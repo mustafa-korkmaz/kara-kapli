@@ -1,0 +1,17 @@
+﻿{
+  "ConnectionStrings": {
+    "BlogContext": "Server=rajje.db.elephantsql.com;Port=5432;Database=czurcuic;User Id = czurcuic; Password=\tJkuUawrR34f9bf_Gqp_7CEVWpRAtfIVT;CommandTimeout=20;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    },
+    "LogRequestContent": true
+  },
+  "AllowedHosts": "*",
+  "Keys": {
+    "CacheProvider": "LocalMemoryCacheService"
+  }
+}

@@ -12,6 +12,9 @@ namespace Dal.Entities
         [MaxLength(100)]
         public string Title { get; set; }
 
+        [MaxLength(12)]
+        public string PhoneNumber { get; set; }
+
         [MaxLength(50)]
         public string AuthorizedPersonName { get; set; }
 

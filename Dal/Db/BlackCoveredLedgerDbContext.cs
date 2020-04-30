@@ -158,13 +158,53 @@ namespace Dal.Db
 
             #endregion role claim modifications
 
-            //#region dbo.userLogs
+            #region seed
 
-            //modelBuilder.Entity<UserLog>()
-            //    .HasIndex(b => b.UserId)
-            //    .HasName("IX_UserId");
+            modelBuilder.Entity<ApplicationUser>().HasData(
 
-            //#endregion #dbo.userLogs
+           CreateUser(Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
+           "Korkmaz Ltd.",
+           "Mustafa Korkmaz",
+           "mustafakorkmazdev@gmail.com"));
+
+            ApplicationUser CreateUser(Guid id, string title, string name, string email)
+            {
+                return new ApplicationUser
+                {
+                    Id = id,
+                    Email = email,
+                    NormalizedEmail = email.ToUpper(),
+                    EmailConfirmed = true,
+                    CreatedAt = new DateTime(2020, 4, 30),
+                    UserName = email,
+                    NormalizedUserName = email.ToUpper(),
+                    SecurityStamp = "951a4c00-20d0-4d65-9d4a-7db4001c834c",
+                    ConcurrencyStamp = "024e1046-752c-4943-9373-5ac78ab5601a",
+                    PasswordHash = "AD5bszN5VbOZSQW+1qcXQb08ElGNt9uNoTrsNenNHSsD1g2Gp6ya4+uFJWmoUsmfng==",
+                    Title = title,
+                    NameSurname = name
+                };
+            }
+
+            modelBuilder.Entity<Entities.Customer>().HasData(
+                  CreateCustomer(1,
+                  Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
+                    "Akcam Ltd. ",
+                    "Esra Korkmaz"));
+
+            Entities.Customer CreateCustomer(int id, Guid userId, string title, string person)
+            {
+                return new Entities.Customer
+                {
+                    AuthorizedPersonName = person,
+                    Id = id,
+                    CreatedAt = new DateTime(2020,4,30),
+                    Title = title,
+                    UserId = userId,
+                    RemainingBalance = 0
+                };
+            }
+            #endregion seed
         }
 
         public override int SaveChanges()

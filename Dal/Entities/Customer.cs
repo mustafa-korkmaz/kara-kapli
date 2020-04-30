@@ -5,6 +5,7 @@ namespace Dal.Entities
 {
     public class Customer : EntityBase
     {
+        [Required]
         public Guid UserId { get; set; }
         public virtual Identity.ApplicationUser User { get; set; } // navigation 
 

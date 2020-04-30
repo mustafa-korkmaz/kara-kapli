@@ -165,24 +165,6 @@ namespace Dal.Db
             //    .HasName("IX_UserId");
 
             //#endregion #dbo.userLogs
-
-            //avoid nvarchar (use varchar)
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
-                   .Where(t => t.ClrType != typeof(ApplicationUser)
-                    && t.ClrType != typeof(ApplicationUserLogin<string>)
-                    && t.ClrType != typeof(ApplicationUserRole<string>)
-                    && t.ClrType != typeof(ApplicationUserClaim<string>)
-                    && t.ClrType != typeof(ApplicationRoleClaim<string>)
-                    && t.ClrType != typeof(ApplicationUserToken<string>)
-                    && t.ClrType != typeof(ApplicationRole))
-                   .SelectMany(t => t.GetProperties())
-                   .Where(p => p.ClrType == typeof(string)))
-            {
-                var length = property.GetMaxLength();
-
-                property.SetColumnType(length == null ? "varchar" : string.Format("varchar({0})", length));
-            }
-
         }
 
         public override int SaveChanges()

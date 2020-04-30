@@ -17,9 +17,9 @@ namespace Dal.Db
         }
 
         public DbSet<Entities.Customer> Customers { get; set; }
+        public DbSet<Entities.CustomerOperation> CustomerOperations { get; set; }
         public DbSet<Entities.ParameterType> ParameterTypes { get; set; }
         public DbSet<Entities.Parameter> Parameters { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

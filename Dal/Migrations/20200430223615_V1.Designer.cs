@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dal.Migrations
 {
     [DbContext(typeof(BlackCoveredLedgerDbContext))]
-    [Migration("20200430223028_V2")]
-    partial class V2
+    [Migration("20200430223615_V1")]
+    partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,7 +106,7 @@ namespace Dal.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("CustomerOperation");
+                    b.ToTable("CustomerOperations");
                 });
 
             modelBuilder.Entity("Dal.Entities.Identity.ApplicationRole", b =>

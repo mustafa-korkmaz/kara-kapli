@@ -104,7 +104,7 @@ namespace Dal.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("CustomerOperation");
+                    b.ToTable("CustomerOperations");
                 });
 
             modelBuilder.Entity("Dal.Entities.Identity.ApplicationRole", b =>

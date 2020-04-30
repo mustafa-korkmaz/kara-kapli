@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dal.Migrations
 {
     [DbContext(typeof(BlackCoveredLedgerDbContext))]
-    [Migration("20200430205320_V1")]
+    [Migration("20200430220813_V1")]
     partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,6 +310,74 @@ namespace Dal.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Dal.Entities.Parameter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<byte>("Order")
+                        .HasColumnType("smallint");
+
+                    b.Property<int>("ParameterTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParameterTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Parameters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            Name = "Diğer",
+                            Order = (byte)0,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        });
+                });
+
+            modelBuilder.Entity("Dal.Entities.ParameterType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParameterTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "CustomerOperationType"
+                        });
+                });
+
             modelBuilder.Entity("Dal.Entities.Customer", b =>
                 {
                     b.HasOne("Dal.Entities.Identity.ApplicationUser", "User")
@@ -364,6 +432,21 @@ namespace Dal.Migrations
             modelBuilder.Entity("Dal.Entities.Identity.ApplicationUserToken<System.Guid>", b =>
                 {
                     b.HasOne("Dal.Entities.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dal.Entities.Parameter", b =>
+                {
+                    b.HasOne("Dal.Entities.ParameterType", "ParameterType")
+                        .WithMany()
+                        .HasForeignKey("ParameterTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Dal.Entities.Identity.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

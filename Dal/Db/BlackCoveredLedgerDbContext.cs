@@ -17,6 +17,9 @@ namespace Dal.Db
         }
 
         public DbSet<Entities.Customer> Customers { get; set; }
+        public DbSet<Entities.ParameterType> ParameterTypes { get; set; }
+        public DbSet<Entities.Parameter> Parameters { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -198,12 +201,37 @@ namespace Dal.Db
                 {
                     AuthorizedPersonName = person,
                     Id = id,
-                    CreatedAt = new DateTime(2020,4,30),
+                    CreatedAt = new DateTime(2020, 4, 30),
                     Title = title,
                     UserId = userId,
                     RemainingBalance = 0
                 };
             }
+
+            modelBuilder.Entity<Entities.ParameterType>().HasData(
+                new Entities.ParameterType
+                {
+                    Id = 1,
+                    Name = "CustomerOperationType"
+                });
+
+            modelBuilder.Entity<Entities.Parameter>().HasData(
+                CreateParameter(1,
+                  Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
+                    1,
+                    "Diğer"));
+
+            Entities.Parameter CreateParameter(int id, Guid userId, int typeId, string name)
+            {
+                return new Entities.Parameter
+                {
+                    Id = id,
+                    UserId = userId,
+                    Name = name,
+                    ParameterTypeId = typeId
+                };
+            }
+
             #endregion seed
         }
 

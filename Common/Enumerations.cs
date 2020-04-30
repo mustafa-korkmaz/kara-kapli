@@ -38,34 +38,6 @@
         Deleted
     }
 
-    public enum CampaignFilterType : byte
-    {
-        /// <summary>
-        /// page name filter. eg: teacher-premium, school-premium
-        /// </summary>
-        Page = 1,
-        /// <summary>
-        /// user product plan filter. eg: advance, core
-        /// </summary>
-        Plan = 2,
-        /// <summary>
-        /// user type filter. eg: teacher, school
-        /// </summary>
-        UserType = 3,
-        /// <summary>
-        /// all users, authed users or guests?
-        /// </summary>
-        Authentication
-    }
-
-    public enum Key
-    {
-        Tag,
-        Discount,
-        Image,
-        Video
-    }
-
     public enum ResponseType
     {
         InternalError = -3,
@@ -79,20 +51,10 @@
         RecordNotFound = 5,
     }
 
-    public enum WebMethodType
+    public enum ParameterType
     {
-        Null,
-        Get,
-        Post,
-        Put,
-        Info,
-        NoEffect
-    }
-
-    public enum ContentType
-    {
-        Null,
-        FormUrlencoded
+        None = 0,
+        CustomerOperationType
     }
 
     public enum PlanType
@@ -112,27 +74,6 @@
         HasError = 4
     }
 
-    public enum PageType : byte
-    {
-        PrudentialFirstWeb = 1,
-        PrudentialFirstAdmin = 2,
-        PrudentialFirstMobile = 3
-    }
-
-    /// <summary>
-    ///  dbo.UserSettings.Key 
-    /// </summary>
-    public enum UserSettingKey : byte
-    {
-        AuthorNotifications = 0
-    }
-
-    public enum SearchType
-    {
-        Authors = 1,
-        Events = 2
-    }
-
     public enum DeviceType : byte
     {
         Ios = 0,
@@ -147,17 +88,6 @@
         Wish = 2,
         Other = 3,
         None = 4
-    }
-
-    public enum StudentNotificationMailType : byte
-    {
-        None = 0,
-        CompleteProfile = 1,
-        ApplicationFee = 2,
-        UploadDocs = 3,
-        FormSubmissions = 4,
-        Generic = 5,
-        Custom = 6
     }
 
     public enum NotificationType : byte
@@ -212,92 +142,6 @@
         SchoolHiredATeacher = 13
     }
 
-    public enum PoolActionType
-    {
-        Removed = 0,
-        Added = 1
-    }
-
-    public enum UserLogType : byte
-    {
-        None = 0,
-        ProfileApproved = 1,
-        ProfileDeclined = 2,
-        InProgress = 3,
-        InProgressCompleted = 4,
-        Passive = 5,
-        BackgroundDocumentVerified = 6,
-        BackgroundDocumentUnverified = 7,
-        ResumeVerified = 8,
-        ResumeUnverified = 9,
-        IdentityVerified = 10,
-        IdentityUnverified = 11,
-        CitizenshipVerified = 12,
-        CitizenshipUnverified = 13,
-        DegreesVerified = 14,
-        DegreesUnverified = 15,
-        CertificationVerified = 16,
-        CertificationUnverified = 17,
-        ReferenceApproved = 18,
-        ReferenceCallAgain = 19,
-        ReferenceDeclined = 20,
-        ReferencesVerified = 21,
-        ReferencesUnverified = 22,
-        WhatsappInteraction = 23,
-        WechatInteraction = 24,
-        EmailInteraction = 25,
-        PhoneInteraction = 26,
-        CellPhoneInteraction = 27,
-        SkypeInteraction = 28,
-        OtherInteraction = 29,
-        FormReferenceApproved = 30,
-        FormReferenceCallAgain = 31,
-        FormReferenceDeclined = 32,
-        ProductUpgradedToCore = 33,
-        ProductUpgradedToPlus = 34,
-        ProductUpgradedToAdvance = 35,
-        TeacherDeleted = 36,
-        SchoolDeleted = 37,
-        Notes = 38,
-        ReminderInteraction = 39,
-        VideoVerified = 40,
-        VideoUnverified = 41,
-        NameSurnameUpdated = 42,
-        CurrentCityUpdated = 43,
-        TeacherDescriptionUpdated = 44,
-        AchievementsUpdated = 45,
-        PreviouslyWorkUpdated = 46,
-        RelatedExperienceUpdated = 47,
-        EducationDegreeUpdated = 48,
-        TeachingExperienceUpdated = 49,
-        StudentDeleted = 50,
-        ApplicationStatusUpdated = 51,
-        ReferenceLetterVerified = 52,
-        ReferenceLetterUnverified = 53,
-        TranscriptVerified = 54,
-        TranscriptUnverified = 55,
-        EssayVerified = 56,
-        EssayUnverified = 57,
-        TestScoreVerified = 58,
-        TestScoreUnverified = 59,
-        SchoolNameUpdated = 60,
-        SchoolCityNameUpdated = 61,
-        StudentNameSurnameUpdated = 62,
-        StudentCurrentCityUpdated = 63,
-        StudentPaymentOverridden = 64,
-        InteractionAttemptFailed = 65,
-        ApplicationFeeChargedBack = 66,
-        DepositFeeChargedBack = 67,
-        NotificationStatusChanged = 68,
-        AddedToTeacherPool = 69,
-        RemovedFromTeacherPool = 70,
-        TeacherWireTransferApproved = 71,
-        SchoolWireTransferApproved = 72,
-        ProductAdded = 73,
-        ProductUpdated = 74,
-        ProductDeleted = 75,
-        SchoolPropertyUpdated = 76
-    }
 
     public enum LogType
     {
@@ -329,20 +173,5 @@
         /// use this type when you are logging an exception
         /// </summary>
         Error
-    }
-
-    public enum ScholarshipApplicationStatus
-    {
-        None = 0,
-        Initial = 1,
-        ApplicationFee = 2,
-        UploadDocs,
-        FormSubmission,
-        AdminReview,
-        SchoolReview,
-        OfferSent,
-        DepositeFee,
-        TutionFee,
-        AcceptanceLetter
     }
 }

@@ -51,6 +51,19 @@ namespace Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ParameterTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParameterTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -181,15 +194,54 @@ namespace Dal.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Parameters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParameterTypeId = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Order = table.Column<byte>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parameters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parameters_ParameterTypes_ParameterTypeId",
+                        column: x => x.ParameterTypeId,
+                        principalTable: "ParameterTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Parameters_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NameSurname", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Title", "TwoFactorEnabled", "UserName" },
                 values: new object[] { new Guid("402e9a22-8b21-11ea-bc55-0242ac130003"), 0, "024e1046-752c-4943-9373-5ac78ab5601a", new DateTime(2020, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "mustafakorkmazdev@gmail.com", true, false, null, "Mustafa Korkmaz", "MUSTAFAKORKMAZDEV@GMAIL.COM", "MUSTAFAKORKMAZDEV@GMAIL.COM", "AD5bszN5VbOZSQW+1qcXQb08ElGNt9uNoTrsNenNHSsD1g2Gp6ya4+uFJWmoUsmfng==", null, false, "951a4c00-20d0-4d65-9d4a-7db4001c834c", "Korkmaz Ltd.", false, "mustafakorkmazdev@gmail.com" });
 
             migrationBuilder.InsertData(
+                table: "ParameterTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "CustomerOperationType" });
+
+            migrationBuilder.InsertData(
                 table: "Customers",
                 columns: new[] { "Id", "AuthorizedPersonName", "CreatedAt", "PhoneNumber", "RemainingBalance", "Title", "UserId" },
                 values: new object[] { 1, "Esra Korkmaz", new DateTime(2020, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.0, "Akcam Ltd. ", new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") });
+
+            migrationBuilder.InsertData(
+                table: "Parameters",
+                columns: new[] { "Id", "IsDeleted", "Name", "Order", "ParameterTypeId", "UserId" },
+                values: new object[] { 1, false, "Diğer", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -232,6 +284,16 @@ namespace Dal.Migrations
                 name: "IX_Customers_UserId",
                 table: "Customers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parameters_ParameterTypeId",
+                table: "Parameters",
+                column: "ParameterTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parameters_UserId",
+                table: "Parameters",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -255,7 +317,13 @@ namespace Dal.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "Parameters");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ParameterTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

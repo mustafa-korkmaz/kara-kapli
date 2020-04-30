@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dal.Entities
@@ -18,9 +19,12 @@ namespace Dal.Entities
         [MaxLength(50)]
         public string AuthorizedPersonName { get; set; }
 
+        [Required]
         public double RemainingBalance { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        public virtual ICollection<CustomerOperation> CustomerOperations { get; set; }// 1=>n relation
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using Common.Response;
 using Dto;
+using System;
 using System.Collections.Generic;
 
 namespace Business
@@ -8,6 +9,12 @@ namespace Business
     public interface ICrudBusiness<TDto>
        where TDto : DtoBase
     {
+        /// <summary>
+        /// Indicates the owner of an entity. i.e ApplicationUser.Id
+        /// when we need to validate entity owner we will need this owner UserId property
+        /// </summary>
+        Guid OwnerId { get; set; }
+
         /// <summary>
         /// creates new entity from given dto
         /// </summary>

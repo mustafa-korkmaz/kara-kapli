@@ -66,14 +66,6 @@ namespace Dal.Repositories
             }
         }
 
-        public void Delete(int id)
-        {
-            var entity = GetById(id);
-            if (entity == null) return;
-
-            Delete(entity);
-        }
-
         /// <summary>
         /// sets and returns new entities which is different from main entity
         /// </summary>

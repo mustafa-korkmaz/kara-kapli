@@ -7,6 +7,7 @@ using Common;
 using Common.Request;
 using Common.Request.Criteria.Customer;
 using Common.Response;
+using Dal.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +36,7 @@ namespace Api.Controllers
 
             if (resp.Type != ResponseType.Success)
             {
-                return BadRequest(resp.ErrorCode);
+                return BadRequest(resp);
             }
 
             return Ok(resp);
@@ -50,11 +51,49 @@ namespace Api.Controllers
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            var resp = Add(model);
+            var resp = Create(model);
 
             if (resp.Type != ResponseType.Success)
             {
-                return BadRequest(resp.ErrorCode);
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Put([FromRoute] CustomerIdViewModel idModel, [FromBody] UpdateCustomerViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Update(idModel.Id, model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Delete([FromRoute] CustomerIdViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Delete(model.Id);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
             }
 
             return Ok(resp);
@@ -99,7 +138,7 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        private ApiResponse Add(CreateCustomerViewModel model)
+        private ApiResponse Create(CreateCustomerViewModel model)
         {
             var apiResp = new ApiResponse
             {
@@ -116,6 +155,57 @@ namespace Api.Controllers
             };
 
             var resp = _customerBusiness.Add(customer);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Update(int id, UpdateCustomerViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var customer = new Dto.Customer
+            {
+                Id = id,
+                AuthorizedPersonName = model.AuthorizedPersonName,
+                PhoneNumber = model.PhoneNumber,
+                Title = model.Title,
+                UserId = GetUserId().Value
+            };
+
+            _customerBusiness.OwnerId = customer.UserId;
+
+            var resp = _customerBusiness.Edit(customer);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Delete(int customerId)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            _customerBusiness.OwnerId = GetUserId().Value;
+
+            var resp = _customerBusiness.Delete(customerId);
 
             if (resp.Type != ResponseType.Success)
             {

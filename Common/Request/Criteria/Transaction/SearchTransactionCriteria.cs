@@ -1,9 +1,9 @@
 ﻿
 using System;
 
-namespace Common.Request.Criteria.Customer
+namespace Common.Request.Criteria.Transaction
 {
-    public class SearchCustomerOperationCriteria
+    public class SearchTransactionCriteria
     {
         public Guid UserId { get; set; }
 

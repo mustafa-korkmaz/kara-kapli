@@ -14,6 +14,7 @@ namespace Business.Customer
         public CustomerBusiness(IUnitOfWork uow, ILogger<CustomerBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
+            ValidateEntityOwner = true;
         }
 
         public PagedListResponse<Dto.Customer> Search(FilteredPagedListRequest<SearchCustomerCriteria> request)

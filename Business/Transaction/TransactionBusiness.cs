@@ -1,22 +1,23 @@
 ﻿using AutoMapper;
-using Dal.Repositories.Customer;
 using Microsoft.Extensions.Logging;
 using Dal;
 using Common.Response;
 using Common.Request;
-using Common.Request.Criteria.Customer;
 using System.Collections.Generic;
+using Common.Request.Criteria.Transaction;
+using Dal.Repositories.Transaction;
 
-namespace Business.Customer
+namespace Business.Transaction
 {
-    public class CustomerOperationBusiness : CrudBusiness<ICustomerOperationRepository, Dal.Entities.Transaction, Dto.Transaction>, ICustomerOperationBusiness
+    public class TransactionBusiness : CrudBusiness<ITransactionRepository, Dal.Entities.Transaction, Dto.Transaction>, ITransactionBusiness
     {
-        public CustomerOperationBusiness(IUnitOfWork uow, ILogger<CustomerOperationBusiness> logger, IMapper mapper)
+        public TransactionBusiness(IUnitOfWork uow, ILogger<TransactionBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
+            ValidateEntityOwner = true;
         }
 
-        public PagedListResponse<Dto.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
+        public PagedListResponse<Dto.Transaction> Search(FilteredPagedListRequest<SearchTransactionCriteria> request)
         {
             var resp = Repository.Search(request);
 

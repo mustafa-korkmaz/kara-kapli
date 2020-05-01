@@ -2,10 +2,16 @@
 using Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.CustomerOperation
+namespace Api.ViewModels.Transaction
 {
-    public class CreateCustomerOperationViewModel
+    public class CreateTransactionViewModel
     {
+        [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
+        [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
+        [Display(Name = "CUSTOMER_ID")]
+        [SnakeCaseQuery(nameof(CustomerId))]
+        public int CustomerId { get; set; }
+
         public bool Title { get; set; }
 
         [StringLength(50, ErrorMessage = ValidationErrorCode.BetweenLength, MinimumLength = AppConstant.MinimumLengthForSearch)]

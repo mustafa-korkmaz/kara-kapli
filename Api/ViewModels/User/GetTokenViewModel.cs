@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.ViewModels.User
 {
-    public class GetTokenViewModels
+    public class GetTokenViewModel
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Display(Name ="EMAIL_OR_USERNAME")]

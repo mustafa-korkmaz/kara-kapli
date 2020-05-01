@@ -1,19 +1,19 @@
 ﻿using Common.Request;
-using Common.Request.Criteria.Customer;
+using Common.Request.Criteria.Transaction;
 using Common.Response;
 using Dal.Db;
 using System.Linq;
 
-namespace Dal.Repositories.Customer
+namespace Dal.Repositories.Transaction
 {
-    public class CustomerOperationRepository : PostgreSqlDbRepository<Entities.Transaction>, ICustomerOperationRepository
+    public class TransactionRepository : PostgreSqlDbRepository<Entities.Transaction>, ITransactionRepository
     {
-        public CustomerOperationRepository(BlackCoveredLedgerDbContext context) : base(context)
+        public TransactionRepository(BlackCoveredLedgerDbContext context) : base(context)
         {
 
         }
 
-        public PagedListResponse<Entities.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
+        public PagedListResponse<Entities.Transaction> Search(FilteredPagedListRequest<SearchTransactionCriteria> request)
         {
             var result = new PagedListResponse<Entities.Transaction>();
 

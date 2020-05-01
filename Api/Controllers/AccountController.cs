@@ -10,21 +10,19 @@ using Security;
 
 namespace Api.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    [Authorize]
-    public class UserController : ApiControllerBase
+    [Route("account"), ApiController, Authorize]
+    public class AccountController : ApiControllerBase
     {
         private readonly ISecurity _security;
 
-        public UserController(ISecurity security)
+        public AccountController(ISecurity security)
         {
             _security = security;
         }
 
         [HttpPost("token")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetToken([FromBody]GetTokenViewModels model)
+        public async Task<IActionResult> GetToken([FromBody]GetTokenViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +71,7 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private async Task<ApiResponse<TokenViewModel>> GetTokenResponse(GetTokenViewModels model)
+        private async Task<ApiResponse<TokenViewModel>> GetTokenResponse(GetTokenViewModel model)
         {
             var apiResp = new ApiResponse<TokenViewModel>
             {

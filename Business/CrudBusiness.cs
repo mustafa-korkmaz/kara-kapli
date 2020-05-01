@@ -9,6 +9,7 @@ using System.Linq;
 using Dal.Repositories;
 using Microsoft.Extensions.Logging;
 using Dal;
+using System;
 
 namespace Business
 {
@@ -23,6 +24,11 @@ namespace Business
         where TDto : DtoBase
         where TRepository : IRepository<TEntity>
     {
+        /// <summary>
+        /// when we need to validate entity owner we will need this owner UserId property
+        /// </summary>
+        public Guid OwnerId { get; set; }
+
         protected readonly IUnitOfWork Uow;
         protected readonly TRepository Repository;
         protected readonly IMapper Mapper;
@@ -94,21 +100,10 @@ namespace Business
             if (ValidateEntityOwner)
             {
                 //client wants to check for an IDOR attack
-                var userIdPropExists = entityProperties.Any(p => p.Name == "UserId");
-
-                if (userIdPropExists)
+                if (!IsEntityOwnerValid(entity))
                 {
-                    PropertyInfo entityProperty = typeof(TEntity).GetProperty("UserId");
-                    PropertyInfo dtoProperty = typeof(TDto).GetProperty("UserId");
-
-                    var entityUserId = entityProperty.GetValue(entity).ToString();
-                    var dtoUserId = dtoProperty.GetValue(dto).ToString();
-
-                    if (!entityUserId.Equals(dtoUserId))
-                    {
-                        businessResp.ErrorCode = ErrorCode.NotAuthorized;
-                        return businessResp;
-                    }
+                    businessResp.ErrorCode = ErrorCode.NotAuthorized;
+                    return businessResp;
                 }
             }
 
@@ -136,14 +131,35 @@ namespace Business
 
         public virtual ResponseBase Delete(int id)
         {
-            if (Entity != null && Entity.Id == id)
+            var resp = new ResponseBase
             {
-                Repository.Delete(Entity);
-            }
-            else
+                Type = ResponseType.Fail
+            };
+
+            var entity = Entity;
+
+            if (entity == null || entity.Id != id)
             {
-                Repository.Delete(id);
+                entity = Repository.GetById(id);
             }
+
+            if (entity == null)
+            {
+                resp.ErrorCode = ErrorCode.RecordNotFound;
+                return resp;
+            }
+
+            if (ValidateEntityOwner)
+            {
+                //client wants to check for an IDOR attack
+                if (!IsEntityOwnerValid(entity))
+                {
+                    resp.ErrorCode = ErrorCode.NotAuthorized;
+                    return resp;
+                }
+            }
+
+            Repository.Delete(entity);
 
             Uow.Save();
 
@@ -152,10 +168,9 @@ namespace Business
             //log db record deletion as an info
             Logger.LogInformation($"'{type}' entity has been hard-deleted.");
 
-            return new ResponseBase
-            {
-                Type = ResponseType.Success
-            };
+            resp.Type = ResponseType.Success;
+
+            return resp;
         }
 
         public virtual ResponseBase SoftDelete(int id)
@@ -248,6 +263,31 @@ namespace Business
             businessResp.Data = dtos;
 
             return businessResp;
+        }
+
+        private bool IsEntityOwnerValid(TEntity entity)
+        {
+            if (OwnerId == Guid.Empty)
+            {
+                throw new Exception("OwnerId cannot be empty");
+            }
+
+            var type = typeof(TEntity);
+
+            var entityProperties = type.GetProperties();
+
+            var userIdPropExists = entityProperties.Any(p => p.Name == "UserId");
+
+            if (userIdPropExists)
+            {
+                PropertyInfo entityProperty = typeof(TEntity).GetProperty("UserId");
+
+                var entityUserId = (Guid)entityProperty.GetValue(entity);
+
+                return entityUserId.Equals(OwnerId);
+            }
+
+            return false;
         }
     }
 }

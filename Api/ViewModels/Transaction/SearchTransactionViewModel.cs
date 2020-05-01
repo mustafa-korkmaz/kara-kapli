@@ -1,11 +1,10 @@
 ﻿
-using Api.ViewModels;
 using Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.CustomerOperation
+namespace Api.ViewModels.Transaction
 {
-    public class SearchCustomerOperationViewModel : PagedListViewModel
+    public class SearchTransactionViewModel : PagedListViewModel
     {
         [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
         [Display(Name = "CUSTOMER_ID")]

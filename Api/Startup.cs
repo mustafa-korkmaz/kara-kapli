@@ -17,6 +17,7 @@ using Newtonsoft.Json.Serialization;
 using Security;
 using Service.Caching;
 using Business.Parameter;
+using Business.Transaction;
 
 namespace Api
 {
@@ -61,7 +62,7 @@ namespace Api
             services.Configure<AppSettings>(Configuration.GetSection("Keys"));
 
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
-            services.AddTransient<ICustomerOperationBusiness, CustomerOperationBusiness>();
+            services.AddTransient<ITransactionBusiness, TransactionBusiness>();
             services.AddTransient<IParameterBusiness, ParameterBusiness>();
             services.AddTransient<ISecurity, JwtSecurity>();
 

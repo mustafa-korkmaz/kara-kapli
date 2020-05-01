@@ -2,9 +2,9 @@
 using Api.ViewModels.Customer;
 using Api.ViewModels.Parameter;
 
-namespace Api.ViewModels.CustomerOperation
+namespace Api.ViewModels.Transaction
 {
-    public class CustomerOperationViewModel
+    public class TransactionViewModel
     {
         public int Id { get; set; }
 

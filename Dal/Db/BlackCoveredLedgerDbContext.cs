@@ -161,6 +161,15 @@ namespace Dal.Db
 
             #endregion role claim modifications
 
+            #region customer operation modifications
+
+            modelBuilder.Entity<Entities.CustomerOperation>()
+              .Property(p => p.Date)
+              .HasColumnType("date")
+              .IsRequired();
+
+            #endregion customer operation modifications
+
             #region seed
 
             modelBuilder.Entity<ApplicationUser>().HasData(

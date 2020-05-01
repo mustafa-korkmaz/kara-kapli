@@ -34,6 +34,9 @@ namespace Dal.Entities
         public bool IsCompleted { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public DateTime CreatedAt { get; set; }
 
         [Required]

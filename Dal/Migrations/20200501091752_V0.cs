@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dal.Migrations
 {
-    public partial class V1 : Migration
+    public partial class V0 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -235,6 +235,7 @@ namespace Dal.Migrations
                     Description = table.Column<string>(maxLength: 250, nullable: false),
                     IsReceivable = table.Column<bool>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: false)
                 },

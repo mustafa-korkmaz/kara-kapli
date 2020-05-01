@@ -81,6 +81,9 @@ namespace Dal.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("character varying(250)")

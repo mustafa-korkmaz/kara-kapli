@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using Api.ViewModels.Customer;
 using Business.Customer;
 using Common;
 using Common.Request;
@@ -8,7 +9,6 @@ using Common.Request.Criteria.Customer;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.ViewModels.Customer;
 
 namespace Api.Controllers
 {

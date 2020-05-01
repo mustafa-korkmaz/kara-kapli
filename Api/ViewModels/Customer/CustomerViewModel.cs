@@ -1,5 +1,5 @@
 ﻿
-namespace WebApi.ViewModels.Customer
+namespace Api.ViewModels.Customer
 {
     public class CustomerViewModel
     {

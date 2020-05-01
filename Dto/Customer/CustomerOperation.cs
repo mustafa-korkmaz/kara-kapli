@@ -8,10 +8,10 @@ namespace Dto
         public virtual Customer Customer { get; set; } //navigation
 
         /// <summary>
-        /// parameterTypes.Id FK
+        /// parameter.Id FK
         /// </summary>
         public int TypeId { get; set; }
-        public virtual ParameterType Type { get; set; } //navigation
+        public virtual Parameter Type { get; set; } //navigation
 
         public double Amount { get; set; }
 

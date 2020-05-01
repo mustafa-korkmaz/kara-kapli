@@ -10,11 +10,11 @@ namespace Dal.Entities
         public virtual Customer Customer { get; set; } //navigation
 
         /// <summary>
-        /// parameterTypes.Id FK
+        /// parameter.Id FK
         /// </summary>
         [Required]
         public int TypeId { get; set; }
-        public virtual ParameterType Type { get; set; } //navigation
+        public virtual Parameter Type { get; set; } //navigation
 
         [Required]
         public double Amount { get; set; }

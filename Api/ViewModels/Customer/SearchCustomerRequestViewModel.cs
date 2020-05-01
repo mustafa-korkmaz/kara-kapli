@@ -3,7 +3,7 @@ using Api.ViewModels;
 using Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.ViewModels.Customer
+namespace Api.ViewModels.Customer
 {
     public class SearchCustomerRequestViewModel : PagedListRequestViewModel
     {

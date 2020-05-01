@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net;
 using Business.Customer;
@@ -32,6 +32,25 @@ namespace Api.Controllers
             }
 
             var resp = Search(model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp.ErrorCode);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Post([FromBody] CreateCustomerRequestViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Add(model);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -80,5 +99,32 @@ namespace Api.Controllers
             return apiResp;
         }
 
+        private ApiResponse Add(CreateCustomerRequestViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var customer = new Dto.Customer
+            {
+                AuthorizedPersonName = model.AuthorizedPersonName,
+                PhoneNumber = model.PhoneNumber,
+                Title = model.Title,
+                UserId = GetUserId().Value,
+                CreatedAt = DateTime.UtcNow.ToTurkeyDateTime()
+            };
+
+            var resp = _customerBusiness.Add(customer);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
     }
 }

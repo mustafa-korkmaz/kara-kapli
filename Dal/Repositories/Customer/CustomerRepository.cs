@@ -23,13 +23,13 @@ namespace Dal.Repositories.Customer
             if (!string.IsNullOrEmpty(request.FilterCriteria.Title))
             {
                 var titleLikeText = string.Format("%{0}%", request.FilterCriteria.Title);
-                query = query.Where(p => EF.Functions.Like(p.Title, titleLikeText));
+                query = query.Where(p => EF.Functions.ILike(p.Title, titleLikeText));
             }
 
             if (!string.IsNullOrEmpty(request.FilterCriteria.AuthorizedPersonName))
             {
                 var personLikeText = string.Format("{0}%", request.FilterCriteria.AuthorizedPersonName);
-                query = query.Where(p => EF.Functions.Like(p.Title, personLikeText));
+                query = query.Where(p => EF.Functions.ILike(p.Title, personLikeText));
             }
 
             if (request.IncludeRecordsTotal)

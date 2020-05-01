@@ -41,6 +41,7 @@ namespace Dal.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
@@ -85,7 +86,6 @@ namespace Dal.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 

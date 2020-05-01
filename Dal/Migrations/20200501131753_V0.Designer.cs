@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dal.Migrations
 {
     [DbContext(typeof(BlackCoveredLedgerDbContext))]
-    [Migration("20200501091752_V0")]
+    [Migration("20200501131753_V0")]
     partial class V0
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,7 @@ namespace Dal.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
@@ -87,7 +88,6 @@ namespace Dal.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 

@@ -177,7 +177,7 @@ namespace Dal.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 100, nullable: true),
+                    Title = table.Column<string>(maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 12, nullable: true),
                     AuthorizedPersonName = table.Column<string>(maxLength: 50, nullable: true),
                     RemainingBalance = table.Column<double>(nullable: false),
@@ -232,7 +232,7 @@ namespace Dal.Migrations
                     CustomerId = table.Column<int>(nullable: false),
                     TypeId = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
-                    Description = table.Column<string>(maxLength: 250, nullable: false),
+                    Description = table.Column<string>(maxLength: 250, nullable: true),
                     IsReceivable = table.Column<bool>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),

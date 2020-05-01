@@ -19,7 +19,6 @@ namespace Dal.Entities
         [Required]
         public double Amount { get; set; }
 
-        [Required]
         [MaxLength(250)]
         public string Description { get; set; }
 

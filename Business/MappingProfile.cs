@@ -23,8 +23,8 @@ namespace Business
             CreateMap<Dto.Customer, Dal.Entities.Customer>();
             CreateMap<Dal.Entities.Customer, Dto.Customer>();
 
-            CreateMap<Dto.CustomerOperation, Dal.Entities.CustomerOperation>();
-            CreateMap<Dal.Entities.CustomerOperation, Dto.CustomerOperation>();
+            CreateMap<Dto.Transaction, Dal.Entities.Transaction>();
+            CreateMap<Dal.Entities.Transaction, Dto.Transaction>();
         }
     }
 }

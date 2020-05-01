@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dal.Entities
 {
-    public class CustomerOperation : EntityBase
+    public class Transaction : EntityBase
     {
         [Required]
         public int CustomerId { get; set; }

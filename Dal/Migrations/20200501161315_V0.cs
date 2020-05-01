@@ -224,7 +224,7 @@ namespace Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerOperations",
+                name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -241,17 +241,17 @@ namespace Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerOperations", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomerOperations_Customers_CustomerId",
+                        name: "FK_Transactions_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomerOperations_ParameterTypes_TypeId",
+                        name: "FK_Transactions_Parameters_TypeId",
                         column: x => x.TypeId,
-                        principalTable: "ParameterTypes",
+                        principalTable: "Parameters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -314,16 +314,6 @@ namespace Dal.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerOperations_CustomerId",
-                table: "CustomerOperations",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerOperations_TypeId",
-                table: "CustomerOperations",
-                column: "TypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Customers_UserId",
                 table: "Customers",
                 column: "UserId");
@@ -337,6 +327,16 @@ namespace Dal.Migrations
                 name: "IX_Parameters_UserId",
                 table: "Parameters",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_CustomerId",
+                table: "Transactions",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_TypeId",
+                table: "Transactions",
+                column: "TypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -357,16 +357,16 @@ namespace Dal.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CustomerOperations");
-
-            migrationBuilder.DropTable(
-                name: "Parameters");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Parameters");
 
             migrationBuilder.DropTable(
                 name: "ParameterTypes");

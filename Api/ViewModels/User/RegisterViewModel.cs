@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.ViewModels.User
 {
-    public class RegisterRequestViewModel
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [StringLength(30, ErrorMessage = ValidationErrorCode.MaxLength)]

@@ -9,20 +9,20 @@ using System.Collections.Generic;
 
 namespace Business.Customer
 {
-    public class CustomerOperationBusiness : CrudBusiness<ICustomerOperationRepository, Dal.Entities.CustomerOperation, Dto.CustomerOperation>, ICustomerOperationBusiness
+    public class CustomerOperationBusiness : CrudBusiness<ICustomerOperationRepository, Dal.Entities.Transaction, Dto.Transaction>, ICustomerOperationBusiness
     {
         public CustomerOperationBusiness(IUnitOfWork uow, ILogger<CustomerOperationBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
         }
 
-        public PagedListResponse<Dto.CustomerOperation> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
+        public PagedListResponse<Dto.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
         {
             var resp = Repository.Search(request);
 
-            var parameters = Mapper.Map<IEnumerable<Dal.Entities.CustomerOperation>, IEnumerable<Dto.CustomerOperation>>(resp.Items);
+            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Transaction>, IEnumerable<Dto.Transaction>>(resp.Items);
 
-            return new PagedListResponse<Dto.CustomerOperation>
+            return new PagedListResponse<Dto.Transaction>
             {
                 Items = parameters,
                 RecordsTotal = resp.RecordsTotal

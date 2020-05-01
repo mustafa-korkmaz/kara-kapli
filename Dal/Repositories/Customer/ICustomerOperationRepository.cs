@@ -4,8 +4,8 @@ using Common.Response;
 
 namespace Dal.Repositories.Customer
 {
-    public interface ICustomerOperationRepository : IRepository<Entities.CustomerOperation>
+    public interface ICustomerOperationRepository : IRepository<Entities.Transaction>
     {
-        PagedListResponse<Entities.CustomerOperation> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request);
+        PagedListResponse<Entities.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request);
     }
 }

@@ -26,6 +26,6 @@ namespace Dal.Entities
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public virtual ICollection<CustomerOperation> CustomerOperations { get; set; }// 1=>n relation
+        public virtual ICollection<Transaction> Transactions { get; set; }// 1=>n relation
     }
 }

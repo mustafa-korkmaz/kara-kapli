@@ -24,7 +24,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedListResponse<CustomerViewModel>>), (int)HttpStatusCode.OK)]
-        public IActionResult Get([FromQuery] SearchCustomerRequestViewModel model)
+        public IActionResult Get([FromQuery] SearchCustomerViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public IActionResult Post([FromBody] CreateCustomerRequestViewModel model)
+        public IActionResult Post([FromBody] CreateCustomerViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private ApiResponse<PagedListResponse<CustomerViewModel>> Search(SearchCustomerRequestViewModel model)
+        private ApiResponse<PagedListResponse<CustomerViewModel>> Search(SearchCustomerViewModel model)
         {
             var apiResp = new ApiResponse<PagedListResponse<CustomerViewModel>>
             {
@@ -99,7 +99,7 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        private ApiResponse Add(CreateCustomerRequestViewModel model)
+        private ApiResponse Add(CreateCustomerViewModel model)
         {
             var apiResp = new ApiResponse
             {

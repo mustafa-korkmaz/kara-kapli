@@ -17,7 +17,7 @@ namespace Dal.Db
         }
 
         public DbSet<Entities.Customer> Customers { get; set; }
-        public DbSet<Entities.CustomerOperation> CustomerOperations { get; set; }
+        public DbSet<Entities.Transaction> Transactions { get; set; }
         public DbSet<Entities.ParameterType> ParameterTypes { get; set; }
         public DbSet<Entities.Parameter> Parameters { get; set; }
 
@@ -163,7 +163,7 @@ namespace Dal.Db
 
             #region customer operation modifications
 
-            modelBuilder.Entity<Entities.CustomerOperation>()
+            modelBuilder.Entity<Entities.Transaction>()
               .Property(p => p.Date)
               .HasColumnType("date")
               .IsRequired();

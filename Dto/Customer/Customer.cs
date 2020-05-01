@@ -20,6 +20,6 @@ namespace Dto
 
         public DateTime CreatedAt { get; set; }
 
-        public virtual ICollection<CustomerOperation> CustomerOperations { get; set; }// 1=>n relation
+        public virtual ICollection<Transaction> CustomerOperations { get; set; }// 1=>n relation
     }
 }

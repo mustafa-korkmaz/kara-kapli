@@ -24,7 +24,7 @@ namespace Api.Controllers
 
         [HttpPost("token")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetToken([FromBody]TokenRequestViewModel model)
+        public async Task<IActionResult> GetToken([FromBody]GetTokenViewModels model)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace Api.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]RegisterRequestViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private async Task<ApiResponse<TokenViewModel>> GetTokenResponse(TokenRequestViewModel model)
+        private async Task<ApiResponse<TokenViewModel>> GetTokenResponse(GetTokenViewModels model)
         {
             var apiResp = new ApiResponse<TokenViewModel>
             {
@@ -136,7 +136,7 @@ namespace Api.Controllers
         /// creates new user
         /// </summary>
         /// <param name="model"></param>
-        private async Task<ApiResponse> RegisterUser(RegisterRequestViewModel model)
+        private async Task<ApiResponse> RegisterUser(RegisterViewModel model)
         {
             var apiResp = new ApiResponse
             {

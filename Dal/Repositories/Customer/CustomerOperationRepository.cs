@@ -2,21 +2,20 @@
 using Common.Request.Criteria.Customer;
 using Common.Response;
 using Dal.Db;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace Dal.Repositories.Customer
 {
-    public class CustomerOperationRepository : PostgreSqlDbRepository<Entities.CustomerOperation>, ICustomerOperationRepository
+    public class CustomerOperationRepository : PostgreSqlDbRepository<Entities.Transaction>, ICustomerOperationRepository
     {
         public CustomerOperationRepository(BlackCoveredLedgerDbContext context) : base(context)
         {
 
         }
 
-        public PagedListResponse<Entities.CustomerOperation> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
+        public PagedListResponse<Entities.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request)
         {
-            var result = new PagedListResponse<Entities.CustomerOperation>();
+            var result = new PagedListResponse<Entities.Transaction>();
 
             var query = Entities.Where(p => p.Customer.UserId == request.FilterCriteria.UserId);
 

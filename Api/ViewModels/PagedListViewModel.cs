@@ -4,7 +4,7 @@ using Common;
 
 namespace Api.ViewModels
 {
-    public class PagedListRequestViewModel
+    public class PagedListViewModel
     {
         /// <summary>
         /// desired start index for PagedList items

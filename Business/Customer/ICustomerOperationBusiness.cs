@@ -5,8 +5,8 @@ using Common.Response;
 
 namespace Business.Customer
 {
-    public interface ICustomerOperationBusiness : ICrudBusiness<Dto.CustomerOperation>
+    public interface ICustomerOperationBusiness : ICrudBusiness<Dto.Transaction>
     {
-        PagedListResponse<Dto.CustomerOperation> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request);
+        PagedListResponse<Dto.Transaction> Search(FilteredPagedListRequest<SearchCustomerOperationCriteria> request);
     }
 }

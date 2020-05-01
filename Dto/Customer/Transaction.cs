@@ -2,7 +2,7 @@
 
 namespace Dto
 {
-    public class CustomerOperation : DtoBase
+    public class Transaction : DtoBase
     {
         public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; } //navigation

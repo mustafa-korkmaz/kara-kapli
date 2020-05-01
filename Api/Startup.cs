@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using Security;
 using Service.Caching;
+using Business.Parameter;
 
 namespace Api
 {
@@ -34,7 +35,7 @@ namespace Api
             services.AddControllers()
             .ConfigureApiBehaviorOptions(options =>
             {
-             options.SuppressModelStateInvalidFilter = true; //prevent automatic 400 response
+                options.SuppressModelStateInvalidFilter = true; //prevent automatic 400 response
             })
             .AddNewtonsoftJson(options =>
             {
@@ -60,6 +61,8 @@ namespace Api
             services.Configure<AppSettings>(Configuration.GetSection("Keys"));
 
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
+            services.AddTransient<ICustomerOperationBusiness, CustomerOperationBusiness>();
+            services.AddTransient<IParameterBusiness, ParameterBusiness>();
             services.AddTransient<ISecurity, JwtSecurity>();
 
             services.AddTransient<ICacheService, CacheService>();

@@ -14,19 +14,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("customer-operations"), ApiController, Authorize]
-    public class CustomerOperationsController : ApiControllerBase
+    [Route("transactions"), ApiController, Authorize]
+    public class TransactionsController : ApiControllerBase
     {
         private readonly ICustomerOperationBusiness _customerOperationBusiness;
 
-        public CustomerOperationsController(ICustomerOperationBusiness customerOperationBusiness)
+        public TransactionsController(ICustomerOperationBusiness customerOperationBusiness)
         {
             _customerOperationBusiness = customerOperationBusiness;
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedListResponse<CustomerOperationViewModel>>), (int)HttpStatusCode.OK)]
-        public IActionResult Get([FromQuery] SearchCustomerOperationRequestViewModel model)
+        public IActionResult Get([FromQuery] SearchCustomerOperationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +62,7 @@ namespace Api.Controllers
         //    return Ok(resp);
         //}
 
-        private ApiResponse<PagedListResponse<CustomerOperationViewModel>> Search(SearchCustomerOperationRequestViewModel model)
+        private ApiResponse<PagedListResponse<CustomerOperationViewModel>> Search(SearchCustomerOperationViewModel model)
         {
             var apiResp = new ApiResponse<PagedListResponse<CustomerOperationViewModel>>
             {

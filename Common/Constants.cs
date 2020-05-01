@@ -9,6 +9,7 @@ namespace Common
     {
         public const string ApiKeyValue = "My.ApiKey";
         public static string ApiKeyHash = Utility.GetHashValue(ApiKeyValue);
+        public const int MinimumLengthForSearch = 3;
     }
 
     public static class ErrorCode

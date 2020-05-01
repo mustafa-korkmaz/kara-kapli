@@ -4,7 +4,7 @@ using Common;
 
 namespace Api.ViewModels
 {
-    public class PagedListViewModel
+    public class PagedListRequestViewModel
     {
         /// <summary>
         /// desired start index for PagedList items
@@ -29,15 +29,5 @@ namespace Api.ViewModels
         /// </summary>
         [SnakeCaseQuery(nameof(IncludeRecordsTotal))]
         public bool IncludeRecordsTotal { get; set; }
-
-        /// <summary>
-        /// search query text
-        /// </summary>
-        public class SearchedPagedListViewModel : PagedListViewModel
-        {
-            [SnakeCaseQuery(nameof(Q))]
-            public string Q { get; set; }
-        }
-
     }
 }

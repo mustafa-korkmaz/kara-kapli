@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using Api.ViewModels;
 using Business.Customer;
 using Common;
+using Common.Request;
+using Common.Request.Criteria.Customer;
 using Common.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.ViewModels.Customer;
 
 namespace Api.Controllers
 {
-    [Route("customers")]
-    [ApiController]
+    [Route("customers"), ApiController, Authorize]
     public class CustomerController : ApiControllerBase
     {
         private readonly ICustomerBusiness _customerBusiness;
@@ -22,14 +24,14 @@ namespace Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<PagedListResponse<CustomerViewModel>>), (int)HttpStatusCode.OK)]
-        public IActionResult Get([FromQuery] PagedListViewModel model)
+        public IActionResult Get([FromQuery] SearchCustomerRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            var resp = GetCustomers();
+            var resp = Search(model);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -39,22 +41,42 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private ApiResponse<IEnumerable<CustomerViewModel>> GetCustomers()
+        private ApiResponse<PagedListResponse<CustomerViewModel>> Search(SearchCustomerRequestViewModel model)
         {
-            var apiResp = new ApiResponse<IEnumerable<CustomerViewModel>>
+            var apiResp = new ApiResponse<PagedListResponse<CustomerViewModel>>
             {
-                Type = ResponseType.Fail
+                Type = ResponseType.Fail,
+                Data = new PagedListResponse<CustomerViewModel>()
             };
 
-            //var resp = _customerBusiness.SearchPosts("search text");
+            var request = new FilteredPagedListRequest<SearchCustomerCriteria>
+            {
+                FilterCriteria = new SearchCustomerCriteria
+                {
+                    AuthorizedPersonName = model.AuthorizedPersonName,
+                    Title = model.Title,
+                    UserId = GetUserId().Value
+                },
+                IncludeRecordsTotal = model.IncludeRecordsTotal,
+                Limit = model.Limit,
+                Offset = model.Offset
+            };
 
-            //apiResp.Data = resp.Select(p => new PostViewModel
-            //{
-            //    Id = p.Id,
-            //    Title = p.Title
-            //});
+            var resp = _customerBusiness.Search(request);
 
+            apiResp.Data.Items = resp.Items.Select(p => new CustomerViewModel
+            {
+                Id = p.Id,
+                Title = p.Title,
+                AuthorizedPersonName = p.AuthorizedPersonName,
+                CreatedAtText = p.CreatedAt.ToDateString(),
+                PhoneNumber = p.PhoneNumber,
+                RemainingBalance = p.RemainingBalance
+            });
+
+            apiResp.Data.RecordsTotal = resp.RecordsTotal;
             apiResp.Type = ResponseType.Success;
+
             return apiResp;
         }
 

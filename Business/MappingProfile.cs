@@ -11,15 +11,20 @@ namespace Business
             CreateMap<Dto.DtoBase, Dal.Entities.EntityBase>();
             CreateMap<Dal.Entities.EntityBase, Dto.DtoBase>();
 
-
             CreateMap<Dal.Entities.Identity.ApplicationUser, Dto.User.ApplicationUser>();
             CreateMap<Dto.User.ApplicationUser, Dal.Entities.Identity.ApplicationUser>();
 
+            CreateMap<Dto.Parameter, Dal.Entities.Parameter>();
+            CreateMap<Dal.Entities.Parameter, Dto.Parameter>();
 
-            //CreateMap<Dto.Blog, Dal.Entities.Blog>();
-            //CreateMap<Dal.Entities.Blog, Dto.Blog>();
-            //CreateMap<IEnumerable<Dto.Blog>, IEnumerable<Dal.Models.Blog>>();
-            //CreateMap<IEnumerable<Dal.Models.Blog>, IEnumerable<Dto.Blog>>();
+            CreateMap<Dto.ParameterType, Dal.Entities.ParameterType>();
+            CreateMap<Dal.Entities.ParameterType, Dto.ParameterType>();
+
+            CreateMap<Dto.Customer, Dal.Entities.Customer>();
+            CreateMap<Dal.Entities.Customer, Dto.Customer>();
+
+            CreateMap<Dto.CustomerOperation, Dal.Entities.CustomerOperation>();
+            CreateMap<Dal.Entities.CustomerOperation, Dto.CustomerOperation>();
         }
     }
 }

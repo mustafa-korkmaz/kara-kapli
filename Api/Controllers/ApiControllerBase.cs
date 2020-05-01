@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using Common;
 using Common.Response;
+using System;
 
 namespace Api.Controllers
 {
@@ -31,11 +32,11 @@ namespace Api.Controllers
         /// If not exists returns null
         /// </summary>
         /// <returns></returns>
-        protected string GetUserId()
+        protected Guid? GetUserId()
         {
             var userIdClaim = User.Claims.FirstOrDefault(p => p.Type == "id");
 
-            return userIdClaim?.Value;
+            return userIdClaim?.Value.ToGuid();
         }
 
         /// <summary>

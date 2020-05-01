@@ -128,5 +128,10 @@ namespace Common
 
         public static string ToSnakeCase(this string o) =>
            Regex.Replace(o, @"(\w)([A-Z])", "$1_$2").ToLower();
+
+        public static Guid ToGuid(this string s)
+        {
+            return Guid.Parse(s);
+        }
     }
 }

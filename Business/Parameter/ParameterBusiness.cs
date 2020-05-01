@@ -1,0 +1,33 @@
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Dal.Repositories.Customer;
+using Microsoft.Extensions.Logging;
+using Dal;
+using Common.Response;
+using Common.Request;
+using Common.Request.Criteria.Parameter;
+using Dal.Repositories.Parameter;
+
+namespace Business.Parameter
+{
+    public class ParameterBusiness : CrudBusiness<IParameterRepository, Dal.Entities.Parameter, Dto.Parameter>, IParameterBusiness
+    {
+        public ParameterBusiness(IUnitOfWork uow, ILogger<ParameterBusiness> logger, IMapper mapper)
+        : base(uow, logger, mapper)
+        {
+        }
+
+        public PagedListResponse<Dto.Parameter> Search(FilteredPagedListRequest<SearchParameterCriteria> request)
+        {
+            var resp = Repository.Search(request);
+
+            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Parameter>, IEnumerable<Dto.Parameter>>(resp.Items);
+
+            return new PagedListResponse<Dto.Parameter>
+            {
+                Items = parameters,
+                RecordsTotal = resp.RecordsTotal
+            };
+        }
+    }
+}

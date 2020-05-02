@@ -39,6 +39,8 @@ namespace Common
         public const string EmailNotValid = "EMAIL_FIELD_IS_NOT_VALID";
 
         public const string UrlNotValid = "URL_FIELD_IS_NOT_VALID";
+
+        public const string DateNotValid = "DATE_FORMAT_IS_NOT_VALID";
     }
 
     public static class LoggingOperationPhrase

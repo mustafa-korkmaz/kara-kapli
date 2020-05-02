@@ -43,24 +43,24 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        //public IActionResult Post([FromBody] CreateCustomerOperationRequestViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(GetModelStateErrorResponse(ModelState));
-        //    }
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Post([FromBody] CreateTransactionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
 
-        //    var resp = Add(model);
+            var resp = Create(model);
 
-        //    if (resp.Type != ResponseType.Success)
-        //    {
-        //        return BadRequest(resp.ErrorCode);
-        //    }
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
 
-        //    return Ok(resp);
-        //}
+            return Ok(resp);
+        }
 
         private ApiResponse<PagedListResponse<TransactionViewModel>> Search(SearchTransactionViewModel model)
         {
@@ -115,32 +115,40 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        //private ApiResponse Add(CreateCustomerOperationRequestViewModel model)
-        //{
-        //    var apiResp = new ApiResponse
-        //    {
-        //        Type = ResponseType.Fail
-        //    };
+        private ApiResponse Create(CreateTransactionViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
 
-        //    var customer = new Dto.Customer
-        //    {
-        //        AuthorizedPersonName = model.AuthorizedPersonName,
-        //        PhoneNumber = model.PhoneNumber,
-        //        Title = model.Title,
-        //        UserId = GetUserId().Value,
-        //        CreatedAt = DateTime.UtcNow.ToTurkeyDateTime()
-        //    };
+            var now = DateTime.UtcNow.ToTurkeyDateTime();
 
-        //    var resp = _customerOperationBusiness.Add(customer);
+            var transaction = new Dto.Transaction
+            {
+                CustomerId = model.CustomerId,
+                TypeId = model.TypeId,
+                Amount = model.Amount.Value,
+                Description = model.Description,
+                IsCompleted = model.IsCompleted.Value,
+                IsReceivable = model.IsReceivable.Value,
+                Date = model.Date,
+                ModifiedAt = now,
+                CreatedAt = now
+            };
 
-        //    if (resp.Type != ResponseType.Success)
-        //    {
-        //        apiResp.ErrorCode = resp.ErrorCode;
-        //        return apiResp;
-        //    }
+            _transactionBusiness.OwnerId = GetUserId().Value;
 
-        //    apiResp.Type = ResponseType.Success;
-        //    return apiResp;
-        //}
+            var resp = _transactionBusiness.Add(transaction);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
     }
 }

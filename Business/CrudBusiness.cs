@@ -33,7 +33,6 @@ namespace Business
         protected readonly TRepository Repository;
         protected readonly IMapper Mapper;
         protected readonly ILogger Logger;
-        protected TEntity Entity;
 
         /// <summary>
         /// to avoid IDOR attacks checks userId of entity and the given dto are the same or not
@@ -93,10 +92,6 @@ namespace Business
                 return businessResp;
             }
 
-            var type = typeof(TEntity);
-
-            var entityProperties = type.GetProperties();
-
             if (ValidateEntityOwner)
             {
                 //client wants to check for an IDOR attack
@@ -107,18 +102,25 @@ namespace Business
                 }
             }
 
+            var type = typeof(TEntity);
+            var entityProperties = type.GetProperties();
+
             foreach (PropertyInfo entityProperty in entityProperties)
             {
-                //Only modify settable properties. Do not change CreatedAt property.
-                if (entityProperty.CanWrite && entityProperty.Name != "CreatedAt")
+                //Get CreatedAt property value from entity.
+                if (entityProperty.Name == "CreatedAt")
                 {
                     PropertyInfo dtoProperty = typeof(TDto).GetProperty(entityProperty.Name); //POCO obj must have same prop as model
 
-                    var value = dtoProperty.GetValue(dto); //get new value of entity from dto object
+                    var value = entityProperty.GetValue(entity); //get value of entity
 
-                    entityProperty.SetValue(entity, value, null); //set new value of entity
+                    dtoProperty.SetValue(dto, value, null); //set dto.CreatedAt as entity.CreatedAt
+
+                    break;
                 }
             }
+
+            entity = Mapper.Map<TDto, TEntity>(dto);
 
             Repository.Update(entity);
 
@@ -136,12 +138,7 @@ namespace Business
                 Type = ResponseType.Fail
             };
 
-            var entity = Entity;
-
-            if (entity == null || entity.Id != id)
-            {
-                entity = Repository.GetById(id);
-            }
+            var entity = Repository.GetById(id);
 
             if (entity == null)
             {
@@ -226,15 +223,15 @@ namespace Business
                 Type = ResponseType.Fail
             };
 
-            Entity = Repository.GetById(id);
+            var entity = Repository.GetById(id);
 
-            if (Entity == null)
+            if (entity == null)
             {
                 businessResp.ErrorCode = ErrorCode.RecordNotFound;
                 return businessResp;
             }
 
-            var dto = Mapper.Map<TEntity, TDto>(Entity);
+            var dto = Mapper.Map<TEntity, TDto>(entity);
 
             businessResp.Type = ResponseType.Success;
             businessResp.Data = dto;

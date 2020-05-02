@@ -39,6 +39,25 @@ namespace Dal.Repositories.Transaction
                 result.RecordsTotal = query.Count();
             }
 
+            query = query.Select(p => new Entities.Transaction
+            {
+                Id = p.Id,
+                Description = p.Description,
+                Amount = p.Amount,
+                TypeId = p.TypeId,
+                IsCompleted = p.IsCompleted,
+                IsReceivable = p.IsReceivable,
+                Date = p.Date,
+                CreatedAt = p.CreatedAt,
+                ModifiedAt = p.ModifiedAt,
+                Customer = new Entities.Customer
+                {
+                    Id = p.CustomerId,
+                    AuthorizedPersonName = p.Customer.AuthorizedPersonName,
+                    Title = p.Customer.Title
+                }
+            });
+
             result.Items = query
                 .OrderByDescending(p => p.Id)
                 .Skip(request.Offset)

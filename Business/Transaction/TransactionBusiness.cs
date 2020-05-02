@@ -8,17 +8,22 @@ using Common.Request.Criteria.Transaction;
 using Dal.Repositories.Transaction;
 using Business.Customer;
 using Common;
+using Business.Parameter;
+using System.Linq;
 
 namespace Business.Transaction
 {
     public class TransactionBusiness : CrudBusiness<ITransactionRepository, Dal.Entities.Transaction, Dto.Transaction>, ITransactionBusiness
     {
-        ICustomerBusiness _customerBusiness;
+        private ICustomerBusiness _customerBusiness;
+        private IParameterBusiness _parameterBusiness;
 
-        public TransactionBusiness(IUnitOfWork uow, ICustomerBusiness customerBusiness, ILogger<TransactionBusiness> logger, IMapper mapper)
+        public TransactionBusiness(IUnitOfWork uow, ICustomerBusiness customerBusiness, IParameterBusiness parameterBusiness,
+            ILogger<TransactionBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
             _customerBusiness = customerBusiness;
+            _parameterBusiness = parameterBusiness;
             ValidateEntityOwner = true;
         }
 
@@ -26,11 +31,13 @@ namespace Business.Transaction
         {
             var resp = Repository.Search(request);
 
-            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Transaction>, IEnumerable<Dto.Transaction>>(resp.Items);
+            var transactions = Mapper.Map<IEnumerable<Dal.Entities.Transaction>, IEnumerable<Dto.Transaction>>(resp.Items);
+           
+            SetTransactionTypes(transactions);
 
             return new PagedListResponse<Dto.Transaction>
             {
-                Items = parameters,
+                Items = transactions,
                 RecordsTotal = resp.RecordsTotal
             };
         }
@@ -124,6 +131,16 @@ namespace Business.Transaction
         private double GetBalance(Dal.Entities.Transaction t)
         {
             return t.IsReceivable ? t.Amount : -1 * t.Amount;
+        }
+
+        private void SetTransactionTypes(IEnumerable<Dto.Transaction> transactions)
+        {
+            var parameters = _parameterBusiness.GetUserParameters(OwnerId);
+
+            foreach (var item in transactions)
+            {
+                item.Type = parameters.FirstOrDefault(p => p.Id == item.TypeId);
+            }
         }
     }
 }

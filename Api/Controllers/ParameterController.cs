@@ -14,12 +14,12 @@ using Business.Transaction;
 
 namespace Api.Controllers
 {
-    [Route("transactions"), ApiController, Authorize]
-    public class TransactionsController : ApiControllerBase
+    [Route("parameters"), ApiController, Authorize]
+    public class ParameterController : ApiControllerBase
     {
         private readonly ITransactionBusiness _transactionBusiness;
 
-        public TransactionsController(ITransactionBusiness transactionBusiness)
+        public ParameterController(ITransactionBusiness transactionBusiness)
         {
             _transactionBusiness = transactionBusiness;
         }

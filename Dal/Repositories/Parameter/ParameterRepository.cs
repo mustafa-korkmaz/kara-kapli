@@ -3,6 +3,8 @@ using Common.Request.Criteria.Parameter;
 using Common.Response;
 using Dal.Db;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Dal.Repositories.Parameter
@@ -12,6 +14,19 @@ namespace Dal.Repositories.Parameter
         public ParameterRepository(BlackCoveredLedgerDbContext context) : base(context)
         {
 
+        }
+
+        public IEnumerable<Entities.Parameter> GetUserParameters(Guid userId)
+        {
+            var query = Entities.Where(p => p.UserId == userId);
+
+            return query.Select(p => new Entities.Parameter
+            {
+                Id = p.Id,
+                Name = p.Name,
+                ParameterTypeId = p.ParameterTypeId
+            })
+            .ToList();
         }
 
         public PagedListResponse<Entities.Parameter> Search(FilteredPagedListRequest<SearchParameterCriteria> request)

@@ -7,6 +7,8 @@ using Common.Response;
 using Common.Request;
 using Common.Request.Criteria.Parameter;
 using Dal.Repositories.Parameter;
+using System;
+using Service.Caching;
 
 namespace Business.Parameter
 {
@@ -28,6 +30,16 @@ namespace Business.Parameter
                 Items = parameters,
                 RecordsTotal = resp.RecordsTotal
             };
+        }
+
+        [CacheableResult(Provider = "LocalMemoryCacheService")]
+        public IEnumerable<Dto.Parameter> GetUserParameters(Guid userId)
+        {
+            var entities = Repository.GetUserParameters(userId);
+
+            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Parameter>, IEnumerable<Dto.Parameter>>(entities);
+
+            return parameters;
         }
     }
 }

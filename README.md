@@ -1,7 +1,8 @@
-# dotnetcore-postgres
+# Kara Kapli Defter / Black Covered Ledger
 
+[![Build Status](https://korkmazmustafa.visualstudio.com/KaraKapli/_apis/build/status/Api-CI?branchName=master)](https://korkmazmustafa.visualstudio.com/KaraKapli/_build/latest?definitionId=8&branchName=master)
 
-This seed repo serves as a boiler plate project with dotnet core and PostgreSQL
+A simple app to keep track of debts and receivables built with dotnet core and PostgreSQL
 
 Includes;
 * EntityFramework

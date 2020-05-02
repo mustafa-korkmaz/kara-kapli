@@ -2,9 +2,9 @@
 using Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.Customer
+namespace Api.ViewModels
 {
-    public class CustomerIdViewModel
+    public class IdViewModel
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]

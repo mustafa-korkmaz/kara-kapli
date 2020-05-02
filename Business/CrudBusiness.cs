@@ -35,7 +35,7 @@ namespace Business
         protected readonly ILogger Logger;
 
         /// <summary>
-        /// to avoid IDOR attacks checks userId of entity and the given dto are the same or not
+        /// to avoid IDOR attacks checks whether userId of entity and the ApplicationUser.Id are the same
         /// </summary>
         protected bool ValidateEntityOwner;
 
@@ -172,17 +172,29 @@ namespace Business
 
         public virtual ResponseBase SoftDelete(int id)
         {
+            var resp = new ResponseBase
+            {
+                Type = ResponseType.Fail
+            };
+
             var entity = Repository.GetById(id);
 
             bool updated = false;
 
             if (entity == null)
             {
-                return new ResponseBase
+                resp.ErrorCode = ErrorCode.RecordNotFound;
+                return resp;
+            }
+
+            if (ValidateEntityOwner)
+            {
+                //client wants to check for an IDOR attack
+                if (!IsEntityOwnerValid(entity))
                 {
-                    Type = ResponseType.Fail,
-                    ErrorCode = ErrorCode.RecordNotFound
-                };
+                    resp.ErrorCode = ErrorCode.NotAuthorized;
+                    return resp;
+                }
             }
 
             var type = typeof(TEntity);
@@ -262,7 +274,7 @@ namespace Business
             return businessResp;
         }
 
-        private bool IsEntityOwnerValid(TEntity entity)
+        protected virtual bool IsEntityOwnerValid(TEntity entity)
         {
             if (OwnerId == Guid.Empty)
             {

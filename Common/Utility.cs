@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
@@ -98,6 +99,31 @@ namespace Common
             return JsonConvert.SerializeObject(obj, Converter.Settings);
         }
 
+        public static string GetMethodResultCacheKey(Delegate method, IEnumerable<object> arguments)
+        {
+            var methodInfo = GetMethodInfo(method);
+
+            return GetMethodResultCacheKey(methodInfo, arguments);
+        }
+
+        public static string GetMethodResultCacheKey(MemberInfo methodInfo, IEnumerable<object> arguments)
+        {
+            var methodName = string.Format("{0}.{1}.{2}",
+                                       methodInfo.ReflectedType.Namespace,
+                                       methodInfo.ReflectedType.Name,
+                                       methodInfo.Name);
+
+            var key = string.Format(
+              "{0}({1})",
+              methodName,
+              string.Join(", ", arguments.Select(x => x != null ? x.ToString() : "<Null>")));
+            return key;
+        }
+
+        public static MethodInfo GetMethodInfo(Delegate d)
+        {
+            return d.Method;
+        }
     }
 
     internal static class Converter

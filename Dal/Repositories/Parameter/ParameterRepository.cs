@@ -33,9 +33,9 @@ namespace Dal.Repositories.Parameter
         {
             var result = new PagedListResponse<Entities.Parameter>();
 
-            var query = Entities.Where(p => p.UserId == request.FilterCriteria.UserId);
+            var query = Entities.Where(p => p.UserId == request.FilterCriteria.UserId && p.IsDeleted == false);
 
-            if (string.IsNullOrEmpty(request.FilterCriteria.Name))
+            if (!string.IsNullOrEmpty(request.FilterCriteria.Name))
             {
                 var nameLikeText = string.Format("%{0}%", request.FilterCriteria.Name);
                 query = query.Where(p => EF.Functions.Like(p.Name, nameLikeText));

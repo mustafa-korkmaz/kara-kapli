@@ -9,14 +9,19 @@ using Common.Request.Criteria.Parameter;
 using Dal.Repositories.Parameter;
 using System;
 using Service.Caching;
+using Common;
 
 namespace Business.Parameter
 {
     public class ParameterBusiness : CrudBusiness<IParameterRepository, Dal.Entities.Parameter, Dto.Parameter>, IParameterBusiness
     {
-        public ParameterBusiness(IUnitOfWork uow, ILogger<ParameterBusiness> logger, IMapper mapper)
+        private readonly ICacheService _cacheService;
+
+        public ParameterBusiness(IUnitOfWork uow, ICacheService cacheService, ILogger<ParameterBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
+            _cacheService = cacheService;
+            ValidateEntityOwner = true;
         }
 
         public PagedListResponse<Dto.Parameter> Search(FilteredPagedListRequest<SearchParameterCriteria> request)
@@ -40,6 +45,62 @@ namespace Business.Parameter
             var parameters = Mapper.Map<IEnumerable<Dal.Entities.Parameter>, IEnumerable<Dto.Parameter>>(entities);
 
             return parameters;
+        }
+
+        public override ResponseBase Add(Dto.Parameter dto)
+        {
+            var resp = base.Add(dto);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return resp;
+            }
+
+            RefreshUserParametersCache();
+
+            return resp;
+        }
+
+        public override DataResponse<int> Edit(Dto.Parameter dto)
+        {
+            var resp = base.Edit(dto);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return resp;
+            }
+
+            RefreshUserParametersCache();
+
+            return resp;
+        }
+
+        public override ResponseBase SoftDelete(int id)
+        {
+            var resp = base.SoftDelete(id);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return resp;
+            }
+
+            RefreshUserParametersCache();
+
+            return resp;
+        }
+
+        /// <summary>
+        /// remove parameters which belongs to Owner
+        /// </summary>
+        private void RefreshUserParametersCache()
+        {
+            var list = new List<object> { OwnerId };
+
+            Func<Guid, IEnumerable<Dto.Parameter>> info = GetUserParameters;
+
+            var cacheKey = Utility.GetMethodResultCacheKey(info, list);
+
+            _cacheService.Remove(cacheKey);
         }
     }
 }

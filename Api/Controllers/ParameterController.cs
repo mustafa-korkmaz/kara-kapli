@@ -1,32 +1,31 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using Api.ViewModels.Customer;
-using Api.ViewModels.Transaction;
 using Api.ViewModels.Parameter;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Common.Request.Criteria.Transaction;
 using Common.Request;
-using Business.Transaction;
+using Dto;
+using Business.Parameter;
+using Common.Request.Criteria.Parameter;
+using Api.ViewModels;
 
 namespace Api.Controllers
 {
     [Route("parameters"), ApiController, Authorize]
     public class ParameterController : ApiControllerBase
     {
-        private readonly ITransactionBusiness _transactionBusiness;
+        private readonly IParameterBusiness _parameterBusiness;
 
-        public ParameterController(ITransactionBusiness transactionBusiness)
+        public ParameterController(IParameterBusiness parameterBusiness)
         {
-            _transactionBusiness = transactionBusiness;
+            _parameterBusiness = parameterBusiness;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<PagedListResponse<TransactionViewModel>>), (int)HttpStatusCode.OK)]
-        public IActionResult Get([FromQuery] SearchTransactionViewModel model)
+        [ProducesResponseType(typeof(ApiResponse<PagedListResponse<ParameterViewModel>>), (int)HttpStatusCode.OK)]
+        public IActionResult Get([FromQuery] SearchParameterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -45,7 +44,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public IActionResult Post([FromBody] CreateTransactionViewModel model)
+        public IActionResult Post([FromBody] CreateParameterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -62,51 +61,72 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private ApiResponse<PagedListResponse<TransactionViewModel>> Search(SearchTransactionViewModel model)
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Put([FromRoute] IdViewModel idModel, [FromBody] UpdateParameterViewModel model)
         {
-            var apiResp = new ApiResponse<PagedListResponse<TransactionViewModel>>
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Update(idModel.Id, model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Delete([FromRoute] IdViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Delete(model.Id);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        private ApiResponse<PagedListResponse<ParameterViewModel>> Search(SearchParameterViewModel model)
+        {
+            var apiResp = new ApiResponse<PagedListResponse<ParameterViewModel>>
             {
                 Type = ResponseType.Fail,
-                Data = new PagedListResponse<TransactionViewModel>()
+                Data = new PagedListResponse<ParameterViewModel>()
             };
 
-            var request = new FilteredPagedListRequest<SearchTransactionCriteria>
+            var request = new FilteredPagedListRequest<SearchParameterCriteria>
             {
-                FilterCriteria = new SearchTransactionCriteria
+                FilterCriteria = new SearchParameterCriteria
                 {
                     UserId = GetUserId().Value,
-                    CustomerId = model.CustomerId,
-                    IsCompleted = model.IsCompleted,
-                    IsReceivable = model.IsReceivable
+                    Name = model.Name
                 },
                 IncludeRecordsTotal = model.IncludeRecordsTotal,
                 Limit = model.Limit,
                 Offset = model.Offset
             };
 
-            var resp = _transactionBusiness.Search(request);
+            var resp = _parameterBusiness.Search(request);
 
-            apiResp.Data.Items = resp.Items.Select(p => new TransactionViewModel
+            apiResp.Data.Items = resp.Items.Select(p => new ParameterViewModel
             {
                 Id = p.Id,
-                Customer = new CustomerViewModel
-                {
-                    Title = p.Customer.Title,
-                    AuthorizedPersonName = p.Customer.AuthorizedPersonName
-                },
-                Type = new ParameterViewModel
-                {
-                    Id = p.Type.Id,
-                    ParameterTypeId = p.Type.ParameterTypeId,
-                    Name = p.Type.Name
-                },
-                Amount = p.Amount,
-                Description = p.Description,
-                IsCompleted = p.IsCompleted,
-                IsReceivable = p.IsReceivable,
-                CreatedAtText = p.CreatedAt.ToDateTimeString(),
-                ModifiedAtText = p.ModifiedAt.ToDateTimeString(),
-                DateText = p.Date.ToDateString(),
+                ParameterTypeId = p.ParameterTypeId,
+                Order = p.Order,
+                Name = p.Name
             });
 
             apiResp.Data.RecordsTotal = resp.RecordsTotal;
@@ -115,31 +135,74 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        private ApiResponse Create(CreateTransactionViewModel model)
+        private ApiResponse Create(CreateParameterViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+            var parameter = new Parameter
+            {
+                UserId = GetUserId().Value,
+                Name = model.Name,
+                Order = model.Order.Value,
+                ParameterTypeId = model.ParameterTypeId.Value
+            };
+
+            _parameterBusiness.OwnerId = parameter.UserId;
+
+            var resp = _parameterBusiness.Add(parameter);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Update(int id, UpdateParameterViewModel model)
         {
             var apiResp = new ApiResponse
             {
                 Type = ResponseType.Fail
             };
 
-            var now = DateTime.UtcNow.ToTurkeyDateTime();
-
-            var transaction = new Dto.Transaction
+            var parameter = new Parameter
             {
-                CustomerId = model.CustomerId,
-                TypeId = model.TypeId,
-                Amount = model.Amount.Value,
-                Description = model.Description,
-                IsCompleted = model.IsCompleted.Value,
-                IsReceivable = model.IsReceivable.Value,
-                Date = model.Date,
-                ModifiedAt = now,
-                CreatedAt = now
+                Id =id,
+                UserId = GetUserId().Value,
+                Name = model.Name,
+                Order = model.Order.Value,
+                ParameterTypeId = model.ParameterTypeId.Value
             };
 
-            _transactionBusiness.OwnerId = GetUserId().Value;
+            _parameterBusiness.OwnerId = parameter.UserId;
 
-            var resp = _transactionBusiness.Add(transaction);
+            var resp = _parameterBusiness.Edit(parameter);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Delete(int parameterId)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            _parameterBusiness.OwnerId = GetUserId().Value;
+
+            var resp = _parameterBusiness.SoftDelete(parameterId);
 
             if (resp.Type != ResponseType.Success)
             {

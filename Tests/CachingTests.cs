@@ -2,6 +2,10 @@ using Xunit;
 using System.Linq;
 using Service.Caching;
 using Business.Customer;
+using Common;
+using System.Collections.Generic;
+using System.Reflection;
+using System;
 
 namespace Tests
 {
@@ -18,16 +22,26 @@ namespace Tests
         }
 
         [Fact]
-        public void RefreshCache_Should_NotCallDatabaseTwice_WhenCacheNotRefreshed()
+        public void CacheKey_Should_Be_Fetched_When_MethodIsGiven()
         {
             //arrange
+            var c = this;
+
+            Action action = c.CacheKey_Should_Be_Fetched_When_MethodIsGiven;
+            Func<int, string> func = c.MyTestMethod;
 
             //act
-
-            //first retrieve from db and cache blogs
+            var actionCacheKey = Utility.GetMethodResultCacheKey(action, new List<string> { "test1", "test2" });
+            var funcCacheKey = Utility.GetMethodResultCacheKey(func, new List<object> { 1000 });
 
             //assert
-           // Assert.True(retrievedFromCache.Count() == retrievedFromDb.Count());
+            Assert.Equal("Tests.CachingTests.CacheKey_Should_Be_Fetched_When_MethodIsGiven(test1, test2)", actionCacheKey);
+            Assert.Equal("Tests.CachingTests.MyTestMethod(1000)", funcCacheKey);
+        }
+
+        private string MyTestMethod(int a)
+        {
+            return a.ToString();
         }
     }
 }

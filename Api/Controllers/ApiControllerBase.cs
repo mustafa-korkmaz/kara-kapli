@@ -18,7 +18,8 @@ namespace Api.Controllers
         protected ApiResponse GetModelStateErrorResponse(ModelStateDictionary dic)
         {
             //we will return first validation error as error code
-            var firstError = dic.Values.First().Errors.First().ErrorMessage;
+            var firstError = dic.Values.First(p => p.ValidationState == ModelValidationState.Invalid)
+                .Errors.First().ErrorMessage;
 
             return new ApiResponse
             {

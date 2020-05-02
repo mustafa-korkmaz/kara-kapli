@@ -11,6 +11,8 @@ using AutoMapper;
 using Business.Customer;
 using Service.Caching;
 using Common;
+using Business.Transaction;
+using Business.Parameter;
 
 [assembly: TestFramework("Tests.Startup", "Tests")]
 namespace Tests
@@ -27,6 +29,7 @@ namespace Tests
 
             services.AddDbContext<Dal.Db.BlackCoveredLedgerDbContext>(options =>
            options.UseNpgsql(configuration.GetConnectionString("BlogContext")));
+            services.AddTransient<Dal.IUnitOfWork, Dal.UnitOfWork>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -34,8 +37,10 @@ namespace Tests
             // Add our Config object so it can be injected
             services.Configure<AppSettings>(configuration.GetSection("Keys"));
 
-            // Injecting the repositories
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
+            services.AddTransient<ITransactionBusiness, TransactionBusiness>();
+            services.AddTransient<IParameterBusiness, ParameterBusiness>();
+            //services.AddTransient<ISecurity, JwtSecurity>();
 
             services.AddTransient<ICacheService, CacheService>();
 

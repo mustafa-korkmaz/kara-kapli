@@ -32,7 +32,7 @@ namespace Business.Transaction
             var resp = Repository.Search(request);
 
             var transactions = Mapper.Map<IEnumerable<Dal.Entities.Transaction>, IEnumerable<Dto.Transaction>>(resp.Items);
-           
+
             SetTransactionTypes(transactions);
 
             return new PagedListResponse<Dto.Transaction>
@@ -79,14 +79,6 @@ namespace Business.Transaction
                 Type = ResponseType.Fail
             };
 
-            var resp = _customerBusiness.Get(dto.CustomerId);
-
-            if (resp.Type != ResponseType.Success)
-            {
-                businessResp.ErrorCode = resp.ErrorCode;
-                return businessResp;
-            }
-
             var entity = Repository.GetById(dto.Id);
 
             if (entity == null)
@@ -95,10 +87,21 @@ namespace Business.Transaction
                 return businessResp;
             }
 
+            //do not let transaction customerId changes
+            dto.CustomerId = entity.CustomerId;
+
+            var resp = _customerBusiness.Get(entity.CustomerId);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                businessResp.ErrorCode = resp.ErrorCode;
+                return businessResp;
+            }
+
             var customer = resp.Data;
 
             //first rollback the existing amount from customer's remaining balance
-            customer.RemainingBalance += GetBalance(entity);
+            customer.RemainingBalance -= GetBalance(entity);
 
             //now add the new balance to customer's remaining balance
             customer.RemainingBalance += GetBalance(dto);
@@ -124,6 +127,52 @@ namespace Business.Transaction
             return businessResp;
         }
 
+        public override ResponseBase Delete(int id)
+        {
+            var deleteResp = new ResponseBase
+            {
+                Type = ResponseType.Fail
+            };
+
+            var entity = Repository.GetById(id);
+
+            var resp = _customerBusiness.Get(entity.CustomerId);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return resp;
+            }
+
+            var customer = resp.Data;
+
+            //rollback the existing amount from customer's remaining balance
+            customer.RemainingBalance -= GetBalance(entity);
+
+            _customerBusiness.OwnerId = OwnerId;
+
+            using (var tx = Uow.BeginTransaction())
+            {
+                //update customer's remaining balance 
+                _customerBusiness.Edit(customer);
+
+                deleteResp = base.Delete(id);
+
+                if (deleteResp.Type != ResponseType.Success)
+                {
+                    return deleteResp;
+                }
+
+                tx.Commit();
+            }
+
+            return deleteResp;
+        }
+
+        protected override bool IsEntityOwnerValid(Dal.Entities.Transaction entity)
+        {
+            return entity.Customer.UserId.Equals(OwnerId);
+        }
+
         private double GetBalance(Dto.Transaction t)
         {
             return t.IsReceivable ? t.Amount : -1 * t.Amount;
@@ -132,7 +181,6 @@ namespace Business.Transaction
         {
             return t.IsReceivable ? t.Amount : -1 * t.Amount;
         }
-
         private void SetTransactionTypes(IEnumerable<Dto.Transaction> transactions)
         {
             var parameters = _parameterBusiness.GetUserParameters(OwnerId);

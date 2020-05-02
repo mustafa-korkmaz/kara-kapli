@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using Api.ViewModels.Customer;
 using Api.ViewModels.Transaction;
 using Api.ViewModels.Parameter;
 using Common;
@@ -11,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Common.Request.Criteria.Transaction;
 using Common.Request;
 using Business.Transaction;
+using Api.ViewModels;
+using Api.ViewModels.Customer;
 
 namespace Api.Controllers
 {
@@ -62,6 +63,44 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Put([FromRoute] IdViewModel idModel, [FromBody] UpdateTransactionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Update(idModel.Id, model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Delete([FromRoute] IdViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = Delete(model.Id);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
         private ApiResponse<PagedListResponse<TransactionViewModel>> Search(SearchTransactionViewModel model)
         {
             var apiResp = new ApiResponse<PagedListResponse<TransactionViewModel>>
@@ -93,6 +132,7 @@ namespace Api.Controllers
                 Id = p.Id,
                 Customer = new CustomerViewModel
                 {
+                    Id = p.CustomerId,
                     Title = p.Customer.Title,
                     AuthorizedPersonName = p.Customer.AuthorizedPersonName
                 },
@@ -109,7 +149,7 @@ namespace Api.Controllers
                 CreatedAtText = p.CreatedAt.ToDateTimeString(),
                 ModifiedAtText = p.ModifiedAt.ToDateTimeString(),
                 DateText = p.Date.ToDateString(),
-            });
+            }); ;
 
             apiResp.Data.RecordsTotal = resp.RecordsTotal;
             apiResp.Type = ResponseType.Success;
@@ -129,7 +169,7 @@ namespace Api.Controllers
             var transaction = new Dto.Transaction
             {
                 CustomerId = model.CustomerId,
-                TypeId = model.TypeId,
+                TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
                 IsCompleted = model.IsCompleted.Value,
@@ -142,6 +182,60 @@ namespace Api.Controllers
             _transactionBusiness.OwnerId = GetUserId().Value;
 
             var resp = _transactionBusiness.Add(transaction);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Update(int id, UpdateTransactionViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var transaction = new Dto.Transaction
+            {
+                Id = id,
+                TypeId = model.TypeId.Value,
+                Amount = model.Amount.Value,
+                Description = model.Description,
+                IsCompleted = model.IsCompleted.Value,
+                IsReceivable = model.IsReceivable.Value,
+                Date = model.Date,
+                ModifiedAt = DateTime.UtcNow.ToTurkeyDateTime()
+            };
+
+            _transactionBusiness.OwnerId = GetUserId().Value;
+
+            var resp = _transactionBusiness.Edit(transaction);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse Delete(int transactionId)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            _transactionBusiness.OwnerId = GetUserId().Value;
+
+            var resp = _transactionBusiness.Delete(transactionId);
 
             if (resp.Type != ResponseType.Success)
             {

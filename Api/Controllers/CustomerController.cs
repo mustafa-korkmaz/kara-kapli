@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using Api.ViewModels;
 using Api.ViewModels.Customer;
 using Business.Customer;
 using Common;
 using Common.Request;
 using Common.Request.Criteria.Customer;
 using Common.Response;
-using Dal.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,7 +63,7 @@ namespace Api.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public IActionResult Put([FromRoute] CustomerIdViewModel idModel, [FromBody] UpdateCustomerViewModel model)
+        public IActionResult Put([FromRoute] IdViewModel idModel, [FromBody] UpdateCustomerViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace Api.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public IActionResult Delete([FromRoute] CustomerIdViewModel model)
+        public IActionResult Delete([FromRoute] IdViewModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -233,8 +233,7 @@ namespace Dal.Migrations
                     TypeId = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Description = table.Column<string>(maxLength: 250, nullable: true),
-                    IsReceivable = table.Column<bool>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    IsDebt = table.Column<bool>(nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: false)
@@ -264,7 +263,7 @@ namespace Dal.Migrations
             migrationBuilder.InsertData(
                 table: "ParameterTypes",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "CustomerOperationType" });
+                values: new object[] { 1, "TransactionType" });
 
             migrationBuilder.InsertData(
                 table: "Customers",
@@ -274,7 +273,13 @@ namespace Dal.Migrations
             migrationBuilder.InsertData(
                 table: "Parameters",
                 columns: new[] { "Id", "IsDeleted", "Name", "Order", "ParameterTypeId", "UserId" },
-                values: new object[] { 1, false, "Diğer", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") });
+                values: new object[,]
+                {
+                    { 1, false, "A-Malzeme Alım", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 2, false, "B-Satış", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 3, false, "A-Tahsilat", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 4, false, "B-Ödeme", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -139,7 +139,7 @@ namespace Api.Controllers
                 {
                     Id = p.Type.Id,
                     ParameterTypeId = p.Type.ParameterTypeId,
-                    Name = p.Type.Name
+                    Name = p.TypePrettyName
                 },
                 Amount = p.Amount,
                 Description = p.Description,
@@ -162,6 +162,8 @@ namespace Api.Controllers
                 Type = ResponseType.Fail
             };
 
+            _transactionBusiness.OwnerId = GetUserId().Value;
+
             var now = DateTime.UtcNow.ToTurkeyDateTime();
 
             var transaction = new Dto.Transaction
@@ -175,8 +177,6 @@ namespace Api.Controllers
                 ModifiedAt = now,
                 CreatedAt = now
             };
-
-            _transactionBusiness.OwnerId = GetUserId().Value;
 
             var resp = _transactionBusiness.Add(transaction);
 

@@ -221,14 +221,14 @@ namespace Dal.Db
                 new Entities.ParameterType
                 {
                     Id = 1,
-                    Name = "CustomerOperationType"
+                    Name = "TransactionType"
                 });
 
             modelBuilder.Entity<Entities.Parameter>().HasData(
-                CreateParameter(1,
-                  Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
-                    1,
-                    "Diğer"));
+                CreateParameter(1, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "A-Malzeme Alım"),
+                CreateParameter(2, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "B-Satış"),
+                CreateParameter(3, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "A-Tahsilat"),
+                CreateParameter(4, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "B-Ödeme"));
 
             Entities.Parameter CreateParameter(int id, Guid userId, int typeId, string name)
             {
@@ -240,6 +240,7 @@ namespace Dal.Db
                     ParameterTypeId = typeId
                 };
             }
+
 
             #endregion seed
         }

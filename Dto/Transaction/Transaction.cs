@@ -13,6 +13,11 @@ namespace Dto
         public int TypeId { get; set; }
         public virtual Parameter Type { get; set; } //navigation
 
+        /// <summary>
+        /// Skips the A- or B- chars in type name which indicates 'Alacak' or 'Borc'
+        /// </summary>
+        public string TypePrettyName => Type.Name.Substring(2);
+
         public double Amount { get; set; }
 
         public string Description { get; set; }

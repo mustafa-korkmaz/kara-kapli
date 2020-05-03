@@ -346,7 +346,34 @@ namespace Dal.Migrations
                         {
                             Id = 1,
                             IsDeleted = false,
-                            Name = "Diğer",
+                            Name = "A-Malzeme Alım",
+                            Order = (byte)0,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            Name = "B-Satış",
+                            Order = (byte)0,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDeleted = false,
+                            Name = "A-Tahsilat",
+                            Order = (byte)0,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            Name = "B-Ödeme",
                             Order = (byte)0,
                             ParameterTypeId = 1,
                             UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
@@ -373,7 +400,7 @@ namespace Dal.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "CustomerOperationType"
+                            Name = "TransactionType"
                         });
                 });
 
@@ -400,10 +427,7 @@ namespace Dal.Migrations
                         .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsReceivable")
+                    b.Property<bool>("IsDebt")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModifiedAt")

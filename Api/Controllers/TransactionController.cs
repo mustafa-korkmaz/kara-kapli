@@ -115,8 +115,7 @@ namespace Api.Controllers
                 {
                     UserId = GetUserId().Value,
                     CustomerId = model.CustomerId,
-                    IsCompleted = model.IsCompleted,
-                    IsReceivable = model.IsReceivable
+                    IsDebt = model.IsDebt
                 },
                 IncludeRecordsTotal = model.IncludeRecordsTotal,
                 Limit = model.Limit,
@@ -144,8 +143,7 @@ namespace Api.Controllers
                 },
                 Amount = p.Amount,
                 Description = p.Description,
-                IsCompleted = p.IsCompleted,
-                IsReceivable = p.IsReceivable,
+                IsDebt = p.IsDebt,
                 CreatedAtText = p.CreatedAt.ToDateTimeString(),
                 ModifiedAtText = p.ModifiedAt.ToDateTimeString(),
                 DateText = p.Date.ToDateString(),
@@ -172,8 +170,7 @@ namespace Api.Controllers
                 TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
-                IsCompleted = model.IsCompleted.Value,
-                IsReceivable = model.IsReceivable.Value,
+                IsDebt = _transactionBusiness.IsDebtTransaction(model.TypeId.Value),
                 Date = model.Date,
                 ModifiedAt = now,
                 CreatedAt = now
@@ -206,8 +203,7 @@ namespace Api.Controllers
                 TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
-                IsCompleted = model.IsCompleted.Value,
-                IsReceivable = model.IsReceivable.Value,
+                IsDebt = _transactionBusiness.IsDebtTransaction(model.TypeId.Value),
                 Date = model.Date,
                 ModifiedAt = DateTime.UtcNow.ToTurkeyDateTime()
             };

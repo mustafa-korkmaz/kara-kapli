@@ -12,6 +12,19 @@ namespace Common
         public const int MinimumLengthForSearch = 3;
     }
 
+    public static class AccountingType
+    {
+        /// <summary>
+        /// BORCLU type accounting
+        /// </summary>
+        public const char Debt = 'B';
+
+        /// <summary>
+        /// ALACAK type accounting
+        /// </summary>
+        public const char Receivable = 'A';
+    }
+
     public static class ErrorCode
     {
         public const string ApplicationException = "UNEXPECTED_ERROR";

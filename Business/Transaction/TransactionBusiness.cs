@@ -175,11 +175,11 @@ namespace Business.Transaction
 
         private double GetBalance(Dto.Transaction t)
         {
-            return t.IsReceivable ? t.Amount : -1 * t.Amount;
+            return t.IsDebt ? t.Amount : -1 * t.Amount;
         }
         private double GetBalance(Dal.Entities.Transaction t)
         {
-            return t.IsReceivable ? t.Amount : -1 * t.Amount;
+            return t.IsDebt ? t.Amount : -1 * t.Amount;
         }
         private void SetTransactionTypes(IEnumerable<Dto.Transaction> transactions)
         {
@@ -189,6 +189,15 @@ namespace Business.Transaction
             {
                 item.Type = parameters.FirstOrDefault(p => p.Id == item.TypeId);
             }
+        }
+
+        public bool IsDebtTransaction(int typeId)
+        {
+            var userParameters = _parameterBusiness.GetUserParameters(OwnerId);
+
+            var transactionType = userParameters.First(p => p.Id == typeId);
+
+            return transactionType.Name[0] == AccountingType.Debt;
         }
     }
 }

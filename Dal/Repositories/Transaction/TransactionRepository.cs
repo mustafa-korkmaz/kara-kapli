@@ -24,14 +24,9 @@ namespace Dal.Repositories.Transaction
                 query = query.Where(p => p.CustomerId == request.FilterCriteria.CustomerId.Value);
             }
 
-            if (request.FilterCriteria.IsReceivable.HasValue)
+            if (request.FilterCriteria.IsDebt.HasValue)
             {
-                query = query.Where(p => p.IsReceivable == request.FilterCriteria.IsReceivable.Value);
-            }
-
-            if (request.FilterCriteria.IsCompleted.HasValue)
-            {
-                query = query.Where(p => p.IsCompleted == request.FilterCriteria.IsCompleted.Value);
+                query = query.Where(p => p.IsDebt == request.FilterCriteria.IsDebt.Value);
             }
 
             if (request.IncludeRecordsTotal)
@@ -45,8 +40,7 @@ namespace Dal.Repositories.Transaction
                 Description = p.Description,
                 Amount = p.Amount,
                 TypeId = p.TypeId,
-                IsCompleted = p.IsCompleted,
-                IsReceivable = p.IsReceivable,
+                IsDebt = p.IsDebt,
                 Date = p.Date,
                 CreatedAt = p.CreatedAt,
                 ModifiedAt = p.ModifiedAt,

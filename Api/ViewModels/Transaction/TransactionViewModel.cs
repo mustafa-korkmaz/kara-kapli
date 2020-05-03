@@ -15,9 +15,7 @@ namespace Api.ViewModels.Transaction
         public double Amount { get; set; }
         public string Description { get; set; }
 
-        public bool IsReceivable { get; set; }
-
-        public bool IsCompleted { get; set; }
+        public bool IsDebt { get; set; }
 
         public string DateText { get; set; }
 

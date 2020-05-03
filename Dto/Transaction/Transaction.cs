@@ -17,13 +17,10 @@ namespace Dto
 
         public string Description { get; set; }
 
-        public bool IsReceivable { get; set; }
-
         /// <summary>
-        /// IsPaid for Debt
-        /// IsCollected for Receivable
+        /// is 'Borclu' typed transaction? If false then it is "Alacakli' 
         /// </summary>
-        public bool IsCompleted { get; set; }
+        public bool IsDebt { get; set; }
 
         public DateTime Date { get; set; }
 

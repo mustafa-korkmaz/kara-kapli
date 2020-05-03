@@ -22,15 +22,11 @@ namespace Dal.Entities
         [MaxLength(250)]
         public string Description { get; set; }
 
-        [Required]
-        public bool IsReceivable { get; set; }
-
         /// <summary>
-        /// IsPaid for Debt
-        /// IsCollected for Receivable
+        /// is 'Borclu' typed transaction? If false then it is "Alacakli' 
         /// </summary>
         [Required]
-        public bool IsCompleted { get; set; }
+        public bool IsDebt { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

@@ -11,14 +11,8 @@ namespace Api.ViewModels.Transaction
         [SnakeCaseQuery(nameof(CustomerId))]
         public int? CustomerId { get; set; }
 
-        [SnakeCaseQuery(nameof(IsReceivable))]
-        public bool? IsReceivable { get; set; }
-
-        /// <summary>
-        /// IsPaid for Debt
-        /// IsCollected for Receivable
-        /// </summary>
-        [SnakeCaseQuery(nameof(IsCompleted))]
-        public bool? IsCompleted { get; set; }
+        [SnakeCaseQuery(nameof(IsDebt))]
+        public bool? IsDebt { get; set; }
+      
     }
 }

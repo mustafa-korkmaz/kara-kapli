@@ -9,12 +9,6 @@ namespace Common.Request.Criteria.Transaction
 
         public int? CustomerId { get; set; }
 
-        public bool? IsReceivable { get; set; }
-
-        /// <summary>
-        /// IsPaid for Debt
-        /// IsCollected for Receivable
-        /// </summary>
-        public bool? IsCompleted { get; set; }
+        public bool? IsDebt { get; set; }
     }
 }

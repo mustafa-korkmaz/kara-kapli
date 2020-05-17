@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Api.ViewModels.User
+namespace Api.ViewModels.User.Response
 {
     public class UserViewModel
     {

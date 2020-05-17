@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Api.ViewModels.User;
+using Api.ViewModels.User.Request;
+using Api.ViewModels.User.Response;
 using Common;
 using Common.Response;
 using Dto.User;

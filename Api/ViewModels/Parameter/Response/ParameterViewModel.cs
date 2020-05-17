@@ -1,4 +1,4 @@
-﻿namespace Api.ViewModels.Parameter
+﻿namespace Api.ViewModels.Parameter.Response
 {
     public class ParameterViewModel
     {

@@ -1,9 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
-using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.Transaction
+namespace Api.ViewModels.Transaction.Request
 {
     public class CreateTransactionViewModel : UpdateTransactionViewModel
     {

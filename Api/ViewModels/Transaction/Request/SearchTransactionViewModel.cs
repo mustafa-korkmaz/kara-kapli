@@ -1,8 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
-using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.Transaction
+namespace Api.ViewModels.Transaction.Request
 {
     public class SearchTransactionViewModel : PagedListViewModel
     {

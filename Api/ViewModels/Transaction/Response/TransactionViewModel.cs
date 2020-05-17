@@ -1,8 +1,8 @@
 ﻿
-using Api.ViewModels.Customer;
-using Api.ViewModels.Parameter;
+using Api.ViewModels.Customer.Response;
+using Api.ViewModels.Parameter.Response;
 
-namespace Api.ViewModels.Transaction
+namespace Api.ViewModels.Transaction.Response
 {
     public class TransactionViewModel
     {

@@ -1,8 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
-using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.Customer
+namespace Api.ViewModels.Customer.Request
 {
     public class CreateCustomerViewModel
     {

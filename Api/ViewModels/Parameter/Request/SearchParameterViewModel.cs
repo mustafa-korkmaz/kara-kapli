@@ -1,8 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
-using System.ComponentModel.DataAnnotations;
 
-namespace Api.ViewModels.Parameter
+namespace Api.ViewModels.Parameter.Request
 {
     public class SearchParameterViewModel : PagedListViewModel
     {

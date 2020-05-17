@@ -4,6 +4,7 @@ using Common.Response;
 using Dal.Db;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Common;
 
 namespace Dal.Repositories.Customer
 {
@@ -11,7 +12,7 @@ namespace Dal.Repositories.Customer
     {
         public CustomerRepository(BlackCoveredLedgerDbContext context) : base(context)
         {
-            
+
         }
 
         public PagedListResponse<Entities.Customer> Search(FilteredPagedListRequest<SearchCustomerCriteria> request)
@@ -22,14 +23,14 @@ namespace Dal.Repositories.Customer
 
             if (!string.IsNullOrEmpty(request.FilterCriteria.Title))
             {
-                var titleLikeText = string.Format("%{0}%", request.FilterCriteria.Title);
+                var titleLikeText = $"%{request.FilterCriteria.Title}%";
                 query = query.Where(p => EF.Functions.ILike(p.Title, titleLikeText));
             }
 
             if (!string.IsNullOrEmpty(request.FilterCriteria.AuthorizedPersonName))
             {
-                var personLikeText = string.Format("{0}%", request.FilterCriteria.AuthorizedPersonName);
-                query = query.Where(p => EF.Functions.ILike(p.Title, personLikeText));
+                var personLikeText = $"{request.FilterCriteria.AuthorizedPersonName}%";
+                query = query.Where(p => EF.Functions.ILike(p.AuthorizedPersonName, personLikeText));
             }
 
             if (request.IncludeRecordsTotal)
@@ -37,8 +38,23 @@ namespace Dal.Repositories.Customer
                 result.RecordsTotal = query.Count();
             }
 
+            switch (request.FilterCriteria.SortType)
+            {
+                case SortType.Ascending:
+                    query = query
+                        .OrderBy(p => p.Title);
+                    break;
+                case SortType.Descending:
+                    query = query
+                        .OrderByDescending(p => p.Title);
+                    break;
+                default:
+                    query = query
+                        .OrderByDescending(p => p.Id);
+                    break;
+            }
+
             result.Items = query
-                .OrderByDescending(p => p.Id)
                 .Skip(request.Offset)
                 .Take(request.Limit)
                 .ToList();

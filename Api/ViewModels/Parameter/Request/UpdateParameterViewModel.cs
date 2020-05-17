@@ -1,6 +1,5 @@
 ﻿
-
-namespace Api.ViewModels.Parameter
+namespace Api.ViewModels.Parameter.Request
 {
     public class UpdateParameterViewModel : CreateParameterViewModel
     {

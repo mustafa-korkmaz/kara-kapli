@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Net;
 using Api.ViewModels;
-using Api.ViewModels.Customer;
+using Api.ViewModels.Customer.Request;
+using Api.ViewModels.Customer.Response;
 using Business.Customer;
 using Common;
 using Common.Request;
@@ -113,7 +114,8 @@ namespace Api.Controllers
                 {
                     AuthorizedPersonName = model.AuthorizedPersonName,
                     Title = model.Title,
-                    UserId = GetUserId().Value
+                    UserId = GetUserId().Value,
+                    SortType = model.GetSortType()
                 },
                 IncludeRecordsTotal = model.IncludeRecordsTotal,
                 Limit = model.Limit,

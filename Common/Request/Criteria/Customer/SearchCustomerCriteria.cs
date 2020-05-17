@@ -10,5 +10,7 @@ namespace Common.Request.Criteria.Customer
         public string Title { get; set; }
 
         public string AuthorizedPersonName { get; set; }
+
+        public SortType SortType { get; set; }
     }
 }

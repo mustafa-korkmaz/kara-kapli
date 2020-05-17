@@ -1,33 +1,10 @@
 ﻿namespace Common
 {
-    public enum AuthenticationMode
-    {
-        Network = 0,
-        Application = 1,
-        Both = 2,
-        None = 3,
-        BothSecure = 4
-    }
-
-    public enum EmailSearchType
-    {
-        All,
-        Confirmed,
-        NonConfirmed
-    }
-
-    public enum JobPostSearchType
-    {
-        All,
-        Active,
-        Passive
-    }
-
-    public enum EmailConfirmationStatus
+    public enum SortType
     {
         None,
-        Confirmed,
-        NotConfirmed
+        Ascending,
+        Descending
     }
 
     public enum Status : byte

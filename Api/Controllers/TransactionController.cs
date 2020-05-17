@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using Api.ViewModels.Transaction;
-using Api.ViewModels.Parameter;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +9,10 @@ using Common.Request.Criteria.Transaction;
 using Common.Request;
 using Business.Transaction;
 using Api.ViewModels;
-using Api.ViewModels.Customer;
+using Api.ViewModels.Customer.Response;
+using Api.ViewModels.Parameter.Response;
+using Api.ViewModels.Transaction.Request;
+using Api.ViewModels.Transaction.Response;
 
 namespace Api.Controllers
 {

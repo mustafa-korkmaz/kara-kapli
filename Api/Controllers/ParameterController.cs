@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Net;
-using Api.ViewModels.Parameter;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +9,8 @@ using Dto;
 using Business.Parameter;
 using Common.Request.Criteria.Parameter;
 using Api.ViewModels;
+using Api.ViewModels.Parameter.Request;
+using Api.ViewModels.Parameter.Response;
 
 namespace Api.Controllers
 {

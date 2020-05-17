@@ -44,7 +44,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiResponse<int>), (int)HttpStatusCode.OK)]
         public IActionResult Post([FromBody] CreateCustomerViewModel model)
         {
             if (!ModelState.IsValid)
@@ -140,9 +140,9 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        private ApiResponse Create(CreateCustomerViewModel model)
+        private ApiResponse<int> Create(CreateCustomerViewModel model)
         {
-            var apiResp = new ApiResponse
+            var apiResp = new ApiResponse<int>
             {
                 Type = ResponseType.Fail
             };
@@ -165,6 +165,8 @@ namespace Api.Controllers
             }
 
             apiResp.Type = ResponseType.Success;
+            apiResp.Data = customer.Id;
+
             return apiResp;
         }
 

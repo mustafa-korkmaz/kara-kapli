@@ -275,10 +275,14 @@ namespace Dal.Migrations
                 columns: new[] { "Id", "IsDeleted", "Name", "Order", "ParameterTypeId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, false, "A-Malzeme Alım", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
-                    { 2, false, "B-Satış", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
-                    { 3, false, "A-Tahsilat", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
-                    { 4, false, "B-Ödeme", (byte)0, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") }
+                    { 1, false, "B-Cariye Borç", (byte)1, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 2, false, "A-Cariye Alacak", (byte)2, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 3, false, "A-Tahsilat", (byte)3, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 4, false, "B-Ödeme", (byte)4, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 5, false, "B-Customer Debt", (byte)5, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 6, false, "A-Customer Receivable", (byte)6, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 7, false, "A-Collection", (byte)7, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") },
+                    { 8, false, "B-Payment", (byte)8, 1, new Guid("402e9a22-8b21-11ea-bc55-0242ac130003") }
                 });
 
             migrationBuilder.CreateIndex(

@@ -38,7 +38,7 @@ namespace Dal.Repositories.Parameter
             if (!string.IsNullOrEmpty(request.FilterCriteria.Name))
             {
                 var nameLikeText = string.Format("%{0}%", request.FilterCriteria.Name);
-                query = query.Where(p => EF.Functions.Like(p.Name, nameLikeText));
+                query = query.Where(p => EF.Functions.ILike(p.Name, nameLikeText));
             }
 
             if (request.IncludeRecordsTotal)

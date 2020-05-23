@@ -346,8 +346,8 @@ namespace Dal.Migrations
                         {
                             Id = 1,
                             IsDeleted = false,
-                            Name = "A-Malzeme Alım",
-                            Order = (byte)0,
+                            Name = "B-Cariye Borç",
+                            Order = (byte)1,
                             ParameterTypeId = 1,
                             UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
                         },
@@ -355,8 +355,8 @@ namespace Dal.Migrations
                         {
                             Id = 2,
                             IsDeleted = false,
-                            Name = "B-Satış",
-                            Order = (byte)0,
+                            Name = "A-Cariye Alacak",
+                            Order = (byte)2,
                             ParameterTypeId = 1,
                             UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
                         },
@@ -365,7 +365,7 @@ namespace Dal.Migrations
                             Id = 3,
                             IsDeleted = false,
                             Name = "A-Tahsilat",
-                            Order = (byte)0,
+                            Order = (byte)3,
                             ParameterTypeId = 1,
                             UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
                         },
@@ -374,7 +374,43 @@ namespace Dal.Migrations
                             Id = 4,
                             IsDeleted = false,
                             Name = "B-Ödeme",
-                            Order = (byte)0,
+                            Order = (byte)4,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsDeleted = false,
+                            Name = "B-Customer Debt",
+                            Order = (byte)5,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsDeleted = false,
+                            Name = "A-Customer Receivable",
+                            Order = (byte)6,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsDeleted = false,
+                            Name = "A-Collection",
+                            Order = (byte)7,
+                            ParameterTypeId = 1,
+                            UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsDeleted = false,
+                            Name = "B-Payment",
+                            Order = (byte)8,
                             ParameterTypeId = 1,
                             UserId = new Guid("402e9a22-8b21-11ea-bc55-0242ac130003")
                         });

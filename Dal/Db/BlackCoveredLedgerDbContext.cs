@@ -225,19 +225,24 @@ namespace Dal.Db
                 });
 
             modelBuilder.Entity<Entities.Parameter>().HasData(
-                CreateParameter(1, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "A-Malzeme Alım"),
-                CreateParameter(2, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "B-Satış"),
-                CreateParameter(3, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "A-Tahsilat"),
-                CreateParameter(4, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, "B-Ödeme"));
+                CreateParameter(1, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 1, "B-Cariye Borç"),
+                CreateParameter(2, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 2, "A-Cariye Alacak"),
+                CreateParameter(3, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 3, "A-Tahsilat"),
+                CreateParameter(4, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 4, "B-Ödeme"),
+                CreateParameter(5, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 5, "B-Customer Debt"),
+                CreateParameter(6, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 6, "A-Customer Receivable"),
+                CreateParameter(7, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 7, "A-Collection"),
+                CreateParameter(8, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 8, "B-Payment"));
 
-            Entities.Parameter CreateParameter(int id, Guid userId, int typeId, string name)
+            Entities.Parameter CreateParameter(int id, Guid userId, int typeId, byte order, string name)
             {
                 return new Entities.Parameter
                 {
                     Id = id,
                     UserId = userId,
                     Name = name,
-                    ParameterTypeId = typeId
+                    ParameterTypeId = typeId,
+                    Order = order
                 };
             }
 

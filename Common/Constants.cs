@@ -30,11 +30,7 @@ namespace Common
         public const string ApplicationException = "UNEXPECTED_ERROR";
         public const string RecordNotFound = "RECORD_NOT_FOUND";
         public const string NotAuthorized = "NOT_AUTHORIZED";
-        public const string ApiKeyNotFound = "API_KEY_NOT_FOUND";
-        public const string ChannelTypeNotFound = "CHANNEL_TYPE_NOT_FOUND";
-        public const string ApiKeyIncorrect = "API_KEY_NOT_INCORRECT";
         public const string UserNotFound = "USER_NOT_FOUND";
-        public const string UserNotActive = "USER_NOT_ACTIVE";
         public const string IncorrectUsernameOrPassword = "USERNAME_OR_PASSWORD_INCORRECT";
         public const string UserExists = "USER_ALREADY_EXISTS";
     }
@@ -47,7 +43,7 @@ namespace Common
 
         public const string BetweenLength = "{0}_FIELD_SHOULD_BE_MIN_{2}_MAX_{1}_CHARS";
 
-        public const string BetweenRange = "{0}_FIELD_SHOULD_BE_BETWEEN_{2}_AND_{1}";
+        public const string BetweenRange = "{0}_FIELD_SHOULD_BE_BETWEEN_{1}_AND_{2}";
 
         public const string EmailNotValid = "EMAIL_FIELD_IS_NOT_VALID";
 

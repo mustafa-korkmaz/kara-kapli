@@ -10,6 +10,11 @@ namespace Api.ViewModels.Transaction.Request
         [SnakeCaseQuery(nameof(CustomerId))]
         public int? CustomerId { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
+        [Display(Name = "TYPE_ID")]
+        [SnakeCaseQuery(nameof(TypeId))]
+        public int? TypeId { get; set; }
+
         [SnakeCaseQuery(nameof(IsDebt))]
         public bool? IsDebt { get; set; }
       

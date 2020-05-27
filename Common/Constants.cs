@@ -15,14 +15,14 @@ namespace Common
     public static class AccountingType
     {
         /// <summary>
-        /// BORCLU type accounting
-        /// </summary>
-        public const char Debt = 'B';
-
-        /// <summary>
         /// ALACAK type accounting
         /// </summary>
-        public const char Receivable = 'A';
+        public const int Receivable = 1;
+
+        /// <summary>
+        /// BORCLU type accounting
+        /// </summary>
+        public const int Debt = 2;
     }
 
     public static class ErrorCode

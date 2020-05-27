@@ -24,7 +24,11 @@ namespace Dal.Repositories.Transaction
                 query = query.Where(p => p.CustomerId == request.FilterCriteria.CustomerId.Value);
             }
 
-            if (request.FilterCriteria.IsDebt.HasValue)
+            if (request.FilterCriteria.TypeId.HasValue)
+            {
+                query = query.Where(p => p.TypeId == request.FilterCriteria.TypeId.Value);
+            }
+            else if (request.FilterCriteria.IsDebt.HasValue)
             {
                 query = query.Where(p => p.IsDebt == request.FilterCriteria.IsDebt.Value);
             }

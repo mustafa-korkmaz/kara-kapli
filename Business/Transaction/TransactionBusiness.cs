@@ -197,7 +197,7 @@ namespace Business.Transaction
 
             var transactionType = userParameters.First(p => p.Id == typeId);
 
-            return transactionType.Name[0] == AccountingType.Debt;
+            return transactionType.ParameterTypeId == AccountingType.Debt;
         }
     }
 }

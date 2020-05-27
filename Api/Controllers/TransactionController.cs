@@ -116,6 +116,7 @@ namespace Api.Controllers
                 {
                     UserId = GetUserId().Value,
                     CustomerId = model.CustomerId,
+                    TypeId = model.TypeId,
                     IsDebt = model.IsDebt
                 },
                 IncludeRecordsTotal = model.IncludeRecordsTotal,

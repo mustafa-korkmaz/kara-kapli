@@ -9,6 +9,8 @@ namespace Common.Request.Criteria.Transaction
 
         public int? CustomerId { get; set; }
 
+        public int? TypeId { get; set; }
+
         public bool? IsDebt { get; set; }
     }
 }

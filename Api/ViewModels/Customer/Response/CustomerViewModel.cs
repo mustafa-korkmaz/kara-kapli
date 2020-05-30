@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Api.ViewModels.Customer.Response
 {
     public class CustomerViewModel
@@ -13,6 +15,6 @@ namespace Api.ViewModels.Customer.Response
 
         public double RemainingBalance { get; set; }
 
-        public string CreatedAtText { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

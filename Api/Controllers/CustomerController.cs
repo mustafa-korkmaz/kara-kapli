@@ -129,7 +129,7 @@ namespace Api.Controllers
                 Id = p.Id,
                 Title = p.Title,
                 AuthorizedPersonName = p.AuthorizedPersonName,
-                CreatedAtText = p.CreatedAt.ToDateString(),
+                CreatedAt = p.CreatedAt,
                 PhoneNumber = p.PhoneNumber,
                 RemainingBalance = p.RemainingBalance
             });
@@ -153,7 +153,7 @@ namespace Api.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Title = model.Title,
                 UserId = GetUserId().Value,
-                CreatedAt = DateTime.UtcNow.ToTurkeyDateTime()
+                CreatedAt = DateTime.UtcNow
             };
 
             var resp = _customerBusiness.Add(customer);

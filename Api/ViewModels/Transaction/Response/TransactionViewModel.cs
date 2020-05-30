@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Api.ViewModels.Customer.Response;
 using Api.ViewModels.Parameter.Response;
 
@@ -17,10 +18,10 @@ namespace Api.ViewModels.Transaction.Response
 
         public bool IsDebt { get; set; }
 
-        public string DateText { get; set; }
+        public DateTime Date { get; set; }
 
-        public string CreatedAtText { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public string ModifiedAtText { get; set; }
+        public DateTime ModifiedAt { get; set; }
     }
 }

@@ -141,14 +141,14 @@ namespace Api.Controllers
                 {
                     Id = p.Type.Id,
                     ParameterTypeId = p.Type.ParameterTypeId,
-                    Name = p.TypePrettyName
+                    Name = p.Type.Name
                 },
                 Amount = p.Amount,
                 Description = p.Description,
                 IsDebt = p.IsDebt,
-                CreatedAtText = p.CreatedAt.ToDateTimeString(),
-                ModifiedAtText = p.ModifiedAt.ToDateTimeString(),
-                DateText = p.Date.ToDateString(),
+                CreatedAt = p.CreatedAt,
+                ModifiedAt = p.ModifiedAt,
+                Date = p.Date
             }); ;
 
             apiResp.Data.RecordsTotal = resp.RecordsTotal;
@@ -166,11 +166,11 @@ namespace Api.Controllers
 
             _transactionBusiness.OwnerId = GetUserId().Value;
 
-            var now = DateTime.UtcNow.ToTurkeyDateTime();
+            var now = DateTime.UtcNow;
 
             var transaction = new Dto.Transaction
             {
-                CustomerId = model.CustomerId,
+                CustomerId = model.CustomerId.Value,
                 TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
@@ -207,7 +207,7 @@ namespace Api.Controllers
                 Description = model.Description,
                 IsDebt = _transactionBusiness.IsDebtTransaction(model.TypeId.Value),
                 Date = model.Date,
-                ModifiedAt = DateTime.UtcNow.ToTurkeyDateTime()
+                ModifiedAt = DateTime.UtcNow
             };
 
             _transactionBusiness.OwnerId = GetUserId().Value;

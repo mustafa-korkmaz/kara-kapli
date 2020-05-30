@@ -18,6 +18,7 @@ using Security;
 using Service.Caching;
 using Business.Parameter;
 using Business.Transaction;
+using Newtonsoft.Json;
 
 namespace Api
 {
@@ -44,6 +45,8 @@ namespace Api
                 {
                     NamingStrategy = new SnakeCaseNamingStrategy()
                 };
+
+                options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             });
 
             //Injecting the db context

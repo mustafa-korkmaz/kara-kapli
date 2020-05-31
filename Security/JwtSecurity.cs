@@ -127,6 +127,8 @@ namespace Security
                 return resp;
             }
 
+            await _userManager.AddToRoleAsync(userModel, userDto.Roles.First());
+
             resp.Type = ResponseType.Success;
 
             return resp;

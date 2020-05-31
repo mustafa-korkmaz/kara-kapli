@@ -13,19 +13,6 @@ namespace Common
         public const string DemoUserPassword = "12345678";
     }
 
-    public static class AccountingType
-    {
-        /// <summary>
-        /// ALACAK type accounting
-        /// </summary>
-        public const int Receivable = 1;
-
-        /// <summary>
-        /// BORCLU type accounting
-        /// </summary>
-        public const int Debt = 2;
-    }
-
     public static class ErrorCode
     {
         public const string ApplicationException = "UNEXPECTED_ERROR";
@@ -87,6 +74,41 @@ namespace Common
         public const string Turkish = "tr";
 
         public const string English = "en";
+    }
+
+    public static class DatabaseKeys
+    {
+        public static class ApplicationRoleId
+        {
+            public static Guid Owner = Guid.Parse("7f9fcc26-c38c-46bd-86a7-b7b3d5959b78");
+
+            public static Guid Admin = Guid.Parse("e964fe31-ba9a-4ee6-98c1-7fa84767868d");
+
+            public static Guid User = Guid.Parse("0967d456-60a8-43de-9ac8-5f15dfaa1909");
+
+            public static Guid DemoUser = Guid.Parse("8a158f67-b9aa-4dec-9e8f-53d29aeb1905");
+        }
+
+        public static class ApplicationRoleName
+        {
+            public const string Owner = "owner";
+            public const string Admin = "admin";
+            public const string User = "user";
+            public const string DemoUser = "demo_user";
+        }
+
+        public static class ParameterTypeId
+        {
+            /// <summary>
+            /// ALACAK type accounting
+            /// </summary>
+            public const int Receivable = 1;
+
+            /// <summary>
+            /// BORCLU type accounting
+            /// </summary>
+            public const int Debt = 2;
+        }
     }
 
     #region cahce keys

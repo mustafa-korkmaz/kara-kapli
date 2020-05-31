@@ -49,11 +49,16 @@ namespace Business.User
                 //add customers
                 _customerBusiness.AddRange(customers);
 
-                var transactions = GetTransactions(customers, parameters, lang);
-
-                //add transactions 
-                _transactionBusiness.AddRange(transactions);
                 tx.Commit();
+            }
+
+            var transactions = GetTransactions(customers, parameters, lang);
+
+            //add transactions 
+            foreach (var transaction in transactions)
+            {
+                _transactionBusiness.OwnerId = userId;
+                _transactionBusiness.Add(transaction);
             }
 
             return new Response
@@ -75,25 +80,25 @@ namespace Business.User
                         Name = "Cariye Borç",
                         UserId = userId,
                         Order = 0,
-                        ParameterTypeId = AccountingType.Debt
+                        ParameterTypeId = DatabaseKeys.ParameterTypeId.Debt
                         },
                         new Dto.Parameter  {
                             Name = "Cariye Alacak",
                             UserId = userId,
                             Order = 1,
-                            ParameterTypeId = AccountingType.Receivable
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Receivable
                         },
                         new Dto.Parameter  {
                             Name = "Tahsilat",
                             UserId = userId,
                             Order = 2,
-                            ParameterTypeId = AccountingType.Receivable
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Receivable
                         },
                         new Dto.Parameter  {
                             Name = "Ödeme",
                             UserId = userId,
                             Order = 3,
-                            ParameterTypeId = AccountingType.Debt
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Debt
                         }
                     });
                     break;
@@ -104,25 +109,25 @@ namespace Business.User
                             Name = "Customer Debt",
                             UserId = userId,
                             Order = 0,
-                            ParameterTypeId = AccountingType.Debt
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Debt
                         },
                         new Dto.Parameter  {
                             Name = "Customer Receivable",
                             UserId = userId,
                             Order = 1,
-                            ParameterTypeId = AccountingType.Receivable
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Receivable
                         },
                         new Dto.Parameter  {
                             Name = "Collection",
                             UserId = userId,
                             Order = 2,
-                            ParameterTypeId = AccountingType.Receivable
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Receivable
                         },
                         new Dto.Parameter  {
                             Name = "Payment",
                             UserId = userId,
                             Order = 3,
-                            ParameterTypeId = AccountingType.Debt
+                            ParameterTypeId = DatabaseKeys.ParameterTypeId.Debt
                         }
                     });
                     break;
@@ -142,7 +147,7 @@ namespace Business.User
                     {
                         new Dto.Customer  {
                         UserId = userId,
-                        Title = "Korkmaz Ltd. şti.",
+                        Title = "Korkmaz Ltd. Şti.",
                         AuthorizedPersonName = "Mustafa Korkmaz",
                         CreatedAt = DateTime.UtcNow
                         },

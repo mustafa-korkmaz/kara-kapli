@@ -53,6 +53,7 @@ namespace Business.Transaction
 
             var customer = resp.Data;
             customer.RemainingBalance += GetBalance(dto);
+            customer.Transactions = null; // prevent updating transaction table
 
             _customerBusiness.OwnerId = OwnerId;
 
@@ -197,7 +198,7 @@ namespace Business.Transaction
 
             var transactionType = userParameters.First(p => p.Id == typeId);
 
-            return transactionType.ParameterTypeId == AccountingType.Debt;
+            return transactionType.ParameterTypeId == DatabaseKeys.ParameterTypeId.Debt;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.ViewModels.User;
 using Api.ViewModels.User.Request;
@@ -171,6 +172,7 @@ namespace Api.Controllers
                 Email = model.Email,
                 NameSurname = model.NameSurname,
                 UserName = model.Username,
+                Roles = new List<string> { DatabaseKeys.ApplicationRoleName.User },
                 EmailConfirmed = true,
                 CreatedAt = DateTime.UtcNow
             };
@@ -208,6 +210,7 @@ namespace Api.Controllers
                 NameSurname = model.Language == Language.Turkish ? "Demo A.Ş." : "Demo Corp.",
                 UserName = username,
                 EmailConfirmed = true,
+                Roles = new List<string> { DatabaseKeys.ApplicationRoleName.DemoUser },
                 CreatedAt = DateTime.UtcNow
             };
 

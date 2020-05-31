@@ -8,5 +8,9 @@ namespace Api.ViewModels.User.Request
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Display(Name ="LANGUAGE")]
         public string Language { get; set; }
+
+        [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
+        [Display(Name = "PASSWORD")]
+        public string Password { get; set; }
     }
 }

@@ -28,12 +28,6 @@
         RecordNotFound = 5,
     }
 
-    public enum ParameterType
-    {
-        None = 0,
-        CustomerOperationType
-    }
-
     public enum PlanType
     {
         Free,

@@ -18,6 +18,7 @@ using Security;
 using Service.Caching;
 using Business.Parameter;
 using Business.Transaction;
+using Business.User;
 using Newtonsoft.Json;
 
 namespace Api
@@ -64,6 +65,7 @@ namespace Api
             // Add our Config object so it can be injected
             services.Configure<AppSettings>(Configuration.GetSection("Keys"));
 
+            services.AddTransient<IUserBusiness, UserBusiness>();
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
             services.AddTransient<ITransactionBusiness, TransactionBusiness>();
             services.AddTransient<IParameterBusiness, ParameterBusiness>();

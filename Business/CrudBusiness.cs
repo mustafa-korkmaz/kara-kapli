@@ -63,13 +63,18 @@ namespace Business
             };
         }
 
-        public virtual Response AddRange(IEnumerable<TDto> dtoList)
+        public virtual Response AddRange(TDto[] dtoList)
         {
-            var entities = Mapper.Map<IEnumerable<TDto>, IEnumerable<TEntity>>(dtoList);
+            var entities = Mapper.Map<TDto[], TEntity[]>(dtoList);
 
             Repository.InsertRange(entities);
 
             Uow.Save();
+
+            for (int i = 0; i < dtoList.Length; i++)
+            {
+                dtoList[i].Id = entities[i].Id;
+            }
 
             return new Response
             {

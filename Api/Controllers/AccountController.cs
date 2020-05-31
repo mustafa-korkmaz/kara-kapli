@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Api.ViewModels.User;
 using Api.ViewModels.User.Request;
 using Api.ViewModels.User.Response;
+using Business.User;
 using Common;
 using Common.Response;
 using Dto.User;
@@ -16,10 +17,12 @@ namespace Api.Controllers
     public class AccountController : ApiControllerBase
     {
         private readonly ISecurity _security;
+        private readonly IUserBusiness _userBusiness;
 
-        public AccountController(ISecurity security)
+        public AccountController(ISecurity security, IUserBusiness userBusiness)
         {
             _security = security;
+            _userBusiness = userBusiness;
         }
 
         [HttpPost("token")]
@@ -188,9 +191,9 @@ namespace Api.Controllers
         /// creates new user
         /// </summary>
         /// <param name="model"></param>
-        private async Task<ApiResponse> RegisterDemoUser(RegisterDemoViewModel model)
+        private async Task<ApiResponse<string>> RegisterDemoUser(RegisterDemoViewModel model)
         {
-            var apiResp = new ApiResponse
+            var apiResp = new ApiResponse<string>
             {
                 Type = ResponseType.Fail
             };
@@ -208,14 +211,23 @@ namespace Api.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            var registerResp = await _security.Register(applicationUser, AppConstant.DemoUserPassword);
+            var resp = await _security.Register(applicationUser, model.Password);
 
-            if (registerResp.Type != ResponseType.Success)
+            if (resp.Type != ResponseType.Success)
             {
-                apiResp.ErrorCode = registerResp.ErrorCode;
+                apiResp.ErrorCode = resp.ErrorCode;
                 return apiResp;
             }
 
+            resp = _userBusiness.CreateDemoUserEntries(applicationUser.Id, model.Language);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Data = applicationUser.Email;
             apiResp.Type = ResponseType.Success;
             return apiResp;
         }

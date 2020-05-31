@@ -25,7 +25,7 @@ namespace Business
         /// creates new entities as bulk insert from given dto list
         /// </summary>
         /// <param name="dtoList"></param>
-        Response AddRange(IEnumerable<TDto> dtoList);
+        Response AddRange(TDto[] dtoList);
 
         /// <summary>
         /// updates given entity and returns affected row count.

@@ -46,7 +46,7 @@ namespace Dal.Repositories
                 _context.Entry(attachedEntity).State = EntityState.Detached;
             }
 
-            //Entities.Attach(entity);
+            Entities.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
 

@@ -53,7 +53,7 @@ namespace Business.Transaction
 
             var customer = resp.Data;
             customer.RemainingBalance += GetBalance(dto);
-            customer.Transactions = null; // prevent updating transaction table
+            customer.User = null; // prevent updating users table
 
             _customerBusiness.OwnerId = OwnerId;
 
@@ -61,7 +61,7 @@ namespace Business.Transaction
             {
                 //update customer's remaining balance 
                 _customerBusiness.Edit(customer);
-
+             
                 base.Add(dto);
 
                 tx.Commit();

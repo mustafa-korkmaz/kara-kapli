@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Dal.Entities;
 
 namespace Dal.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : EntityBase
+    public interface IRepository<TEntity> where TEntity : class
     {
         //IQueryable<TEntity> RawSql(string sql);
 

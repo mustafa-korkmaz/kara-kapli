@@ -15,8 +15,8 @@ namespace Business.Transaction
 {
     public class TransactionBusiness : CrudBusiness<ITransactionRepository, Dal.Entities.Transaction, Dto.Transaction>, ITransactionBusiness
     {
-        private ICustomerBusiness _customerBusiness;
-        private IParameterBusiness _parameterBusiness;
+        private readonly ICustomerBusiness _customerBusiness;
+        private readonly IParameterBusiness _parameterBusiness;
 
         public TransactionBusiness(IUnitOfWork uow, ICustomerBusiness customerBusiness, IParameterBusiness parameterBusiness,
             ILogger<TransactionBusiness> logger, IMapper mapper)

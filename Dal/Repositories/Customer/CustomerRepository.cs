@@ -8,7 +8,7 @@ using Common;
 
 namespace Dal.Repositories.Customer
 {
-    public class CustomerRepository : PostgreSqlDbRepository<Entities.Customer>, ICustomerRepository
+    public class CustomerRepository : PostgreSqlDbRepository<Entities.Customer, int>, ICustomerRepository
     {
         public CustomerRepository(BlackCoveredLedgerDbContext context) : base(context)
         {

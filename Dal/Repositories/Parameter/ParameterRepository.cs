@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Dal.Repositories.Parameter
 {
-    public class ParameterRepository : PostgreSqlDbRepository<Entities.Parameter>, IParameterRepository
+    public class ParameterRepository : PostgreSqlDbRepository<Entities.Parameter, int>, IParameterRepository
     {
         public ParameterRepository(BlackCoveredLedgerDbContext context) : base(context)
         {

@@ -60,6 +60,25 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
+        [HttpPost("demo")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterDemo([FromBody]RegisterDemoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = await RegisterDemoUser(model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -150,10 +169,46 @@ namespace Api.Controllers
                 NameSurname = model.NameSurname,
                 UserName = model.Username,
                 EmailConfirmed = true,
-                CreatedAt = Utility.GetTurkeyCurrentDateTime()
+                CreatedAt = DateTime.UtcNow
             };
 
             var registerResp = await _security.Register(applicationUser, model.Password);
+
+            if (registerResp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = registerResp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        /// <summary>
+        /// creates new user
+        /// </summary>
+        /// <param name="model"></param>
+        private async Task<ApiResponse> RegisterDemoUser(RegisterDemoViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var id = Guid.NewGuid();
+            var username = id.ToString("N");
+
+            var applicationUser = new ApplicationUser
+            {
+                Id = id,
+                Email = username + "@d.com",
+                NameSurname = model.Language == Language.Turkish ? "Demo A.Ş." : "Demo Corp.",
+                UserName = username,
+                EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            var registerResp = await _security.Register(applicationUser, AppConstant.DemoUserPassword);
 
             if (registerResp.Type != ResponseType.Success)
             {

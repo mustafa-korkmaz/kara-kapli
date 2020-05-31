@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Dal.Entities.Identity
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<Guid>, IEntity<Guid>
     {
         [MaxLength(50)]
         public string NameSurname { get; set; }

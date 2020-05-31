@@ -54,9 +54,9 @@ namespace Dal
             _disposed = true;
         }
 
-              public TRepository Repository<TRepository, TEntity>()
-            where TEntity : EntityBase
-            where TRepository : IRepository<TEntity>
+        public TRepository Repository<TRepository, TEntity>()
+      where TEntity : class
+      where TRepository : IRepository<TEntity>
         {
             if (_repositories == null)
             {
@@ -80,7 +80,7 @@ namespace Dal
             return (TRepository)_repositories[type];
         }
 
-       public TRepository Repository<TRepository>()
+        public TRepository Repository<TRepository>()
         {
             if (_repositories == null)
             {

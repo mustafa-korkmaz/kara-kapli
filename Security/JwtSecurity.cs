@@ -122,13 +122,10 @@ namespace Security
             {
                 //not expected
                 resp.ErrorCode = ErrorCode.ApplicationException;
-                _logger.LogError(string.Format("New user {0} cannot be registered.", userDto.Email));
+                _logger.LogError($"New user {userDto.Email} cannot be registered.");
 
                 return resp;
             }
-
-            //log user registration
-            _logger.LogInformation(string.Format("New user {0} has registered.", userDto.Id));
 
             resp.Type = ResponseType.Success;
 

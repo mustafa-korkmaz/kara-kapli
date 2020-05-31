@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Repositories
 {
-    public abstract class PostgreSqlDbRepository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
+    public abstract class PostgreSqlDbRepository<TEntity, TKey> : IRepository<TEntity> where TEntity : class, IEntity<TKey>
     {
         protected readonly DbSet<TEntity> Entities;
         private readonly BlackCoveredLedgerDbContext _context;
@@ -39,7 +39,7 @@ namespace Dal.Repositories
 
         public void Update(TEntity entity)
         {
-            var attachedEntity = Entities.Local.FirstOrDefault(e => e.Id == entity.Id);
+            var attachedEntity = Entities.Local.FirstOrDefault(e => e.Id.Equals(entity.Id));
 
             if (attachedEntity != null)
             {

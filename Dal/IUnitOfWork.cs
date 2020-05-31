@@ -17,7 +17,7 @@ namespace Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         TRepository Repository<TRepository, TEntity>()
-            where TEntity : EntityBase
+            where TEntity : class
             where TRepository : IRepository<TEntity>;
 
         /// <summary>

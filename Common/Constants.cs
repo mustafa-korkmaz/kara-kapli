@@ -10,6 +10,7 @@ namespace Common
         public const string ApiKeyValue = "My.ApiKey";
         public static string ApiKeyHash = Utility.GetHashValue(ApiKeyValue);
         public const int MinimumLengthForSearch = 3;
+        public const string DemoUserPassword = "12345678";
     }
 
     public static class AccountingType
@@ -79,6 +80,13 @@ namespace Common
         public const string Android = "1";
         public const string WebApp = "2";
         public const string AdminPanel = "3";
+    }
+
+    public static class Language
+    {
+        public const string Turkish = "tr";
+
+        public const string English = "en";
     }
 
     #region cahce keys

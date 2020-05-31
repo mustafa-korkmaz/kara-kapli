@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Dal.Repositories.Transaction
 {
-    public class TransactionRepository : PostgreSqlDbRepository<Entities.Transaction>, ITransactionRepository
+    public class TransactionRepository : PostgreSqlDbRepository<Entities.Transaction, int>, ITransactionRepository
     {
         public TransactionRepository(BlackCoveredLedgerDbContext context) : base(context)
         {

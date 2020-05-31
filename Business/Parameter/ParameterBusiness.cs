@@ -47,7 +47,7 @@ namespace Business.Parameter
             return parameters;
         }
 
-        public override ResponseBase Add(Dto.Parameter dto)
+        public override Response Add(Dto.Parameter dto)
         {
             var resp = base.Add(dto);
 
@@ -75,7 +75,7 @@ namespace Business.Parameter
             return resp;
         }
 
-        public override ResponseBase SoftDelete(int id)
+        public override Response SoftDelete(int id)
         {
             var resp = base.SoftDelete(id);
 

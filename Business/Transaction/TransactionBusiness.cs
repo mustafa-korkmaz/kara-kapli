@@ -42,7 +42,7 @@ namespace Business.Transaction
             };
         }
 
-        public override ResponseBase Add(Dto.Transaction dto)
+        public override Response Add(Dto.Transaction dto)
         {
             var resp = _customerBusiness.Get(dto.CustomerId);
 
@@ -66,7 +66,7 @@ namespace Business.Transaction
                 tx.Commit();
             }
 
-            return new ResponseBase
+            return new Response
             {
                 Type = ResponseType.Success
             };
@@ -127,9 +127,9 @@ namespace Business.Transaction
             return businessResp;
         }
 
-        public override ResponseBase Delete(int id)
+        public override Response Delete(int id)
         {
-            var deleteResp = new ResponseBase
+            var deleteResp = new Response
             {
                 Type = ResponseType.Fail
             };

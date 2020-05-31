@@ -3,7 +3,7 @@
     /// <summary>
     /// response class for data returned method
     /// </summary>
-    public class DataResponse<T> : ResponseBase
+    public class DataResponse<T> : Response
     {
         public T Data { get; set; }
     }

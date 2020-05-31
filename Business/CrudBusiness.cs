@@ -47,7 +47,7 @@ namespace Business
             Mapper = mapper;
         }
 
-        public virtual ResponseBase Add(TDto dto)
+        public virtual Response Add(TDto dto)
         {
             var entity = Mapper.Map<TDto, TEntity>(dto);
 
@@ -57,13 +57,13 @@ namespace Business
 
             dto.Id = entity.Id;
 
-            return new ResponseBase
+            return new Response
             {
                 Type = ResponseType.Success
             };
         }
 
-        public virtual ResponseBase AddRange(IEnumerable<TDto> dtoList)
+        public virtual Response AddRange(IEnumerable<TDto> dtoList)
         {
             var entities = Mapper.Map<IEnumerable<TDto>, IEnumerable<TEntity>>(dtoList);
 
@@ -71,7 +71,7 @@ namespace Business
 
             Uow.Save();
 
-            return new ResponseBase
+            return new Response
             {
                 Type = ResponseType.Success
             };
@@ -131,9 +131,9 @@ namespace Business
             return businessResp;
         }
 
-        public virtual ResponseBase Delete(int id)
+        public virtual Response Delete(int id)
         {
-            var resp = new ResponseBase
+            var resp = new Response
             {
                 Type = ResponseType.Fail
             };
@@ -170,9 +170,9 @@ namespace Business
             return resp;
         }
 
-        public virtual ResponseBase SoftDelete(int id)
+        public virtual Response SoftDelete(int id)
         {
-            var resp = new ResponseBase
+            var resp = new Response
             {
                 Type = ResponseType.Fail
             };
@@ -222,7 +222,7 @@ namespace Business
             //log db record modification as an info
             Logger.LogInformation($"'{type}' entity with ID: {id} has been modified.");
 
-            return new ResponseBase
+            return new Response
             {
                 Type = ResponseType.Success
             };

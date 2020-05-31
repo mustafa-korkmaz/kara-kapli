@@ -82,9 +82,9 @@ namespace Security
             return resp;
         }
 
-        public async Task<ResponseBase> Register(ApplicationUser userDto, string password)
+        public async Task<Response> Register(ApplicationUser userDto, string password)
         {
-            var resp = new ResponseBase { Type = ResponseType.Fail };
+            var resp = new Response { Type = ResponseType.Fail };
 
             var userByName = await _userManager.FindByNameAsync(userDto.UserName);
 
@@ -132,9 +132,9 @@ namespace Security
             return resp;
         }
 
-        public async Task<ResponseBase> ResetPassword(string id, string password)
+        public async Task<Response> ResetPassword(string id, string password)
         {
-            var resp = new ResponseBase
+            var resp = new Response
             {
                 Type = ResponseType.Fail
             };
@@ -160,9 +160,9 @@ namespace Security
             return resp;
         }
 
-        public async Task<ResponseBase> ChangePassword(string email, string newPassword)
+        public async Task<Response> ChangePassword(string email, string newPassword)
         {
-            var resp = new ResponseBase
+            var resp = new Response
             {
                 Type = ResponseType.Fail
             };

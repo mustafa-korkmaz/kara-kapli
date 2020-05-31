@@ -21,14 +21,14 @@ namespace Security
         /// <param name="userDto"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<ResponseBase> Register(ApplicationUser userDto, string password);
+        Task<Response> Register(ApplicationUser userDto, string password);
 
         /// <summary>
         /// resets user's password
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<ResponseBase> ResetPassword(string userId, string password);
+        Task<Response> ResetPassword(string userId, string password);
 
         /// <summary>
         /// changes user password
@@ -36,7 +36,7 @@ namespace Security
         /// <param name="email"></param>
         /// <param name="newPassword"></param>
         /// <returns></returns>
-        Task<ResponseBase> ChangePassword(string email, string newPassword);
+        Task<Response> ChangePassword(string email, string newPassword);
 
         /// <summary>
         /// returns current user info by user id

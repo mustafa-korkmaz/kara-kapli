@@ -16,7 +16,6 @@ namespace Business.User
     {
         private readonly ICustomerBusiness _customerBusiness;
         private readonly IParameterBusiness _parameterBusiness;
-        private readonly ITransactionBusiness _transactionBusiness;
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
@@ -28,7 +27,6 @@ namespace Business.User
         {
             _customerBusiness = customerBusiness;
             _parameterBusiness = parameterBusiness;
-            _transactionBusiness = transactionBusiness;
             _uow = uow;
             _repository = _uow.Repository<IUserRepository, Dal.Entities.Identity.ApplicationUser>();
             _logger = logger;
@@ -39,26 +37,19 @@ namespace Business.User
         {
             var parameters = GetParameters(userId, lang);
 
-            var customers = GetCustomers(userId, lang);
-
             using (var tx = _uow.BeginTransaction())
             {
                 //add parameters
                 _parameterBusiness.AddRange(parameters);
 
+                var customers = GetCustomers(userId, parameters, lang);
+              
+                SetCustomerRemainingBalances(customers);
+                
                 //add customers
                 _customerBusiness.AddRange(customers);
 
                 tx.Commit();
-            }
-
-            var transactions = GetTransactions(customers, parameters, lang);
-
-            //add transactions 
-            foreach (var transaction in transactions)
-            {
-                _transactionBusiness.OwnerId = userId;
-                _transactionBusiness.Add(transaction);
             }
 
             return new Response
@@ -136,7 +127,7 @@ namespace Business.User
             return list.ToArray();
         }
 
-        private Dto.Customer[] GetCustomers(Guid userId, string lang)
+        private Dto.Customer[] GetCustomers(Guid userId, Dto.Parameter[] parameters, string lang)
         {
             var list = new List<Dto.Customer>();
 
@@ -147,23 +138,26 @@ namespace Business.User
                     {
                         new Dto.Customer  {
                         UserId = userId,
+                        Transactions = GetTransactions(parameters,lang),
                         Title = "Korkmaz Ltd. Şti.",
                         AuthorizedPersonName = "Mustafa Korkmaz",
                         CreatedAt = DateTime.UtcNow
                         },
                         new Dto.Customer  {
                             UserId = userId,
+                            Transactions = GetTransactions(parameters,lang),
                             Title = "Ahmet Faik",
                             AuthorizedPersonName = "Samed Faik",
                             CreatedAt = DateTime.UtcNow
                         },
                         new Dto.Customer {
                             UserId = userId,
+                            Transactions = GetTransactions(parameters,lang),
                             Title = "Duran A.Ş.",
                             AuthorizedPersonName = "Ali Duran",
                             PhoneNumber = "5441234567",
                             CreatedAt = DateTime.UtcNow
-                        }
+                        },
                     });
                     break;
                 default:
@@ -195,18 +189,15 @@ namespace Business.User
             return list.ToArray();
         }
 
-        private Dto.Transaction[] GetTransactions(Dto.Customer[] customers, Dto.Parameter[] parameters, string lang)
+        private Dto.Transaction[] GetTransactions(Dto.Parameter[] parameters, string lang)
         {
             var list = new List<Dto.Transaction>();
 
-            foreach (var customer in customers)
+            foreach (var parameter in parameters)
             {
-                foreach (var parameter in parameters)
-                {
-                    var desc = lang.ToLower() == Language.Turkish ? parameter.Name + " işlemi" : parameter.Name + " operation";
+                var desc = lang.ToLower() == Language.Turkish ? parameter.Name + " işlemi" : parameter.Name + " operation";
 
-                    list.Add(GetDemoTransaction(customer.Id, parameter.Id, parameter.ParameterTypeId == 2, desc));
-                }
+                list.Add(GetDemoTransaction(0, parameter.Id, parameter.ParameterTypeId == 2, desc));
             }
 
             return list.ToArray();
@@ -220,7 +211,7 @@ namespace Business.User
             var amount = rand.NextDouble() + rand.Next(500, 10000);
             return new Dto.Transaction
             {
-                Amount = amount,
+                Amount = Math.Round(amount, 2),
                 CreatedAt = now,
                 Date = DateTime.Today,
                 IsDebt = isDebt,
@@ -229,6 +220,24 @@ namespace Business.User
                 CustomerId = customerId,
                 Description = desc
             };
+        }
+
+        private void SetCustomerRemainingBalances(Dto.Customer[] customers)
+        {
+            foreach (var c in customers)
+            {
+                var list = c.Transactions;
+
+                foreach (var t in list)
+                {
+                    c.RemainingBalance += GetBalance(t);
+                }
+            }
+        }
+
+        private double GetBalance(Dto.Transaction t)
+        {
+            return t.IsDebt ? t.Amount : -1 * t.Amount;
         }
     }
 }

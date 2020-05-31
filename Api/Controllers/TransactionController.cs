@@ -133,7 +133,7 @@ namespace Api.Controllers
                 Id = p.Id,
                 Customer = new CustomerViewModel
                 {
-                    Id = p.CustomerId,
+                    Id = p.Customer.Id,
                     Title = p.Customer.Title,
                     AuthorizedPersonName = p.Customer.AuthorizedPersonName
                 },
@@ -199,6 +199,8 @@ namespace Api.Controllers
                 Type = ResponseType.Fail
             };
 
+            _transactionBusiness.OwnerId = GetUserId().Value;
+
             var transaction = new Dto.Transaction
             {
                 Id = id,
@@ -209,8 +211,6 @@ namespace Api.Controllers
                 Date = model.Date,
                 ModifiedAt = DateTime.UtcNow
             };
-
-            _transactionBusiness.OwnerId = GetUserId().Value;
 
             var resp = _transactionBusiness.Edit(transaction);
 

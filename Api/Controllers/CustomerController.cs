@@ -131,7 +131,8 @@ namespace Api.Controllers
                 AuthorizedPersonName = p.AuthorizedPersonName,
                 CreatedAt = p.CreatedAt,
                 PhoneNumber = p.PhoneNumber,
-                RemainingBalance = p.RemainingBalance
+                DebtBalance = p.DebtBalance,
+                ReceivableBalance = p.ReceivableBalance
             });
 
             apiResp.Data.RecordsTotal = resp.RecordsTotal;

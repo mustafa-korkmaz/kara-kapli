@@ -235,7 +235,8 @@ namespace Dal.Db
                     CreatedAt = new DateTime(2020, 4, 30),
                     Title = title,
                     UserId = userId,
-                    RemainingBalance = 0
+                    DebtBalance = 0,
+                    ReceivableBalance = 0
                 };
             }
 

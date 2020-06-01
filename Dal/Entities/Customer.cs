@@ -21,7 +21,10 @@ namespace Dal.Entities
         public string AuthorizedPersonName { get; set; }
 
         [Required]
-        public double RemainingBalance { get; set; }
+        public double DebtBalance { get; set; }
+
+        [Required]
+        public double ReceivableBalance { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }

@@ -13,7 +13,11 @@ namespace Api.ViewModels.Customer.Response
 
         public string AuthorizedPersonName { get; set; }
 
-        public double RemainingBalance { get; set; }
+        public double RemainingBalance => DebtBalance - ReceivableBalance;
+
+        public double DebtBalance { get; set; }
+
+        public double ReceivableBalance { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

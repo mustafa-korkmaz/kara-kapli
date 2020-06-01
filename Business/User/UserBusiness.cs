@@ -43,9 +43,9 @@ namespace Business.User
                 _parameterBusiness.AddRange(parameters);
 
                 var customers = GetCustomers(userId, parameters, lang);
-              
+
                 SetCustomerRemainingBalances(customers);
-                
+
                 //add customers
                 _customerBusiness.AddRange(customers);
 
@@ -230,14 +230,16 @@ namespace Business.User
 
                 foreach (var t in list)
                 {
-                    c.RemainingBalance += GetBalance(t);
+                    if (t.IsDebt)
+                    {
+                        c.DebtBalance += t.Amount;
+                    }
+                    else
+                    {
+                        c.ReceivableBalance += t.Amount;
+                    }
                 }
             }
-        }
-
-        private double GetBalance(Dto.Transaction t)
-        {
-            return t.IsDebt ? t.Amount : -1 * t.Amount;
         }
     }
 }

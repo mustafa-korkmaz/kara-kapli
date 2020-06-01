@@ -16,7 +16,9 @@ namespace Dto
 
         public string AuthorizedPersonName { get; set; }
 
-        public double RemainingBalance { get; set; }
+        public double DebtBalance { get; set; }
+
+        public double ReceivableBalance { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

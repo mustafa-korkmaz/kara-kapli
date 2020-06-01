@@ -52,7 +52,9 @@ namespace Business.Transaction
             }
 
             var customer = resp.Data;
-            customer.RemainingBalance += GetBalance(dto);
+
+            SetCustomerBalance(customer, dto.IsDebt, dto.Amount);
+
             customer.User = null; // prevent updating users table
 
             _customerBusiness.OwnerId = OwnerId;
@@ -61,7 +63,7 @@ namespace Business.Transaction
             {
                 //update customer's remaining balance 
                 _customerBusiness.Edit(customer);
-             
+
                 base.Add(dto);
 
                 tx.Commit();
@@ -101,11 +103,11 @@ namespace Business.Transaction
 
             var customer = resp.Data;
 
-            //first rollback the existing amount from customer's remaining balance
-            customer.RemainingBalance -= GetBalance(entity);
+            //rollback the existing amount from customer's remaining balance
+            DeleteCustomerBalance(customer, entity.IsDebt, entity.Amount);
 
             //now add the new balance to customer's remaining balance
-            customer.RemainingBalance += GetBalance(dto);
+            SetCustomerBalance(customer, dto.IsDebt, dto.Amount);
 
             _customerBusiness.OwnerId = OwnerId;
 
@@ -147,7 +149,7 @@ namespace Business.Transaction
             var customer = resp.Data;
 
             //rollback the existing amount from customer's remaining balance
-            customer.RemainingBalance -= GetBalance(entity);
+            DeleteCustomerBalance(customer, entity.IsDebt, entity.Amount);
 
             _customerBusiness.OwnerId = OwnerId;
 
@@ -174,14 +176,6 @@ namespace Business.Transaction
             return entity.Customer.UserId.Equals(OwnerId);
         }
 
-        private double GetBalance(Dto.Transaction t)
-        {
-            return t.IsDebt ? t.Amount : -1 * t.Amount;
-        }
-        private double GetBalance(Dal.Entities.Transaction t)
-        {
-            return t.IsDebt ? t.Amount : -1 * t.Amount;
-        }
         private void SetTransactionTypes(IEnumerable<Dto.Transaction> transactions)
         {
             var parameters = _parameterBusiness.GetUserParameters(OwnerId);
@@ -190,6 +184,33 @@ namespace Business.Transaction
             {
                 item.Type = parameters.FirstOrDefault(p => p.Id == item.TypeId);
             }
+        }
+
+        private void DeleteCustomerBalance(Dto.Customer customer, bool isDebt, double amount)
+        {
+            if (isDebt)
+            {
+                customer.DebtBalance -= amount;
+
+            }
+            else
+            {
+                customer.ReceivableBalance -= amount;
+            }
+
+        }
+
+        private void SetCustomerBalance(Dto.Customer customer, bool isDebt, double amount)
+        {
+            if (isDebt)
+            {
+                customer.DebtBalance += amount;
+            }
+            else
+            {
+                customer.ReceivableBalance += amount;
+            }
+
         }
 
         public bool IsDebtTransaction(int typeId)

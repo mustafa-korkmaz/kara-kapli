@@ -165,12 +165,14 @@ namespace Business.User
                     {
                         new Dto.Customer  {
                             UserId = userId,
+                            Transactions = GetTransactions(parameters,lang),
                             Title = "Acme Corp.",
                             AuthorizedPersonName = "Bugs Bunny",
                             CreatedAt = DateTime.UtcNow
                         },
                         new Dto.Customer  {
                             UserId = userId,
+                            Transactions = GetTransactions(parameters,lang),
                             Title = "John Doe",
                             AuthorizedPersonName = "John",
                             PhoneNumber = "5551234567",
@@ -178,6 +180,7 @@ namespace Business.User
                         },
                         new Dto.Customer {
                             UserId = userId,
+                            Transactions = GetTransactions(parameters,lang),
                             Title = "Pearson Spector Inc.",
                             AuthorizedPersonName = "Mike Ross",
                             CreatedAt = DateTime.UtcNow

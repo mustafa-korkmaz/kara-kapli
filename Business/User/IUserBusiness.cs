@@ -6,6 +6,8 @@ namespace Business.User
 {
     public interface IUserBusiness
     {
-        Response CreateDemoUserEntries(Guid userId, string lang);
+        Response CreateDemoUserDefaultEntries(Guid userId, string lang);
+
+        Response CreateUserDefaultEntries(Guid userId, string lang);
     }
 }

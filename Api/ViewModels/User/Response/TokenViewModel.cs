@@ -1,10 +1,13 @@
-﻿namespace Api.ViewModels.User.Response
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Api.ViewModels.User.Response
 {
     public class TokenViewModel
     {
         public string AccessToken { get; set; }
 
-        public string ExpiresIn { get; set; }
+        // public string ExpiresIn { get; set; }
 
         public string NameSurname { get; set; }
 
@@ -13,6 +16,8 @@
         public string Id { get; set; }
 
         public string Email { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
 
     }
 }

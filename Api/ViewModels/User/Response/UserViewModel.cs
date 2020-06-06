@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Api.ViewModels.User.Response
 {
@@ -15,5 +17,7 @@ namespace Api.ViewModels.User.Response
         public DateTime CreatedAt { get; set; }
 
         public bool EmailConfirmed { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
     }
 }

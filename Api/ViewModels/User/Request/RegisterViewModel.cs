@@ -6,11 +6,11 @@ namespace Api.ViewModels.User.Request
     public class RegisterViewModel
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
-        [StringLength(30, ErrorMessage = ValidationErrorCode.MaxLength)]
-        [Display(Name = "USERNAME")]
-        public string Username { get; set; }
+        [Display(Name = "LANGUAGE")]
+        public string Language { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
+        [StringLength(50, ErrorMessage = ValidationErrorCode.MaxLength)]
         [EmailAddress(ErrorMessage = ValidationErrorCode.EmailNotValid)]
         [Display(Name = "EMAIL")]
         public string Email { get; set; }

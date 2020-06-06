@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
-using Api.ViewModels.User;
 using Api.ViewModels.User.Request;
 using Api.ViewModels.User.Response;
 using Business.User;
@@ -27,15 +27,16 @@ namespace Api.Controllers
         }
 
         [HttpPost("token")]
+        [ProducesResponseType(typeof(ApiResponse<TokenViewModel>), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetToken([FromBody]GetTokenViewModel model)
+        public async Task<IActionResult> Token([FromBody]GetTokenViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            var resp = await GetTokenResponse(model);
+            var resp = await GetToken(model);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -46,6 +47,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
@@ -65,6 +67,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("demo")]
+        [ProducesResponseType(typeof(ApiResponse<string>), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
         public async Task<IActionResult> RegisterDemo([FromBody]RegisterDemoViewModel model)
         {
@@ -84,6 +87,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<UserViewModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
             var resp = await GetUser();
@@ -96,7 +100,7 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        private async Task<ApiResponse<TokenViewModel>> GetTokenResponse(GetTokenViewModel model)
+        private async Task<ApiResponse<TokenViewModel>> GetToken(GetTokenViewModel model)
         {
             var apiResp = new ApiResponse<TokenViewModel>
             {
@@ -119,11 +123,12 @@ namespace Api.Controllers
 
             var viewModel = new TokenViewModel
             {
+                Id = applicationUser.Id.ToString(),
                 Username = applicationUser.UserName,
                 AccessToken = securityResp.Data,
                 Email = applicationUser.Email,
                 NameSurname = applicationUser.NameSurname,
-                Id = applicationUser.Id.ToString()
+                Roles = applicationUser.Roles
             };
 
             apiResp.Data = viewModel;
@@ -150,7 +155,8 @@ namespace Api.Controllers
                     Email = user.Email,
                     NameSurname = user.NameSurname,
                     Username = user.UserName,
-                    EmailConfirmed = user.EmailConfirmed
+                    EmailConfirmed = user.EmailConfirmed,
+                    Roles = user.Roles
                 }
             };
         }
@@ -171,17 +177,25 @@ namespace Api.Controllers
                 Id = Guid.NewGuid(),
                 Email = model.Email,
                 NameSurname = model.NameSurname,
-                UserName = model.Username,
+                UserName = model.Email,
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.User },
                 EmailConfirmed = true,
                 CreatedAt = DateTime.UtcNow
             };
 
-            var registerResp = await _security.Register(applicationUser, model.Password);
+            var resp = await _security.Register(applicationUser, model.Password);
 
-            if (registerResp.Type != ResponseType.Success)
+            if (resp.Type != ResponseType.Success)
             {
-                apiResp.ErrorCode = registerResp.ErrorCode;
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            resp = _userBusiness.CreateUserDefaultEntries(applicationUser.Id, model.Language);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
                 return apiResp;
             }
 
@@ -222,7 +236,7 @@ namespace Api.Controllers
                 return apiResp;
             }
 
-            resp = _userBusiness.CreateDemoUserEntries(applicationUser.Id, model.Language);
+            resp = _userBusiness.CreateDemoUserDefaultEntries(applicationUser.Id, model.Language);
 
             if (resp.Type != ResponseType.Success)
             {

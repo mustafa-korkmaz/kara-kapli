@@ -33,7 +33,7 @@ namespace Business.User
             _mapper = mapper;
         }
 
-        public Response CreateDemoUserEntries(Guid userId, string lang)
+        public Response CreateDemoUserDefaultEntries(Guid userId, string lang)
         {
             var parameters = GetParameters(userId, lang);
 
@@ -48,6 +48,24 @@ namespace Business.User
 
                 //add customers
                 _customerBusiness.AddRange(customers);
+
+                tx.Commit();
+            }
+
+            return new Response
+            {
+                Type = ResponseType.Success
+            };
+        }
+
+        public Response CreateUserDefaultEntries(Guid userId, string lang)
+        {
+            var parameters = GetParameters(userId, lang);
+
+            using (var tx = _uow.BeginTransaction())
+            {
+                //add parameters
+                _parameterBusiness.AddRange(parameters);
 
                 tx.Commit();
             }

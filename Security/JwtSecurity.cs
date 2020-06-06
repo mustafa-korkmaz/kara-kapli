@@ -199,6 +199,11 @@ namespace Security
 
             var userDto = _mapper.Map<Dal.Entities.Identity.ApplicationUser, ApplicationUser>(userEntity);
 
+            //get user roles
+            var roles = await _userManager.GetRolesAsync(userEntity);
+
+            userDto.Roles = roles;
+
             return userDto;
         }
 

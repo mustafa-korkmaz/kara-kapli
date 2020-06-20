@@ -16,6 +16,12 @@ namespace Dal.Entities.Identity
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        /// <summary>
+        /// user settings with json properties
+        /// </summary>
+        [MaxLength(250)]
+        public string Settings { get; set; }
+
         public virtual ICollection<Parameter> Parameters { get; set; }// 1=>n relation
     }
 }

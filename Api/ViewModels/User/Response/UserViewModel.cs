@@ -19,5 +19,16 @@ namespace Api.ViewModels.User.Response
         public bool EmailConfirmed { get; set; }
 
         public IEnumerable<string> Roles { get; set; }
+
+        public Settings Settings { get; set; }
+    }
+
+    public class Settings
+    {
+        public string ThemeColor { get; set; }
+
+        public bool OpenTagsView { get; set; }
+
+        public bool FixedHeader { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using Common.Response;
+using Dto.User;
 
 namespace Business.User
 {
@@ -9,5 +10,7 @@ namespace Business.User
         Response CreateDemoUserDefaultEntries(Guid userId, string lang);
 
         Response CreateUserDefaultEntries(Guid userId, string lang);
+
+        UserSettings GetSettings(string settingsJson);
     }
 }

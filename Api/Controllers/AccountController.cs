@@ -145,6 +145,8 @@ namespace Api.Controllers
         {
             var user = await _security.GetUser(User);
 
+            var settings = _userBusiness.GetSettings(user.Settings);
+
             return new ApiResponse<UserViewModel>
             {
                 Type = ResponseType.Success,
@@ -156,7 +158,13 @@ namespace Api.Controllers
                     NameSurname = user.NameSurname,
                     Username = user.UserName,
                     EmailConfirmed = user.EmailConfirmed,
-                    Roles = user.Roles
+                    Roles = user.Roles,
+                    Settings = new Settings
+                    {
+                        FixedHeader = settings.FixedHeader,
+                        OpenTagsView = settings.OpenTagsView,
+                        ThemeColor = settings.ThemeColor
+                    }
                 }
             };
         }

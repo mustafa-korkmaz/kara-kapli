@@ -27,6 +27,8 @@ namespace Dto.User
 
         public Dictionary<string, string> Claims { get; set; }
 
+        public string Settings { get; set; }
+
         //public bool IsAdmin
         //{
         //    get

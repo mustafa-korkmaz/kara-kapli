@@ -9,6 +9,8 @@ using Common.Response;
 using Microsoft.Extensions.Logging;
 using Dal;
 using Dal.Repositories.User;
+using Dto.User;
+using System.Text.Json;
 
 namespace Business.User
 {
@@ -74,6 +76,11 @@ namespace Business.User
             {
                 Type = ResponseType.Success
             };
+        }
+
+        public UserSettings GetSettings(string settingsJson)
+        {
+           return JsonSerializer.Deserialize<UserSettings>(settingsJson);
         }
 
         private Dto.Parameter[] GetParameters(Guid userId, string lang)

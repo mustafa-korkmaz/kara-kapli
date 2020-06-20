@@ -80,7 +80,25 @@ namespace Business.User
 
         public UserSettings GetSettings(string settingsJson)
         {
-           return JsonSerializer.Deserialize<UserSettings>(settingsJson);
+            if (settingsJson == null)
+            {
+                return new UserSettings();
+            }
+
+            return JsonSerializer.Deserialize<UserSettings>(settingsJson);
+        }
+
+        public string GetDefaultSettings()
+        {
+            // default theme settings
+            var settings = new UserSettings
+            {
+                OpenTagsView = true,
+                FixedHeader = false,
+                ThemeColor = "#1890FF"
+            };
+
+            return JsonSerializer.Serialize(settings);
         }
 
         private Dto.Parameter[] GetParameters(Guid userId, string lang)

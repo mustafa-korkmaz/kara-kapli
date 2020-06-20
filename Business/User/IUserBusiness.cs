@@ -12,5 +12,7 @@ namespace Business.User
         Response CreateUserDefaultEntries(Guid userId, string lang);
 
         UserSettings GetSettings(string settingsJson);
+
+        string GetDefaultSettings();
     }
 }

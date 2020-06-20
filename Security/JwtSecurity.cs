@@ -111,6 +111,7 @@ namespace Security
                 NameSurname = userDto.NameSurname,
                 PasswordHash = HashPassword(password),
                 SecurityStamp = Guid.NewGuid().ToString(),
+                Settings = userDto.Settings,
                 CreatedAt = userDto.CreatedAt
             };
 

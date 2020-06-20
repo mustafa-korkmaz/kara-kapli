@@ -127,8 +127,7 @@ namespace Api.Controllers
                 Username = applicationUser.UserName,
                 AccessToken = securityResp.Data,
                 Email = applicationUser.Email,
-                NameSurname = applicationUser.NameSurname,
-                Roles = applicationUser.Roles
+                NameSurname = applicationUser.NameSurname
             };
 
             apiResp.Data = viewModel;
@@ -188,6 +187,7 @@ namespace Api.Controllers
                 UserName = model.Email,
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.User },
                 EmailConfirmed = true,
+                Settings = _userBusiness.GetDefaultSettings(),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -233,6 +233,7 @@ namespace Api.Controllers
                 UserName = username,
                 EmailConfirmed = true,
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.DemoUser },
+                Settings = _userBusiness.GetDefaultSettings(),
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -3,6 +3,7 @@ using Common.Request.Criteria.Transaction;
 using Common.Response;
 using Dal.Db;
 using System.Linq;
+using Common;
 
 namespace Dal.Repositories.Transaction
 {
@@ -28,7 +29,7 @@ namespace Dal.Repositories.Transaction
             {
                 query = query.Where(p => p.TypeId == request.FilterCriteria.TypeId.Value);
             }
-            
+
             if (request.FilterCriteria.IsDebt.HasValue)
             {
                 query = query.Where(p => p.IsDebt == request.FilterCriteria.IsDebt.Value);
@@ -37,6 +38,22 @@ namespace Dal.Repositories.Transaction
             if (request.IncludeRecordsTotal)
             {
                 result.RecordsTotal = query.Count();
+            }
+
+            switch (request.FilterCriteria.SortType)
+            {
+                case SortType.Ascending:
+                    query = query
+                        .OrderBy(p => p.Customer.Title);
+                    break;
+                case SortType.Descending:
+                    query = query
+                        .OrderByDescending(p => p.Customer.Title);
+                    break;
+                default:
+                    query = query
+                        .OrderByDescending(p => p.Id);
+                    break;
             }
 
             query = query.Select(p => new Entities.Transaction
@@ -58,7 +75,6 @@ namespace Dal.Repositories.Transaction
             });
 
             result.Items = query
-                .OrderByDescending(p => p.Id)
                 .Skip(request.Offset)
                 .Take(request.Limit)
                 .ToList();

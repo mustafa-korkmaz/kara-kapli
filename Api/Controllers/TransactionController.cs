@@ -117,7 +117,8 @@ namespace Api.Controllers
                     UserId = GetUserId().Value,
                     CustomerId = model.CustomerId,
                     TypeId = model.TypeId,
-                    IsDebt = model.IsDebt
+                    IsDebt = model.IsDebt,
+                    SortType = model.GetSortType()
                 },
                 IncludeRecordsTotal = model.IncludeRecordsTotal,
                 Limit = model.Limit,

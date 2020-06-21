@@ -95,7 +95,8 @@ namespace Business.User
             {
                 OpenTagsView = true,
                 FixedHeader = false,
-                ThemeColor = "#1890FF"
+                ThemeColor = "#1890FF",
+                PaginationAlign = "left"
             };
 
             return JsonSerializer.Serialize(settings);
@@ -117,6 +118,12 @@ namespace Business.User
             }
 
             user.Settings = JsonSerializer.Serialize(newSettings);
+
+            if (user.Settings.Length > 250)
+            {
+                resp.ErrorCode = ErrorCode.ObjectExceededMaxAllowedLength;
+                return resp;
+            }
 
             _repository.Update(user);
 

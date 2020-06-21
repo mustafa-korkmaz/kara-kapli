@@ -21,6 +21,7 @@ namespace Common
         public const string UserNotFound = "USER_NOT_FOUND";
         public const string IncorrectUsernameOrPassword = "USERNAME_OR_PASSWORD_INCORRECT";
         public const string UserExists = "USER_ALREADY_EXISTS";
+        public const string ObjectExceededMaxAllowedLength = "OBJECT_EXCEEDED_MAX_ALLOWED_LENGTH";
     }
 
     public static class ValidationErrorCode

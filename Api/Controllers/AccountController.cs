@@ -100,6 +100,26 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
+        [HttpPost("settings")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        [AllowAnonymous]
+        public IActionResult Settings([FromBody]SettingsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = UpdateSettings(model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
         private async Task<ApiResponse<TokenViewModel>> GetToken(GetTokenViewModel model)
         {
             var apiResp = new ApiResponse<TokenViewModel>
@@ -162,7 +182,8 @@ namespace Api.Controllers
                     {
                         FixedHeader = settings.FixedHeader,
                         OpenTagsView = settings.OpenTagsView,
-                        ThemeColor = settings.ThemeColor
+                        ThemeColor = settings.ThemeColor,
+                        PaginationAlign = settings.PaginationAlign
                     }
                 }
             };
@@ -258,5 +279,31 @@ namespace Api.Controllers
             return apiResp;
         }
 
+        private ApiResponse UpdateSettings(SettingsViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var userSettings = new UserSettings
+            {
+                OpenTagsView = model.OpenTagsView.Value,
+                FixedHeader = model.FixedHeader.Value,
+                ThemeColor = model.ThemeColor,
+                PaginationAlign = model.PaginationAlign
+            };
+
+            var resp = _userBusiness.UpdateSettings(GetUserId().Value, userSettings);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
     }
 }

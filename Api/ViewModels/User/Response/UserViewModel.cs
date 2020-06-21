@@ -30,5 +30,7 @@ namespace Api.ViewModels.User.Response
         public bool OpenTagsView { get; set; }
 
         public bool FixedHeader { get; set; }
+
+        public string PaginationAlign { get; set; }
     }
 }

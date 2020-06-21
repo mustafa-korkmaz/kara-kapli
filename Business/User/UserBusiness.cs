@@ -101,6 +101,32 @@ namespace Business.User
             return JsonSerializer.Serialize(settings);
         }
 
+        public Response UpdateSettings(Guid userId, UserSettings newSettings)
+        {
+            var resp = new Response
+            {
+                Type = ResponseType.Fail
+            };
+
+            var user = _repository.GetById(userId);
+
+            if (user == null)
+            {
+                resp.ErrorCode = ErrorCode.UserNotFound;
+                return resp;
+            }
+
+            user.Settings = JsonSerializer.Serialize(newSettings);
+
+            _repository.Update(user);
+
+            _uow.Save();
+
+            resp.Type = ResponseType.Success;
+
+            return resp;
+        }
+
         private Dto.Parameter[] GetParameters(Guid userId, string lang)
         {
             var list = new List<Dto.Parameter>();

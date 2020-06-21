@@ -14,5 +14,7 @@ namespace Business.User
         UserSettings GetSettings(string settingsJson);
 
         string GetDefaultSettings();
+
+        Response UpdateSettings(Guid userId, UserSettings newSettings);
     }
 }

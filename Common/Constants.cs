@@ -31,6 +31,8 @@ namespace Common
 
         public const string BetweenLength = "{0}_FIELD_SHOULD_BE_MIN_{2}_MAX_{1}_CHARS";
 
+        public const string ExactLength = "{0}_FIELD_SHOULD_BE_{1}_CHARS";
+
         public const string BetweenRange = "{0}_FIELD_SHOULD_BE_BETWEEN_{1}_AND_{2}";
 
         public const string EmailNotValid = "EMAIL_FIELD_IS_NOT_VALID";

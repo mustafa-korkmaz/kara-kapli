@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Dto.User
 {
     public class UserSettings
     {
         public string ThemeColor { get; set; }
+
+        public string PaginationAlign { get; set; }
 
         public bool OpenTagsView { get; set; }
 

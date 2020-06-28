@@ -23,12 +23,7 @@ namespace Security
         /// <returns></returns>
         Task<Response> Register(ApplicationUser userDto, string password);
 
-        /// <summary>
-        /// resets user's password
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<Response> ResetPassword(string userId, string password);
+        Task<Response> ResetPassword(string emailOrUsername);
 
         /// <summary>
         /// changes user password

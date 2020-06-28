@@ -135,14 +135,19 @@ namespace Security
             return resp;
         }
 
-        public async Task<Response> ResetPassword(string id, string password)
+        public async Task<Response> ResetPassword(string emailOrUsername)
         {
             var resp = new Response
             {
                 Type = ResponseType.Fail
             };
 
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByEmailAsync(emailOrUsername);
+
+            if (user == null)
+            {
+                user = await _userManager.FindByNameAsync(emailOrUsername);
+            }
 
             if (user == null)
             {
@@ -150,10 +155,8 @@ namespace Security
                 return resp;
             }
 
-            user.PasswordHash = HashPassword(password);
-            user.EmailConfirmed = true; //user clicked the reset pwd link via email
-
-            await _userManager.UpdateAsync(user);
+            // todo
+            // create pass reset link
 
             //log user password reset request
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordReset, user.Id));

@@ -26,6 +26,26 @@ namespace Api.Controllers
             _userBusiness = userBusiness;
         }
 
+        [HttpPost("reset")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Reset([FromBody]ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = await ResetPassword(model.EmailOrUsername);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
         [HttpPost("token")]
         [ProducesResponseType(typeof(ApiResponse<TokenViewModel>), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
@@ -278,6 +298,26 @@ namespace Api.Controllers
             apiResp.Type = ResponseType.Success;
             return apiResp;
         }
+
+        private async Task<ApiResponse> ResetPassword(string emailOrUsername)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var resp = await _security.ResetPassword(emailOrUsername);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
 
         private ApiResponse UpdateSettings(SettingsViewModel model)
         {

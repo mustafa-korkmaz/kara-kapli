@@ -13,13 +13,11 @@ namespace Api.ViewModels.Parameter.Request
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Range(0, byte.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
         [Display(Name = "ORDER")]
-        [SnakeCaseQuery(nameof(Order))]
         public byte? Order { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
         [Display(Name = "PARAMETER_TYPE_ID")]
-        [SnakeCaseQuery(nameof(ParameterTypeId))]
         public int? ParameterTypeId { get; set; }
     }
 }

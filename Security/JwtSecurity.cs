@@ -109,6 +109,7 @@ namespace Security
                 EmailConfirmed = userDto.EmailConfirmed,
                 UserName = userDto.UserName,
                 NameSurname = userDto.NameSurname,
+                Title = userDto.Title,
                 PasswordHash = HashPassword(password),
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Settings = userDto.Settings,

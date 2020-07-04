@@ -197,6 +197,7 @@ namespace Api.Controllers
                     NameSurname = user.NameSurname,
                     Username = user.UserName,
                     EmailConfirmed = user.EmailConfirmed,
+                    Title = user.Title,
                     Roles = user.Roles,
                     Settings = new Settings
                     {
@@ -270,7 +271,7 @@ namespace Api.Controllers
             {
                 Id = id,
                 Email = username + "@d.com",
-                NameSurname = model.Language == Language.Turkish ? "Demo A.Ş." : "Demo Corp.",
+                Title = model.Language == Language.Turkish ? "Demo A.Ş." : "Demo Corp.",
                 UserName = username,
                 EmailConfirmed = true,
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.DemoUser },

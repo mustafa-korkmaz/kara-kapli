@@ -20,6 +20,8 @@ namespace Api.ViewModels.User.Response
 
         public IEnumerable<string> Roles { get; set; }
 
+        public string Title { get; set; }
+
         public Settings Settings { get; set; }
     }
 

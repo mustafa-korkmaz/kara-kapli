@@ -18,8 +18,8 @@ namespace Dto.User
         public string ImageName { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        public bool ContactPermission { get; set; }
+      
+        public string Title { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

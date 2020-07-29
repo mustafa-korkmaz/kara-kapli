@@ -199,6 +199,7 @@ namespace Api.Controllers
                     EmailConfirmed = user.EmailConfirmed,
                     Title = user.Title,
                     Roles = user.Roles,
+                    MembershipExpiresAt = user.MembershipExpiresAt,
                     Settings = new Settings
                     {
                         FixedHeader = settings.FixedHeader,
@@ -221,6 +222,9 @@ namespace Api.Controllers
                 Type = ResponseType.Fail
             };
 
+            var now = DateTime.UtcNow;
+            var expirationDate = now.AddDays(15);
+
             var applicationUser = new ApplicationUser
             {
                 Id = Guid.NewGuid(),
@@ -230,7 +234,8 @@ namespace Api.Controllers
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.User },
                 EmailConfirmed = true,
                 Settings = _userBusiness.GetDefaultSettings(),
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now,
+                MembershipExpiresAt = expirationDate
             };
 
             var resp = await _security.Register(applicationUser, model.Password);
@@ -266,6 +271,8 @@ namespace Api.Controllers
 
             var id = Guid.NewGuid();
             var username = id.ToString("N");
+            var now = DateTime.UtcNow;
+            var expirationDate = now.AddDays(15);
 
             var applicationUser = new ApplicationUser
             {
@@ -276,7 +283,8 @@ namespace Api.Controllers
                 EmailConfirmed = true,
                 Roles = new List<string> { DatabaseKeys.ApplicationRoleName.DemoUser },
                 Settings = _userBusiness.GetDefaultSettings(),
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now,
+                MembershipExpiresAt = expirationDate
             };
 
             var resp = await _security.Register(applicationUser, model.Password);

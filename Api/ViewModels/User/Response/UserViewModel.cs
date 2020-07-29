@@ -15,6 +15,7 @@ namespace Api.ViewModels.User.Response
         public string Email { get; set; }
 
         public DateTime CreatedAt { get; set; }
+        public DateTime MembershipExpiresAt { get; set; }
 
         public bool EmailConfirmed { get; set; }
 

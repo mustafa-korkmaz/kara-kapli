@@ -113,6 +113,7 @@ namespace Security
                 PasswordHash = HashPassword(password),
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Settings = userDto.Settings,
+                LockoutEnd = userDto.MembershipExpiresAt,
                 CreatedAt = userDto.CreatedAt
             };
 

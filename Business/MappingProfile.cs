@@ -13,8 +13,11 @@ namespace Business
             CreateMap<Dto.DtoBase, Dal.Entities.EntityBase>();
             CreateMap<Dal.Entities.EntityBase, Dto.DtoBase>();
 
-            CreateMap<Dal.Entities.Identity.ApplicationUser, Dto.User.ApplicationUser>();
-            CreateMap<Dto.User.ApplicationUser, Dal.Entities.Identity.ApplicationUser>();
+            CreateMap<Dal.Entities.Identity.ApplicationUser, Dto.User.ApplicationUser>()
+                  .ForMember(dest => dest.MembershipExpiresAt,
+                  opt => opt.MapFrom(src => src.LockoutEnd.HasValue ? src.LockoutEnd.Value.DateTime : new System.DateTime()));
+            CreateMap<Dto.User.ApplicationUser, Dal.Entities.Identity.ApplicationUser>()
+                .ForMember(dest => dest.LockoutEnd, opt => opt.MapFrom(src => src.MembershipExpiresAt));
 
             CreateMap<Dto.Parameter, Dal.Entities.Parameter>();
             CreateMap<Dal.Entities.Parameter, Dto.Parameter>();

@@ -320,5 +320,32 @@ namespace Business.User
                 }
             }
         }
+
+        public Response UpdateCompanyInformation(Guid userId, string title, string authorizedPerson)
+        {
+            var resp = new Response
+            {
+                Type = ResponseType.Fail
+            };
+
+            var user = _repository.GetById(userId);
+
+            if (user == null)
+            {
+                resp.ErrorCode = ErrorCode.UserNotFound;
+                return resp;
+            }
+
+            user.NameSurname = authorizedPerson;
+            user.Title = title;
+
+            _repository.Update(user);
+
+            _uow.Save();
+
+            resp.Type = ResponseType.Success;
+
+            return resp;
+        }
     }
 }

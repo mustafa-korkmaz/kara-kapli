@@ -20,6 +20,7 @@ using Business.Parameter;
 using Business.Transaction;
 using Business.User;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace Api
 {
@@ -57,8 +58,17 @@ namespace Api
 
             //Injecting the identity manager
             services.AddIdentity<Dal.Entities.Identity.ApplicationUser,
-                Dal.Entities.Identity.ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<Dal.Db.BlackCoveredLedgerDbContext>();
+                Dal.Entities.Identity.ApplicationRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
+                })
+                .AddEntityFrameworkStores<Dal.Db.BlackCoveredLedgerDbContext>()
+                .AddDefaultTokenProviders();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

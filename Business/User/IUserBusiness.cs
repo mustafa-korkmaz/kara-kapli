@@ -16,5 +16,7 @@ namespace Business.User
         string GetDefaultSettings();
 
         Response UpdateSettings(Guid userId, UserSettings newSettings);
+
+        Response UpdateCompanyInformation(Guid userId, string title, string authorizedPerson);
     }
 }

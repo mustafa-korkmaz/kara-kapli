@@ -2,6 +2,7 @@
 using Common.Response;
 using Dto.User;
 using System.Threading.Tasks;
+using System;
 
 namespace Security
 {
@@ -28,10 +29,10 @@ namespace Security
         /// <summary>
         /// changes user password
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="userId"></param>
         /// <param name="newPassword"></param>
         /// <returns></returns>
-        Task<Response> ChangePassword(string email, string newPassword);
+        Task<Response> ChangePassword(Guid userId, string newPassword);
 
         /// <summary>
         /// returns current user info by user id

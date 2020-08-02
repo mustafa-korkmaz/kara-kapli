@@ -168,14 +168,14 @@ namespace Security
             return resp;
         }
 
-        public async Task<Response> ChangePassword(string email, string newPassword)
+        public async Task<Response> ChangePassword(Guid userId, string newPassword)
         {
             var resp = new Response
             {
                 Type = ResponseType.Fail
             };
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
@@ -189,7 +189,7 @@ namespace Security
 
             await _userManager.ResetPasswordAsync(user, token, newPassword);
 
-            //log user password reset request
+                //log user password reset request
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordChanged, user.Id));
 
             resp.Type = ResponseType.Success;

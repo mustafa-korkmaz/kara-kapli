@@ -46,6 +46,26 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
+
+        [HttpPost("password")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Password([FromBody]ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = await ChangePassword(model.Password);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
         [HttpPost("token")]
         [ProducesResponseType(typeof(ApiResponse<TokenViewModel>), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
@@ -57,6 +77,25 @@ namespace Api.Controllers
             }
 
             var resp = await GetToken(model);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpPatch]
+        [ProducesResponseType(typeof(ApiResponse<TokenViewModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Update([FromBody]UpdateUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = UpdateUser(model);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -327,7 +366,6 @@ namespace Api.Controllers
             return apiResp;
         }
 
-
         private ApiResponse UpdateSettings(SettingsViewModel model)
         {
             var apiResp = new ApiResponse
@@ -344,6 +382,44 @@ namespace Api.Controllers
             };
 
             var resp = _userBusiness.UpdateSettings(GetUserId().Value, userSettings);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private async Task<ApiResponse> ChangePassword(string password)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var resp = await _security.ChangePassword(GetUserId().Value, password);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private ApiResponse UpdateUser(UpdateUserViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var resp = _userBusiness.UpdateCompanyInformation(GetUserId().Value, model.Title, model.AuthorizedPersonName);
 
             if (resp.Type != ResponseType.Success)
             {

@@ -10,6 +10,7 @@ using Business.Customer;
 using Common;
 using Business.Parameter;
 using System.Linq;
+using Business.Dashboard;
 
 namespace Business.Transaction
 {
@@ -17,13 +18,16 @@ namespace Business.Transaction
     {
         private readonly ICustomerBusiness _customerBusiness;
         private readonly IParameterBusiness _parameterBusiness;
+        private readonly IDashboardBusiness _dashboardBusiness;
 
-        public TransactionBusiness(IUnitOfWork uow, ICustomerBusiness customerBusiness, IParameterBusiness parameterBusiness,
+        public TransactionBusiness(IUnitOfWork uow, ICustomerBusiness customerBusiness,
+            IParameterBusiness parameterBusiness, IDashboardBusiness dashboardBusiness,
             ILogger<TransactionBusiness> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
             _customerBusiness = customerBusiness;
             _parameterBusiness = parameterBusiness;
+            _dashboardBusiness = dashboardBusiness;
             ValidateEntityOwner = true;
         }
 
@@ -68,6 +72,8 @@ namespace Business.Transaction
 
                 tx.Commit();
             }
+
+            _dashboardBusiness.RefreshUserCache(OwnerId);
 
             return new Response
             {
@@ -126,6 +132,8 @@ namespace Business.Transaction
                 tx.Commit();
             }
 
+            _dashboardBusiness.RefreshUserCache(OwnerId);
+
             businessResp.Type = ResponseType.Success;
             return businessResp;
         }
@@ -168,7 +176,18 @@ namespace Business.Transaction
                 tx.Commit();
             }
 
+            _dashboardBusiness.RefreshUserCache(OwnerId);
+
             return deleteResp;
+        }
+
+        public bool IsDebtTransaction(int typeId)
+        {
+            var userParameters = _parameterBusiness.GetUserParameters(OwnerId);
+
+            var transactionType = userParameters.First(p => p.Id == typeId);
+
+            return transactionType.ParameterTypeId == DatabaseKeys.ParameterTypeId.Debt;
         }
 
         protected override bool IsEntityOwnerValid(Dal.Entities.Transaction entity)
@@ -211,15 +230,6 @@ namespace Business.Transaction
                 customer.ReceivableBalance += amount;
             }
 
-        }
-
-        public bool IsDebtTransaction(int typeId)
-        {
-            var userParameters = _parameterBusiness.GetUserParameters(OwnerId);
-
-            var transactionType = userParameters.First(p => p.Id == typeId);
-
-            return transactionType.ParameterTypeId == DatabaseKeys.ParameterTypeId.Debt;
         }
     }
 }

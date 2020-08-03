@@ -3,6 +3,7 @@ using Api.Configurations.Jwt;
 using Api.Middlewares;
 using Business;
 using Business.Customer;
+using Business.Dashboard;
 using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -79,6 +80,7 @@ namespace Api
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
             services.AddTransient<ITransactionBusiness, TransactionBusiness>();
             services.AddTransient<IParameterBusiness, ParameterBusiness>();
+            services.AddTransient<IDashboardBusiness, DashboardBusiness>();
             services.AddTransient<ISecurity, JwtSecurity>();
 
             services.AddTransient<ICacheService, CacheService>();

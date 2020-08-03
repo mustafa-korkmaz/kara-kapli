@@ -30,6 +30,8 @@ namespace Business
 
             CreateMap<Dto.Transaction, Dal.Entities.Transaction>();
             CreateMap<Dal.Entities.Transaction, Dto.Transaction>();
+
+            CreateMap<Dal.Entities.Dashboard, Dto.Dashboard>();
         }
     }
 }

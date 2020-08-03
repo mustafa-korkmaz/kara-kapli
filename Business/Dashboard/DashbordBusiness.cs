@@ -30,7 +30,11 @@ namespace Business.Dashboard
         {
             var dashboard = _repository.GetUserDashboard(userId);
 
-            return _mapper.Map<Dal.Entities.Dashboard, Dto.Dashboard>(dashboard);
+            var dto = _mapper.Map<Dal.Entities.Dashboard, Dto.Dashboard>(dashboard);
+
+            dto.LastUpdatedAt = DateTime.UtcNow;
+
+            return dto;
         }
 
         /// <summary>

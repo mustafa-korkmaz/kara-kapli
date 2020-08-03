@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Api.ViewModels.Dashboard.Response
 {
     public class UserDashboardViewModel
@@ -10,5 +12,7 @@ namespace Api.ViewModels.Dashboard.Response
         public double CustomerReceivablesTotal { get; set; }
 
         public double CustomerDebtsTotal { get; set; }
+
+        public DateTime LastUpdatedAt { get; set; }
     }
 }

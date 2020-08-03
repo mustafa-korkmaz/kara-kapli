@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Dto
@@ -12,5 +13,7 @@ namespace Dto
         public double CustomerReceivablesTotal => Customers.Sum(c => c.ReceivableBalance);
 
         public double CustomerDebtsTotal => Customers.Sum(c => c.DebtBalance);
+
+        public DateTime LastUpdatedAt { get; set; }
     }
 }

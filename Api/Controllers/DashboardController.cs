@@ -46,7 +46,8 @@ namespace Api.Controllers
                 TransactionCount = resp.TransactionCount,
                 CustomerCount = resp.Customers.Count,
                 CustomerDebtsTotal = resp.CustomerDebtsTotal,
-                CustomerReceivablesTotal = resp.CustomerReceivablesTotal
+                CustomerReceivablesTotal = resp.CustomerReceivablesTotal,
+                LastUpdatedAt = resp.LastUpdatedAt
             };
 
             apiResp.Data = data;

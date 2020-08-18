@@ -88,7 +88,7 @@ namespace Api.Controllers
 
         [HttpPatch]
         [ProducesResponseType(typeof(ApiResponse<TokenViewModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update([FromBody]UpdateUserViewModel model)
+        public IActionResult Update([FromBody]UpdateUserViewModel model)
         {
             if (!ModelState.IsValid)
             {

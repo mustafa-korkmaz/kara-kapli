@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using Api.ViewModels;
 using Api.ViewModels.Customer.Request;
 using Api.ViewModels.Customer.Response;
@@ -91,6 +92,28 @@ namespace Api.Controllers
             }
 
             var resp = Delete(model.Id);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpPost("feedback")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        [AllowAnonymous]
+        public IActionResult Feedback([FromBody] FeedbackViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = new ApiResponse();
+            //todo: send email
+            Thread.Sleep(2000);
 
             if (resp.Type != ResponseType.Success)
             {

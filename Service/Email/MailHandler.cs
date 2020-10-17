@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.FileProviders;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
+using System.Reflection;
 
 namespace Service.Email
 {
@@ -36,7 +38,6 @@ namespace Service.Email
         public void Send(Email email)
         {
             MailMessage mail = new MailMessage();
-            System.Net.NetworkCredential cred = new System.Net.NetworkCredential(email.From, email.Password);
 
             var smtpClient = new SmtpClient(Settings.Host, Settings.Port)
             {
@@ -44,6 +45,8 @@ namespace Service.Email
                 UseDefaultCredentials = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network
             };
+
+            System.Net.NetworkCredential cred = new System.Net.NetworkCredential(email.From, email.Password);
 
             try
             {
@@ -83,14 +86,18 @@ namespace Service.Email
         {
             string mailBody;
 
-            using (StreamReader reader = new StreamReader(GetTemplatePath(templateName)))
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+            using (var stream = embeddedProvider.GetFileInfo("_templates/" + templateName).CreateReadStream())
             {
-                mailBody = reader.ReadToEnd();
+                using (var reader = new StreamReader(stream))
+                {
+                    mailBody = reader.ReadToEnd();
+                }
             }
 
             foreach (var variable in templateVariables)
             {
-                mailBody = mailBody.Replace(variable.Key, variable.Value);
+                mailBody = mailBody.Replace("{" + variable.Key + "}", variable.Value);
             }
 
             return mailBody; // set mail body as template

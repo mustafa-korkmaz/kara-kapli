@@ -29,7 +29,18 @@ namespace Service.Email
             if (string.IsNullOrEmpty(email.From))
             {
                 email.From = _appSettings.Value.Email.MailFrom;
+                email.DisplayName = _appSettings.Value.Email.MailDisplayName;
                 email.Password = _appSettings.Value.Email.MailPassword;
+            }
+
+            if (!email.Template.Variables.ContainsKey("admin_panel_url"))
+            {
+                email.Template.Variables.Add("admin_panel_url", _appSettings.Value.AdminPanelUrl);
+            }
+
+            if (!email.Template.Variables.ContainsKey("landing_page_url"))
+            {
+                email.Template.Variables.Add("landing_page_url", _appSettings.Value.LandingPageUrl);
             }
 
             var mailHandler = MailHandler.Instance;

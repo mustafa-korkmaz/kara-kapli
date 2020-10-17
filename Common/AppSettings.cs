@@ -17,10 +17,9 @@ namespace Common
         /// </summary>
         public string PfeWebUrl { get; set; }
 
-        /// <summary>
-        /// berlin url
-        /// </summary>
         public string AdminPanelUrl { get; set; }
+
+        public string LandingPageUrl { get; set; }
 
         public LoggingSettings Logging { get; set; }
 

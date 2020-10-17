@@ -311,7 +311,7 @@ namespace Security
                 Subject = "Şifre sıfırlama isteği",
                 Template = new Template
                 {
-                    Name = "reset-password.html",
+                    Name = "reset-password-link.html",
                     Variables = new Dictionary<string, string>
                     {
                         {"reset_link", resetLink}

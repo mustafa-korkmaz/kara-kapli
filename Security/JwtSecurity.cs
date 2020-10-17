@@ -166,8 +166,6 @@ namespace Security
 
             var resetLink = Utility.Base64Encode($"{user.Id:N}::{user.SecurityStamp}::{unixTimestamp}");
 
-            user.LockoutEnd = now;
-
             var mailSent = SendResetPasswordEmail(resetLink, user.Email);
 
             if (!mailSent)
@@ -176,8 +174,10 @@ namespace Security
                 return resp;
             }
 
+            user.LockoutEnd = now.AddMinutes(10); // 10 minutes expiration period
+
             await _userManager.UpdateAsync(user);
-            //log user password reset request
+            
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordReset, user.Id));
 
             resp.Type = ResponseType.Success;

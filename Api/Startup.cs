@@ -22,6 +22,7 @@ using Business.Transaction;
 using Business.User;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
+using Service.Email;
 
 namespace Api
 {
@@ -84,6 +85,7 @@ namespace Api
             services.AddTransient<ISecurity, JwtSecurity>();
 
             services.AddTransient<ICacheService, CacheService>();
+            services.AddTransient<IEmailService, EmailService>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 

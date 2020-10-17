@@ -68,23 +68,11 @@ namespace Common
 
         public string TemplatePath { get; set; }
 
-        public string MailFromForSystem { get; set; }
+        public string MailFrom { get; set; }
 
-        public string MailDisplayNameForSystem { get; set; }
+        public string MailDisplayName { get; set; }
 
-        public string MailPassForSystem { get; set; }
-
-        public string MailFromForTeachers { get; set; }
-
-        public string MailDisplayNameForTeachers { get; set; }
-
-        public string MailPassforTeachers { get; set; }
-
-        public string MailFromForScholarship { get; set; }
-
-        public string MailDisplayNameForScholarship { get; set; }
-
-        public string MailPassforScholarship { get; set; }
+        public string MailPassword { get; set; }
     }
 
     public class SmsSettings

@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ApplicationUser = Dto.User.ApplicationUser;
 using Microsoft.Extensions.Logging;
+using Utility = Common.Utility;
+using Service.Email;
 
 namespace Security
 {
@@ -21,12 +23,14 @@ namespace Security
         private readonly UserManager<Dal.Entities.Identity.ApplicationUser> _userManager;
         private readonly ILogger<JwtSecurity> _logger;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public JwtSecurity(UserManager<Dal.Entities.Identity.ApplicationUser> userManager, ILogger<JwtSecurity> logger, IMapper mapper)
+        public JwtSecurity(UserManager<Dal.Entities.Identity.ApplicationUser> userManager, ILogger<JwtSecurity> logger, IMapper mapper, IEmailService emailService)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<DataResponse<string>> GetToken(ApplicationUser userDto, string password)
@@ -157,9 +161,22 @@ namespace Security
                 return resp;
             }
 
-            // todo
-            // create pass reset link
+            var now = DateTime.UtcNow;
+            var unixTimestamp = Utility.GetUnixTimeStamp(now);
 
+            var resetLink = Utility.Base64Encode($"{user.Id:N}::{user.SecurityStamp}::{unixTimestamp}");
+
+            user.LockoutEnd = now;
+
+            var mailSent = SendResetPasswordEmail(resetLink, user.Email);
+
+            if (!mailSent)
+            {
+                resp.ErrorCode = ErrorCode.ApplicationException;
+                return resp;
+            }
+
+            await _userManager.UpdateAsync(user);
             //log user password reset request
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordReset, user.Id));
 
@@ -189,7 +206,7 @@ namespace Security
 
             await _userManager.ResetPasswordAsync(user, token, newPassword);
 
-                //log user password reset request
+            //log user password reset request
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordChanged, user.Id));
 
             resp.Type = ResponseType.Success;
@@ -284,6 +301,25 @@ namespace Security
         {
             var id = value.Split("_")[0];
             return id;
+        }
+
+        private bool SendResetPasswordEmail(string resetLink, string emailAddress)
+        {
+            var email = new Email
+            {
+                To = emailAddress,
+                Subject = "Şifre sıfırlama isteği",
+                Template = new Template
+                {
+                    Name = "reset-password.html",
+                    Variables = new Dictionary<string, string>
+                    {
+                        {"reset_link", resetLink}
+                    }
+                }
+            };
+
+            return _emailService.SendEmail(email);
         }
 
         #endregion private methods

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using Api.ViewModels;
 using Api.ViewModels.Customer.Request;
 using Api.ViewModels.Customer.Response;

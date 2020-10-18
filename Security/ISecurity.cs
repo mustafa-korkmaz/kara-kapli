@@ -15,7 +15,7 @@ namespace Security
         /// <param name="password"></param>
         /// <returns></returns>
         Task<DataResponse<string>> GetToken(ApplicationUser userDto, string password);
-    
+
         /// <summary>
         /// Creates user and sets user info
         /// </summary>
@@ -24,7 +24,15 @@ namespace Security
         /// <returns></returns>
         Task<Response> Register(ApplicationUser userDto, string password);
 
-        Task<Response> ResetPassword(string emailOrUsername);
+        Task<Response> ResetAccount(string emailOrUsername);
+
+        /// <summary>
+        /// validates security code and returns respective user
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="securityCode"></param>
+        /// <returns></returns>
+        Task<DataResponse<Guid>> ConfirmPasswordReset(string password, string securityCode);
 
         /// <summary>
         /// changes user password

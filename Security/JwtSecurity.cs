@@ -141,7 +141,7 @@ namespace Security
             return resp;
         }
 
-        public async Task<Response> ResetPassword(string emailOrUsername)
+        public async Task<Response> ResetAccount(string emailOrUsername)
         {
             var resp = new Response
             {
@@ -174,12 +174,75 @@ namespace Security
                 return resp;
             }
 
-            user.LockoutEnd = now.AddMinutes(10); // 10 minutes expiration period
+            user.LockoutEnd = now;
 
             await _userManager.UpdateAsync(user);
-            
+
             _logger.LogInformation(string.Format(LoggingOperationPhrase.PasswordReset, user.Id));
 
+            resp.Type = ResponseType.Success;
+
+            return resp;
+        }
+
+        public async Task<DataResponse<Guid>> ConfirmPasswordReset(string password, string securityCode)
+        {
+            var resp = new DataResponse<Guid>
+            {
+                Type = ResponseType.Fail,
+                Data = Guid.Empty
+            };
+
+            string decodedLink;
+
+            try
+            {
+                decodedLink = Utility.Base64Decode(securityCode);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"{securityCode} decode error", e);
+                resp.ErrorCode = ErrorCode.ApplicationException;
+                return resp;
+            }
+
+            var linkParams = decodedLink.Split("::");
+
+            if (linkParams.Length != 3)
+            {
+                _logger.LogError($"{securityCode} params cannot be found");
+
+                resp.ErrorCode = ErrorCode.ApplicationException;
+                return resp;
+            }
+
+            var userId = Guid.Parse(linkParams[0]);
+            var securityStamp = linkParams[1];
+            var unixTimestamp = int.Parse(linkParams[2]);
+
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null || user.SecurityStamp != securityStamp)
+            {
+                resp.ErrorCode = ErrorCode.SecurityError;
+                return resp;
+            }
+
+            var lockoutEndDate = user.LockoutEnd.Value.UtcDateTime;
+
+            if (unixTimestamp != Utility.GetUnixTimeStamp(lockoutEndDate))
+            {
+                resp.ErrorCode = ErrorCode.SecurityCodeExpired;
+                return resp;
+            }
+
+            if (lockoutEndDate.AddMinutes(10) < DateTime.UtcNow)
+            {
+                resp.ErrorCode = ErrorCode.SecurityCodeExpired;
+                return resp;
+            }
+
+            resp.Data = userId;
             resp.Type = ResponseType.Success;
 
             return resp;

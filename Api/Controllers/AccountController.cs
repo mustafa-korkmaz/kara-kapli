@@ -29,14 +29,34 @@ namespace Api.Controllers
         [HttpPost("reset")]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
         [AllowAnonymous]
-        public async Task<IActionResult> Reset([FromBody]ResetPasswordViewModel model)
+        public async Task<IActionResult> Reset([FromBody]ResetViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            var resp = await ResetPassword(model.EmailOrUsername);
+            var resp = await ResetAccount(model.EmailOrUsername);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            return Ok(resp);
+        }
+
+        [HttpPost("reset-password")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelStateErrorResponse(ModelState));
+            }
+
+            var resp = await ResetUserPassword(model);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -347,14 +367,41 @@ namespace Api.Controllers
             return apiResp;
         }
 
-        private async Task<ApiResponse> ResetPassword(string emailOrUsername)
+        private async Task<ApiResponse> ResetAccount(string emailOrUsername)
         {
             var apiResp = new ApiResponse
             {
                 Type = ResponseType.Fail
             };
 
-            var resp = await _security.ResetPassword(emailOrUsername);
+            var resp = await _security.ResetAccount(emailOrUsername);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = resp.ErrorCode;
+                return apiResp;
+            }
+
+            apiResp.Type = ResponseType.Success;
+            return apiResp;
+        }
+
+        private async Task<ApiResponse> ResetUserPassword(ResetPasswordViewModel model)
+        {
+            var apiResp = new ApiResponse
+            {
+                Type = ResponseType.Fail
+            };
+
+            var confirmResp = await _security.ConfirmPasswordReset(model.Password, model.SecurityCode);
+
+            if (confirmResp.Type != ResponseType.Success)
+            {
+                apiResp.ErrorCode = confirmResp.ErrorCode;
+                return apiResp;
+            }
+
+            var resp = await _security.ChangePassword(confirmResp.Data, model.Password);
 
             if (resp.Type != ResponseType.Success)
             {

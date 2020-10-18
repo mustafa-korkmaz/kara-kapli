@@ -20,6 +20,7 @@ namespace Dal.Db
         public DbSet<Entities.Transaction> Transactions { get; set; }
         public DbSet<Entities.ParameterType> ParameterTypes { get; set; }
         public DbSet<Entities.Parameter> Parameters { get; set; }
+        public DbSet<Entities.Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

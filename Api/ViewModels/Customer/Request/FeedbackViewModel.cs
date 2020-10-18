@@ -7,6 +7,7 @@ namespace Api.ViewModels.Customer.Request
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Display(Name = "MESSAGE")]
+        [StringLength(1000)]
         public string Message { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]

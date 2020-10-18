@@ -31,6 +31,9 @@ namespace Business
             CreateMap<Dto.Transaction, Dal.Entities.Transaction>();
             CreateMap<Dal.Entities.Transaction, Dto.Transaction>();
 
+            CreateMap<Dto.Feedback, Dal.Entities.Feedback>();
+            CreateMap<Dal.Entities.Feedback, Dto.Feedback>();
+
             CreateMap<Dal.Entities.Dashboard, Dto.Dashboard>();
         }
     }

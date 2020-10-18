@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Dal.Repositories.Customer;
 using Microsoft.Extensions.Logging;
 using Dal;
-using Common.Response;
-using Common.Request;
-using Common.Request.Criteria.Customer;
-using System.Collections.Generic;
+using Dal.Repositories.Feedback;
 
 namespace Business.Feedback
 {

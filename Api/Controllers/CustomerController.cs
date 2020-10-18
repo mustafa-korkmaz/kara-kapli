@@ -101,28 +101,6 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
-        [HttpPost("feedback")]
-        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        [AllowAnonymous]
-        public IActionResult Feedback([FromBody] FeedbackViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(GetModelStateErrorResponse(ModelState));
-            }
-
-            var resp = new ApiResponse();
-            //todo: send email
-            Thread.Sleep(2000);
-
-            if (resp.Type != ResponseType.Success)
-            {
-                return BadRequest(resp);
-            }
-
-            return Ok(resp);
-        }
-
         private ApiResponse<PagedListResponse<CustomerViewModel>> Search(SearchCustomerViewModel model)
         {
             var apiResp = new ApiResponse<PagedListResponse<CustomerViewModel>>

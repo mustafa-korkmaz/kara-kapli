@@ -135,14 +135,11 @@ namespace Api
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
-            //app.UseHttpsRedirection();
 
             //request handling
             app.UseRequestMiddleware();
@@ -160,7 +157,7 @@ namespace Api
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 
-            logger.LogInformation($"application started working on {Environment.MachineName}");
+            logger.LogInformation($"application started working on {Environment.MachineName} at {DateTime.UtcNow:u}");
         }
     }
 }

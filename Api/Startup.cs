@@ -22,6 +22,7 @@ using Service.Caching;
 using Business.Parameter;
 using Business.Transaction;
 using Business.User;
+using Google.Cloud.Diagnostics.AspNetCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -119,8 +120,12 @@ namespace Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            ILoggerFactory loggerFactory)
         {
+#if !DEBUG
+            loggerFactory.AddGoogle(app.ApplicationServices, "karakapli");
+#endif
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

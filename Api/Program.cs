@@ -25,7 +25,7 @@ namespace Api
 #if DEBUG
                     logging.AddConsole(options => options.IncludeScopes = true);
 #endif
-                    logging.AddDebug();
+                    //logging.AddDebug();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

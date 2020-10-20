@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using Common;
-using Common.Response;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

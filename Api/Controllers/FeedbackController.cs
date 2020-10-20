@@ -1,18 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using Api.ViewModels;
+﻿using System.Net;
 using Api.ViewModels.Customer.Request;
-using Api.ViewModels.Customer.Response;
-using Business.Customer;
 using Business.Feedback;
 using Common;
-using Common.Request;
-using Common.Request.Criteria.Customer;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {

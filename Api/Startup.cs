@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Api.Configurations.Jwt;
 using Api.Middlewares;
@@ -23,6 +24,7 @@ using Business.Transaction;
 using Business.User;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Service.Email;
 
 namespace Api
@@ -155,6 +157,10 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+
+            var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
+
+            logger.LogInformation($"application started working on {Environment.MachineName}");
         }
     }
 }

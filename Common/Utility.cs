@@ -139,7 +139,34 @@ namespace Common
 
         public static int GetUnixTimeStamp(DateTime date)
         {
-           return (int)(date.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return (int)(date.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
+
+        public static (string fileName, string extension) GetFileNameAndExtension(string fileFullName)
+        {
+            var array = fileFullName.Split('.');
+
+            if (array.Length < 2)
+            {
+                return (fileFullName, "");
+            }
+
+            var fileName = "";
+
+            var extension = "";
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (i == array.Length - 1)
+                {
+                    extension = array[i];
+                    break;
+                }
+
+                fileName += array[i];
+            }
+
+            return (fileName, extension);
         }
     }
 

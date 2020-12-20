@@ -27,6 +27,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Service.Email;
+using Service.Upload;
 
 namespace Api
 {
@@ -91,6 +92,7 @@ namespace Api
 
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IUploadService, UploadService>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 

@@ -24,12 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="_templates\reset-password-link.html" />
   </ItemGroup>
 

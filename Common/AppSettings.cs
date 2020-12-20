@@ -8,14 +8,7 @@ namespace Common
     {
         public string ApiUrl { get; set; }
 
-        public string PfeWebConnection { get; set; }
-
         public string CacheProvider { get; set; }
-
-        /// <summary>
-        /// prudential first web address
-        /// </summary>
-        public string PfeWebUrl { get; set; }
 
         public string AdminPanelUrl { get; set; }
 
@@ -25,17 +18,7 @@ namespace Common
 
         public EMailSettings Email { get; set; }
 
-        public SmsSettings Sms { get; set; }
-
-        /// <summary>
-        /// payment method settings
-        /// </summary>
-        public PaymentSettings Payment { get; set; }
-
-        /// <summary>
-        /// comma seperated reseved domains like prudentialFirst.com
-        /// </summary>
-        public string ReservedDomains { get; set; }
+        public UploadSettings Upload { get; set; }
     }
 
     public class LoggingSettings
@@ -88,23 +71,17 @@ namespace Common
     }
 
 
-    public class PaymentSettings
+    public class UploadSettings
     {
         /// <summary>
-        /// StripeApiKey for auth
+        /// file upload api url
         /// </summary>
-        public string StripeApiKey { get; set; }
+        public string ApiUrl { get; set; }
 
         /// <summary>
-        /// StripePublishableKey for web requests
+        /// MaxUploadSizeInBytes for upload requests
         /// </summary>
-        public string StripePublishableKey { get; set; }
-
-        /// <summary>
-        /// Stripe web hook secret
-        /// </summary>
-        public string StripeWebHookSecret { get; set; }
+        public int MaxSizeInBytes { get; set; }
     }
-
 
 }

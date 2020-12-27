@@ -17,6 +17,8 @@ namespace Dto
 
         public string Description { get; set; }
 
+        public string AttachmentName { get; set; }
+
         /// <summary>
         /// is 'Borclu' typed transaction? If false then it is "Alacakli' 
         /// </summary>

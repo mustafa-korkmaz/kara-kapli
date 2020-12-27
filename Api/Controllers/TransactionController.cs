@@ -146,6 +146,7 @@ namespace Api.Controllers
                 },
                 Amount = p.Amount,
                 Description = p.Description,
+                AttachmentName = p.AttachmentName,
                 IsDebt = p.IsDebt,
                 CreatedAt = p.CreatedAt,
                 ModifiedAt = p.ModifiedAt,
@@ -175,6 +176,7 @@ namespace Api.Controllers
                 TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
+                AttachmentName = model.AttachmentName,
                 IsDebt = _transactionBusiness.IsDebtTransaction(model.TypeId.Value),
                 Date = model.Date,
                 ModifiedAt = now,
@@ -209,6 +211,7 @@ namespace Api.Controllers
                 TypeId = model.TypeId.Value,
                 Amount = model.Amount.Value,
                 Description = model.Description,
+                AttachmentName = model.AttachmentName,
                 IsDebt = _transactionBusiness.IsDebtTransaction(model.TypeId.Value),
                 Date = model.Date,
                 ModifiedAt = DateTime.UtcNow

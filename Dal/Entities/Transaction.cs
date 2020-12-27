@@ -22,6 +22,9 @@ namespace Dal.Entities
         [MaxLength(250)]
         public string Description { get; set; }
 
+        [MaxLength(70)]
+        public string AttachmentName { get; set; }
+
         /// <summary>
         /// is 'Borclu' typed transaction? If false then it is "Alacakli' 
         /// </summary>

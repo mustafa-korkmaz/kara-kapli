@@ -3,23 +3,24 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Threading.Tasks;
+using Api.ViewModels;
 using Api.ViewModels.Upload.Request;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.Upload;
+using Service.File;
 
 namespace Api.Controllers
 {
     [Route("uploads"), ApiController, Authorize]
     public class UploadController : ApiControllerBase
     {
-        private readonly IUploadService _uploadService;
+        private readonly IFileService _fileService;
 
-        public UploadController(IUploadService uploadService)
+        public UploadController(IFileService fileService)
         {
-            _uploadService = uploadService;
+            _fileService = fileService;
         }
 
         [HttpPost]
@@ -36,6 +37,30 @@ namespace Api.Controllers
             return Ok(resp);
         }
 
+        [HttpGet("{name}")]
+        [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get([FromRoute] string name)
+        {
+            _fileService.OwnerId = GetUserId().Value;
+
+            var resp = await _fileService.Get(name);
+
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
+
+            const string contentType = "application/zip";
+            HttpContext.Response.ContentType = contentType;
+
+            var result = new FileContentResult(resp.Data, contentType)
+            {
+                FileDownloadName = name
+            };
+
+            return result;
+        }
+
         private async Task<ApiResponse<string>> Save(UploadViewModel model)
         {
             var apiResp = new ApiResponse<string>
@@ -43,7 +68,7 @@ namespace Api.Controllers
                 Type = ResponseType.Fail
             };
 
-            if (!_uploadService.ValidateSize(model.File.Length))
+            if (!_fileService.ValidateSize(model.File.Length))
             {
                 apiResp.ErrorCode = ErrorCode.ObjectExceededMaxAllowedLength;
                 return apiResp;
@@ -68,18 +93,24 @@ namespace Api.Controllers
                 compressedBytes = outStream.ToArray();  // get compressed byte array in order to save content as .zip
             }
 
-            var zipFileName = $"{Guid.NewGuid()}_{fileName}.zip";
+            var zipFileName = $"{Guid.NewGuid()}_{fileName}";
 
-            _uploadService.OwnerId = GetUserId().Value;
+            //keep name length as max 70
+            if (zipFileName.Length > 65)
+            {
+                zipFileName = $"{zipFileName.Substring(0, 66)}.zip";
+            }
+            else
+            {
+                zipFileName += ".zip";
+            }
 
-            await _uploadService.Save(compressedBytes, zipFileName);
+            _fileService.OwnerId = GetUserId().Value;
+
+            await _fileService.Save(compressedBytes, zipFileName);
 
             apiResp.Type = ResponseType.Success;
             apiResp.Data = zipFileName;
-
-            // string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", $"{guid}_{fileName}.zip");
-
-            // await System.IO.File.WriteAllBytesAsync(path, compressedBytes); // Requires System.Linq
 
             return apiResp;
         }

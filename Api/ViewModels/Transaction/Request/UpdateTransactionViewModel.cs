@@ -9,17 +9,17 @@ namespace Api.ViewModels.Transaction.Request
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Range(1, int.MaxValue, ErrorMessage = ValidationErrorCode.BetweenRange)]
         [Display(Name = "TYPE_ID")]
-        [SnakeCaseQuery(nameof(TypeId))]
         public int? TypeId { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Display(Name = "AMOUNT")]
-        [SnakeCaseQuery(nameof(Amount))]
         public double? Amount { get; set; }
 
         [StringLength(250, ErrorMessage = ValidationErrorCode.BetweenLength, MinimumLength = AppConstant.MinimumLengthForSearch)]
         [Display(Name = "DESCRIPTION")]
         public string Description { get; set; }
+
+        public string AttachmentName { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [RegularExpression(@"^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$", ErrorMessage = ValidationErrorCode.DateNotValid)]

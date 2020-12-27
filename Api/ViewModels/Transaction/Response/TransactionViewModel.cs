@@ -16,6 +16,8 @@ namespace Api.ViewModels.Transaction.Response
         public double Amount { get; set; }
         public string Description { get; set; }
 
+        public string AttachmentName { get; set; }
+
         public bool IsDebt { get; set; }
 
         public DateTime Date { get; set; }

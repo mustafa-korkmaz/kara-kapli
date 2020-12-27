@@ -1,12 +1,15 @@
 ﻿
 using System;
 using System.Threading.Tasks;
+using Common.Response;
 
-namespace Service.Upload
+namespace Service.File
 {
-    public interface IUploadService
+    public interface IFileService
     {
         Task Save(byte[] content, string fileName);
+
+        Task<DataResponse<byte[]>> Get(string fileName);
 
         Guid OwnerId { get; set; }
 

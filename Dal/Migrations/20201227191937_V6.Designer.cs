@@ -3,15 +3,17 @@ using System;
 using Dal.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dal.Migrations
 {
     [DbContext(typeof(BlackCoveredLedgerDbContext))]
-    partial class BlackCoveredLedgerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201227191937_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -60,6 +60,7 @@ namespace Dal.Repositories.Transaction
             {
                 Id = p.Id,
                 Description = p.Description,
+                AttachmentName = p.AttachmentName,
                 Amount = p.Amount,
                 TypeId = p.TypeId,
                 IsDebt = p.IsDebt,

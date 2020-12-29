@@ -22,6 +22,7 @@ using Service.Caching;
 using Business.Parameter;
 using Business.Transaction;
 using Business.User;
+using Dal.Repositories.File;
 using Google.Cloud.Diagnostics.AspNetCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
@@ -93,6 +94,7 @@ namespace Api
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IFileRepository, FileRepository>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 

@@ -35,6 +35,9 @@ namespace Business
             CreateMap<Dal.Entities.Feedback, Dto.Feedback>();
 
             CreateMap<Dal.Entities.Dashboard, Dto.Dashboard>();
+
+            CreateMap<Dto.File, Dal.Entities.File>();
+            CreateMap<Dal.Entities.File, Dto.File>();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Api.ViewModels.Upload.Request
+namespace Api.ViewModels.File.Request
 {
-    public class UploadViewModel
+    public class UploadFileViewModel
     {
         public IFormFile File { get; set; }
     }

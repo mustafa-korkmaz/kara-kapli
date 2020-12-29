@@ -19,6 +19,8 @@ namespace Common
         public EMailSettings Email { get; set; }
 
         public UploadSettings Upload { get; set; }
+
+        public MongoConfigSettings MongoConfig { get; set; }
     }
 
     public class LoggingSettings
@@ -70,7 +72,6 @@ namespace Common
         public string AuthorizationHeader { get; set; }
     }
 
-
     public class UploadSettings
     {
         /// <summary>
@@ -82,6 +83,12 @@ namespace Common
         /// MaxUploadSizeInBytes for upload requests
         /// </summary>
         public int MaxSizeInBytes { get; set; }
+    }
+
+    public class MongoConfigSettings
+    {
+        public string ConnectionString { get; set; }
+        public string DatabaseName { get; set; }
     }
 
 }

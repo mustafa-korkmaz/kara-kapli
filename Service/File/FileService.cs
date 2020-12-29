@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using Common.Response;
+using Dal.Repositories.File;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Service.File
 {
@@ -14,72 +12,72 @@ namespace Service.File
     {
         private readonly ILogger<FileService> _logger;
         private readonly IOptions<AppSettings> _appSettings;
-        private readonly HttpClient _client;
-        private readonly string _apiUrl;
+        private readonly IFileRepository _repository;
 
-        public FileService(IOptions<AppSettings> appSettings, ILogger<FileService> logger)
+        public FileService(IFileRepository repository, IOptions<AppSettings> appSettings, ILogger<FileService> logger)
         {
             _appSettings = appSettings;
             _logger = logger;
-            _apiUrl = _appSettings.Value.Upload.ApiUrl;
-
-            HttpClientHandler clientHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
-            };
-
-            _client = new HttpClient(clientHandler);
+            _repository = repository;
         }
 
-        public async Task<DataResponse<byte[]>> Get(string fileName)
+        public DataResponse<Dto.File> Get(string fileName)
         {
-            var resp = new DataResponse<byte[]>
+            var resp = new DataResponse<Dto.File>
             {
                 Type = ResponseType.RecordNotFound
             };
 
-            var url = $"{_apiUrl}/v1/uploads/{OwnerId}%2F{fileName}";
-         
-            var result = await _client.GetAsync(url);
+            var id = fileName.Split("_")[0];
 
-            var jsonString = await result.Content.ReadAsStringAsync();
+            var file = _repository.GetById(id);
 
-            result.EnsureSuccessStatusCode();
 
-            var content = JsonConvert.DeserializeObject<FileResponse>(jsonString);
-
-            if (content.error_code == "RECORD_NOT_FOUND")
+            if (file == null || file.OwnerId != OwnerId.ToString())
             {
                 return resp;
             }
 
-            resp.Data = content.data;
-            resp.Type = ResponseType.Success;
+            resp.Data = new Dto.File
+            {
+                Content = file.Content,
+                Name = file.Name
+            };
 
-            _logger.LogInformation($"{fileName} downloaded successfully");
+            resp.Type = ResponseType.Success;
 
             return resp;
         }
 
         public Guid OwnerId { get; set; }
 
-        public async Task Save(byte[] content, string fileName)
+        public void Save(Dto.File file)
         {
-            var payload = new
+            var zipFileName = file.Name;
+
+            //keep name length as max 70
+            if (zipFileName.Length > 65)
             {
-                content,
-                name = $"{OwnerId}/{fileName}"
+                zipFileName = $"{zipFileName.Substring(0, 66)}.zip";
+            }
+            else
+            {
+                zipFileName += ".zip";
+            }
+
+            var entity = new Dal.Entities.File
+            {
+                Name = zipFileName,
+                OwnerId = file.OwnerId,
+                Content = file.Content
             };
 
-            var json = JsonConvert.SerializeObject(payload);
+            _repository.Insert(entity);
 
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            file.Id = entity.Id;
+            file.Name = zipFileName;
 
-            var result = await _client.PostAsync($"{_apiUrl}/v1/uploads", data);
-
-            _logger.LogInformation($"{payload.name} uploaded successfully");
-
-            result.EnsureSuccessStatusCode();
+            _logger.LogInformation($"{zipFileName} saved successfully");
         }
 
         public bool ValidateSize(long size)
@@ -87,10 +85,5 @@ namespace Service.File
             return _appSettings.Value.Upload.MaxSizeInBytes >= size;
         }
 
-        struct FileResponse
-        {
-            public byte[] data;
-            public string error_code;
-        }
     }
 }

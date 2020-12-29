@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Threading.Tasks;
-using Api.ViewModels;
-using Api.ViewModels.Upload.Request;
+using Api.ViewModels.File.Request;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +23,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Post([FromForm] UploadViewModel model)
+        public async Task<IActionResult> Post([FromForm] UploadFileViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -39,11 +37,11 @@ namespace Api.Controllers
 
         [HttpGet("{name}")]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Get([FromRoute] string name)
+        public IActionResult Get([FromRoute] string name)
         {
             _fileService.OwnerId = GetUserId().Value;
 
-            var resp = await _fileService.Get(name);
+            var resp = _fileService.Get(name);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -53,15 +51,15 @@ namespace Api.Controllers
             const string contentType = "application/zip";
             HttpContext.Response.ContentType = contentType;
 
-            var result = new FileContentResult(resp.Data, contentType)
+            var result = new FileContentResult(resp.Data.Content, contentType)
             {
-                FileDownloadName = name
+                FileDownloadName = resp.Data.Name
             };
 
             return result;
         }
 
-        private async Task<ApiResponse<string>> Save(UploadViewModel model)
+        private async Task<ApiResponse<string>> Save(UploadFileViewModel model)
         {
             var apiResp = new ApiResponse<string>
             {
@@ -93,27 +91,21 @@ namespace Api.Controllers
                 compressedBytes = outStream.ToArray();  // get compressed byte array in order to save content as .zip
             }
 
-            var zipFileName = $"{Guid.NewGuid()}_{fileName}";
-
-            //keep name length as max 70
-            if (zipFileName.Length > 65)
+            var file = new Dto.File
             {
-                zipFileName = $"{zipFileName.Substring(0, 66)}.zip";
-            }
-            else
-            {
-                zipFileName += ".zip";
-            }
+                OwnerId = GetUserId().Value.ToString(),
+                Name = fileName,
+                Content = compressedBytes
+            };
 
-            _fileService.OwnerId = GetUserId().Value;
 
-            await _fileService.Save(compressedBytes, zipFileName);
+            _fileService.Save(file);
 
             apiResp.Type = ResponseType.Success;
-            apiResp.Data = zipFileName;
+
+            apiResp.Data = $"{file.Id}_{file.Name}";
 
             return apiResp;
         }
-
     }
 }

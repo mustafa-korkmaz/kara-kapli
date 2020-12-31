@@ -77,7 +77,7 @@ namespace Service.File
             var payload = new
             {
                 content = file.Content,
-                name = $"{OwnerId}/{zipFileName}"
+                name = $"{file.OwnerId}/{zipFileName}"
             };
 
             var json = JsonConvert.SerializeObject(payload);
@@ -89,6 +89,7 @@ namespace Service.File
             result.EnsureSuccessStatusCode();
 
             file.Id = fileId;
+            file.Name = zipFileName;
 
             _logger.LogInformation($"{zipFileName} saved successfully");
         }

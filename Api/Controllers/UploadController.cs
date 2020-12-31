@@ -98,12 +98,11 @@ namespace Api.Controllers
                 Content = compressedBytes
             };
 
-
             await _fileService.Save(file);
 
             apiResp.Type = ResponseType.Success;
 
-            apiResp.Data = $"{file.Id}_{file.Name}";
+            apiResp.Data = file.Name;
 
             return apiResp;
         }

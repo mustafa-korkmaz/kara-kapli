@@ -1,14 +1,15 @@
 ﻿
 using System;
+using System.Threading.Tasks;
 using Common.Response;
 
 namespace Service.File
 {
     public interface IFileService
     {
-        void Save(Dto.File file);
+        Task Save(Dto.File file);
 
-        DataResponse<Dto.File> Get(string fileName);
+        Task<DataResponse<Dto.File>> Get(string fileName);
 
         Guid OwnerId { get; set; }
 

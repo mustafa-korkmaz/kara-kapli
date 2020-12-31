@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Common;
 using Common.Response;
 using Dal.Repositories.File;
@@ -21,7 +22,7 @@ namespace Service.File
             _repository = repository;
         }
 
-        public DataResponse<Dto.File> Get(string fileName)
+        public Task<DataResponse<Dto.File>> Get(string fileName)
         {
             var resp = new DataResponse<Dto.File>
             {
@@ -35,7 +36,7 @@ namespace Service.File
 
             if (file == null || file.OwnerId != OwnerId.ToString())
             {
-                return resp;
+                return Task.FromResult(resp);
             }
 
             resp.Data = new Dto.File
@@ -46,12 +47,12 @@ namespace Service.File
 
             resp.Type = ResponseType.Success;
 
-            return resp;
+            return Task.FromResult(resp);
         }
 
         public Guid OwnerId { get; set; }
 
-        public void Save(Dto.File file)
+        public Task Save(Dto.File file)
         {
             var zipFileName = file.Name;
 
@@ -78,6 +79,8 @@ namespace Service.File
             file.Name = zipFileName;
 
             _logger.LogInformation($"{zipFileName} saved successfully");
+
+            return Task.CompletedTask;
         }
 
         public bool ValidateSize(long size)

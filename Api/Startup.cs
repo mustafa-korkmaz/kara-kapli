@@ -93,7 +93,7 @@ namespace Api
 
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IFileService, FileDiskStorageService>();
             services.AddTransient<IFileRepository, FileRepository>();
 
             services.AddAutoMapper(typeof(MappingProfile));

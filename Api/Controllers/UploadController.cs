@@ -37,11 +37,11 @@ namespace Api.Controllers
 
         [HttpGet("{name}")]
         [ProducesResponseType(typeof(ApiResponse), (int)HttpStatusCode.OK)]
-        public IActionResult Get([FromRoute] string name)
+        public async Task<IActionResult> Get([FromRoute] string name)
         {
             _fileService.OwnerId = GetUserId().Value;
 
-            var resp = _fileService.Get(name);
+            var resp = await _fileService.Get(name);
 
             if (resp.Type != ResponseType.Success)
             {
@@ -99,7 +99,7 @@ namespace Api.Controllers
             };
 
 
-            _fileService.Save(file);
+            await _fileService.Save(file);
 
             apiResp.Type = ResponseType.Success;
 

@@ -45,8 +45,10 @@ namespace Security
         /// <summary>
         /// returns current user info by user id
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        Task<ApplicationUser> GetUser(ClaimsPrincipal user);
+        Task<ApplicationUser> GetUser(string userId);
+
+        Task<Guid?> GetUserId(string email);
     }
 }

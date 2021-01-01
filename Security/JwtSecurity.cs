@@ -118,7 +118,8 @@ namespace Security
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Settings = userDto.Settings,
                 LockoutEnd = userDto.MembershipExpiresAt,
-                CreatedAt = userDto.CreatedAt
+                CreatedAt = userDto.CreatedAt,
+                LockoutEnabled = userDto.IsSocialLogin
             };
 
             await _userManager.CreateAsync(userModel);
@@ -277,10 +278,8 @@ namespace Security
             return resp;
         }
 
-        public async Task<ApplicationUser> GetUser(ClaimsPrincipal user)
+        public async Task<ApplicationUser> GetUser(string userId)
         {
-            var userId = _userManager.GetUserId(user);
-
             var userEntity = await _userManager.FindByIdAsync(userId);
 
             var userDto = _mapper.Map<Dal.Entities.Identity.ApplicationUser, ApplicationUser>(userEntity);
@@ -293,6 +292,12 @@ namespace Security
             return userDto;
         }
 
+        public async Task<Guid?> GetUserId(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return user?.Id;
+        }
 
         #region private methods
 

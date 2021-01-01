@@ -241,7 +241,7 @@ namespace Api.Controllers
         /// <returns></returns>
         private async Task<ApiResponse<UserViewModel>> GetUser()
         {
-            var user = await _security.GetUser(User);
+            var user = await _security.GetUser(GetUserId().Value.ToString());
 
             var settings = _userBusiness.GetSettings(user.Settings);
 

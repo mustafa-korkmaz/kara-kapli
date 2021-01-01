@@ -18,7 +18,7 @@ namespace Dto.User
         public string ImageName { get; set; }
 
         public string PhoneNumber { get; set; }
-      
+
         public string Title { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -30,6 +30,11 @@ namespace Dto.User
         public Dictionary<string, string> Claims { get; set; }
 
         public string Settings { get; set; }
+
+        /// <summary>
+        ///  will be mapped with Identity.LockOutEnabled prop
+        /// </summary>
+        public bool IsSocialLogin { get; set; }
 
         //public bool IsAdmin
         //{

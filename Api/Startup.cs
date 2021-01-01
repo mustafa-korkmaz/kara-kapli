@@ -23,7 +23,6 @@ using Business.Parameter;
 using Business.Transaction;
 using Business.User;
 using Dal.Repositories.File;
-using Google.Cloud.Diagnostics.AspNetCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -109,7 +108,7 @@ namespace Api
                 config.AddPolicy("policy", policy);
             });
 
-            services.ConfigureJwtAuthentication();
+            services.ConfigureJwtAuthentication(Configuration);
             services.ConfigureJwtAuthorization();
 
             // Register the Swagger generator, defining 1 or more Swagger documents

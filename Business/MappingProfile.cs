@@ -15,10 +15,12 @@ namespace Business
 
             CreateMap<Dal.Entities.Identity.ApplicationUser, Dto.User.ApplicationUser>()
                   .ForMember(dest => dest.MembershipExpiresAt,
-                  opt => opt.MapFrom(src => src.LockoutEnd.HasValue ? src.LockoutEnd.Value.DateTime : new System.DateTime()));
+                  opt => opt.MapFrom(src => src.LockoutEnd.HasValue ? src.LockoutEnd.Value.DateTime : new System.DateTime()))
+                  .ForMember(dest => dest.IsSocialLogin, opt => opt.MapFrom(src => src.LockoutEnabled));
             CreateMap<Dto.User.ApplicationUser, Dal.Entities.Identity.ApplicationUser>()
-                .ForMember(dest => dest.LockoutEnd, opt => opt.MapFrom(src => src.MembershipExpiresAt));
-
+                .ForMember(dest => dest.LockoutEnd, opt => opt.MapFrom(src => src.MembershipExpiresAt))
+                .ForMember(dest => dest.LockoutEnabled, opt => opt.MapFrom(src => src.IsSocialLogin));
+         
             CreateMap<Dto.Parameter, Dal.Entities.Parameter>();
             CreateMap<Dal.Entities.Parameter, Dto.Parameter>();
 

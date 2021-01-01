@@ -84,11 +84,7 @@ namespace Api.Configurations.Jwt
 
             if (userId == null)
             {
-                userId = Guid.NewGuid();
-
-                var newUser = GetNewUser(userId.Value, user, ctx);
-
-                await service.Register(newUser, "");
+                userId = await CreateFirebaseUser(service, user, ctx);
             }
 
             var id = new ClaimsIdentity();
@@ -97,8 +93,10 @@ namespace Api.Configurations.Jwt
             user.AddIdentity(id);
         }
 
-        private static Dto.User.ApplicationUser GetNewUser(Guid newUserId, ClaimsPrincipal principal, HttpContext ctx)
+        private static async Task<Guid> CreateFirebaseUser(ISecurity service, ClaimsPrincipal principal, HttpContext ctx)
         {
+            var userId = Guid.NewGuid();
+
             var now = DateTime.UtcNow;
             var expirationDate = now.AddDays(15);
 
@@ -107,9 +105,9 @@ namespace Api.Configurations.Jwt
             var email = principal.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             var name = principal.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
 
-            return new Dto.User.ApplicationUser
+            var userDto = new Dto.User.ApplicationUser
             {
-                Id = newUserId,
+                Id = userId,
                 Email = email,
                 NameSurname = name ?? email,
                 UserName = email,
@@ -120,6 +118,19 @@ namespace Api.Configurations.Jwt
                 MembershipExpiresAt = expirationDate,
                 IsSocialLogin = true
             };
+
+            var resp = await service.Register(userDto, "");
+
+            if (resp.Type == ResponseType.Success)
+            {
+                userBusiness.CreateUserDefaultEntries(userId, Language.Turkish); // todo select lang
+            }
+            else
+            {
+                throw new ApplicationException($"Firebase login error with {email}");
+            }
+
+            return userId;
         }
     }
 }

@@ -43,6 +43,7 @@ namespace Service.File
 
             if (content.error_code == "RECORD_NOT_FOUND")
             {
+                resp.ErrorCode = ErrorCode.RecordNotFound;
                 return resp;
             }
 
@@ -61,7 +62,7 @@ namespace Service.File
         public async Task Save(Dto.File file)
         {
             var fileId = Guid.NewGuid().ToString("N");
-          
+
             var zipFileName = $"{fileId}_{file.Name}";
 
             //keep name length as max 70

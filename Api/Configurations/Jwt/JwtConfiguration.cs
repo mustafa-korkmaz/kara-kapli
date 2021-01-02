@@ -76,15 +76,15 @@ namespace Api.Configurations.Jwt
 
         private static async Task AddUserIdClaim(ClaimsPrincipal user, HttpContext ctx)
         {
-            var service = ctx.RequestServices.GetService<ISecurity>();
+            var userBusiness = ctx.RequestServices.GetService<IUserBusiness>();
 
             var email = user.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
-            var userId = await service.GetUserId(email);
+            var userId = userBusiness.GetUserIdByEmail(email);
 
             if (userId == null)
             {
-                userId = await CreateFirebaseUser(service, user, ctx);
+                userId = await CreateFirebaseUser(userBusiness, user, ctx);
             }
 
             var id = new ClaimsIdentity();
@@ -93,14 +93,14 @@ namespace Api.Configurations.Jwt
             user.AddIdentity(id);
         }
 
-        private static async Task<Guid> CreateFirebaseUser(ISecurity service, ClaimsPrincipal principal, HttpContext ctx)
+        private static async Task<Guid> CreateFirebaseUser(IUserBusiness userBusiness, ClaimsPrincipal principal, HttpContext ctx)
         {
             var userId = Guid.NewGuid();
 
             var now = DateTime.UtcNow;
             var expirationDate = now.AddDays(15);
 
-            var userBusiness = ctx.RequestServices.GetService<IUserBusiness>();
+            var service = ctx.RequestServices.GetService<ISecurity>();
 
             var email = principal.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             var name = principal.Claims.FirstOrDefault(c => c.Type == "name")?.Value;

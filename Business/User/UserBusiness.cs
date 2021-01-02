@@ -347,5 +347,10 @@ namespace Business.User
 
             return resp;
         }
+
+        public Guid? GetUserIdByEmail(string email)
+        {
+            return _repository.GetUserIdByEmail(email);
+        }
     }
 }

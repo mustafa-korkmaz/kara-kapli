@@ -258,7 +258,7 @@ namespace Api.Controllers
                     EmailConfirmed = user.EmailConfirmed,
                     Title = user.Title,
                     Roles = user.Roles,
-                    MembershipExpiresAt = user.MembershipExpiresAt,
+                    MembershipExpiresAt = user.MembershipExpiresAt.DateTime,
                     Settings = new Settings
                     {
                         FixedHeader = settings.FixedHeader,

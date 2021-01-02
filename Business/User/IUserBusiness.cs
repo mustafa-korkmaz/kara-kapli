@@ -18,5 +18,7 @@ namespace Business.User
         Response UpdateSettings(Guid userId, UserSettings newSettings);
 
         Response UpdateCompanyInformation(Guid userId, string title, string authorizedPerson);
+
+        Guid? GetUserIdByEmail(string email);
     }
 }

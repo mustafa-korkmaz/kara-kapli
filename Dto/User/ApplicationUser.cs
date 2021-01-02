@@ -23,7 +23,7 @@ namespace Dto.User
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime MembershipExpiresAt { get; set; }
+        public DateTimeOffset MembershipExpiresAt { get; set; }
 
         public IList<string> Roles { get; set; }
 

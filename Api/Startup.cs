@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Service.Email;
 using Service.File;
+using Service.Slack;
 
 namespace Api
 {
@@ -93,6 +94,7 @@ namespace Api
 
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ISlackService, SlackService>();
             services.AddTransient<IFileService, FileDiskStorageService>();
             services.AddTransient<IFileRepository, FileRepository>();
 

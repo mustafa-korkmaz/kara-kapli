@@ -15,6 +15,7 @@ using ApplicationUser = Dto.User.ApplicationUser;
 using Microsoft.Extensions.Logging;
 using Utility = Common.Utility;
 using Service.Email;
+using Service.Slack;
 
 namespace Security
 {
@@ -24,13 +25,15 @@ namespace Security
         private readonly ILogger<JwtSecurity> _logger;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly ISlackService _slackService;
 
-        public JwtSecurity(UserManager<Dal.Entities.Identity.ApplicationUser> userManager, ILogger<JwtSecurity> logger, IMapper mapper, IEmailService emailService)
+        public JwtSecurity(UserManager<Dal.Entities.Identity.ApplicationUser> userManager, ILogger<JwtSecurity> logger, IMapper mapper, IEmailService emailService, ISlackService slackService)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _emailService = emailService;
+            _slackService = slackService;
         }
 
         public async Task<DataResponse<string>> GetToken(ApplicationUser userDto, string password)
@@ -106,6 +109,9 @@ namespace Security
                 return resp;
             }
 
+            //start sending slack notification
+            var slackMessageTask = _slackService.SendMessage($"{userDto.Email} joined :tada:", "account-tracker");
+
             var userModel = new Dal.Entities.Identity.ApplicationUser
             {
                 Id = userDto.Id,
@@ -130,7 +136,10 @@ namespace Security
             {
                 //not expected
                 resp.ErrorCode = ErrorCode.ApplicationException;
+
                 _logger.LogError($"New user {userDto.Email} cannot be registered.");
+
+                await _slackService.SendMessage($"{userDto.Email} cannot be registered.", "account-tracker");
 
                 return resp;
             }
@@ -138,6 +147,8 @@ namespace Security
             await _userManager.AddToRoleAsync(userModel, userDto.Roles.First());
 
             resp.Type = ResponseType.Success;
+
+            await slackMessageTask;
 
             return resp;
         }

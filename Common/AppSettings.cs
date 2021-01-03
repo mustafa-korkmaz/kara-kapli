@@ -10,6 +10,8 @@ namespace Common
 
         public string CacheProvider { get; set; }
 
+        public string SlackBotToken { get; set; }
+
         public string AdminPanelUrl { get; set; }
 
         public string LandingPageUrl { get; set; }

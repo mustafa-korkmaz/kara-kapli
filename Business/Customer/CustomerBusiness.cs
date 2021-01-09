@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Dal.Repositories.Customer;
 using Microsoft.Extensions.Logging;
 using Dal;
@@ -28,6 +29,15 @@ namespace Business.Customer
                 Items = customers,
                 RecordsTotal = resp.RecordsTotal
             };
+        }
+
+        public IEnumerable<Dto.Customer> GetAll(Guid userId)
+        {
+            var entities = Repository.GetAll(userId);
+
+            var customers = Mapper.Map<IEnumerable<Dal.Entities.Customer>, IEnumerable<Dto.Customer>>(entities);
+
+            return customers;
         }
     }
 }

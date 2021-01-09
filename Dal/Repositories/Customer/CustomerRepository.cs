@@ -1,4 +1,6 @@
-﻿using Common.Request;
+﻿using System;
+using System.Collections.Generic;
+using Common.Request;
 using Common.Request.Criteria.Customer;
 using Common.Response;
 using Dal.Db;
@@ -60,6 +62,13 @@ namespace Dal.Repositories.Customer
                 .ToList();
 
             return result;
+        }
+
+        public IEnumerable<Entities.Customer> GetAll(Guid userId)
+        {
+            var query = Entities.Where(p => p.UserId == userId);
+
+            return query.ToList();
         }
     }
 }

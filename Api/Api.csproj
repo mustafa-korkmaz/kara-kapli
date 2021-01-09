@@ -36,5 +36,9 @@
     <ProjectReference Include="..\Security\Security.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Import\Response\" />
+  </ItemGroup>
+
 
 </Project>

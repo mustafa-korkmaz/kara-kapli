@@ -11,6 +11,7 @@ namespace Common
         public static string ApiKeyHash = Utility.GetHashValue(ApiKeyValue);
         public const int MinimumLengthForSearch = 3;
         public const string DemoUserPassword = "12345678";
+        public const string SystemUserId = "87622649-96c8-40b5-bcef-8351b0883b49";
     }
 
     public static class ErrorCode
@@ -24,6 +25,8 @@ namespace Common
         public const string ObjectExceededMaxAllowedLength = "OBJECT_EXCEEDED_MAX_ALLOWED_LENGTH";
         public const string SecurityCodeExpired = "SECURITY_CODE_EXPIRED";
         public const string SecurityError = "SECURITY_ERROR";
+        public const string CustomerTitleConflict = "CUSTOMER_TITLE_CONFLICT";
+        public const string CustomerExists = "CUSTOMER_EXISTS {0}";
     }
 
     public static class ValidationErrorCode

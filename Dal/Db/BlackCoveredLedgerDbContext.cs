@@ -181,7 +181,9 @@ namespace Dal.Db
                 CreateRole(Guid.Parse("0967d456-60a8-43de-9ac8-5f15dfaa1909"),
                     "user", "7473ba90-3e20-491d-a4c2-ecbc7f22ec5f"),
                 CreateRole(Guid.Parse("8a158f67-b9aa-4dec-9e8f-53d29aeb1905"),
-                    "demo_user", "8a51070d-4ad9-4b7a-84af-c7b4bfb7aa41")
+                    "demo_user", "8a51070d-4ad9-4b7a-84af-c7b4bfb7aa41"),
+                CreateRole(Guid.Parse("8a158f67-b9aa-4dec-9e8f-53d29aeb1905"),
+                    "premium_user", "7c591b7b-0cfc-4de0-a216-a920779b7e7d")
             );
 
             ApplicationRole CreateRole(Guid id, string name, string concurrencyStamp)
@@ -200,7 +202,12 @@ namespace Dal.Db
            CreateUser(Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
            "Korkmaz Ltd.",
            "Mustafa Korkmaz",
-           "mustafakorkmazdev@gmail.com"));
+           "mustafakorkmazdev@gmail.com"), 
+           CreateUser(Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"),
+               "System",
+               "Mustafa Korkmaz",
+               "mustafa@koruq.com"));
+
 
             ApplicationUser CreateUser(Guid id, string title, string name, string email)
             {
@@ -261,7 +268,10 @@ namespace Dal.Db
                 CreateParameter(5, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 5, "Customer Debt"),
                 CreateParameter(6, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 6, "Customer Receivable"),
                 CreateParameter(7, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 7, "Collection"),
-                CreateParameter(8, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 8, "Payment"));
+                CreateParameter(8, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 8, "Payment"),
+                CreateParameter(9, Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"), 2, 0, "-"), //TransactionType.Debt
+                CreateParameter(10, Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"), 1, 1, "-") //TransactionType.Receivable
+            );
 
             Entities.Parameter CreateParameter(int id, Guid userId, int typeId, byte order, string name)
             {

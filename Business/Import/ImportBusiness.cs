@@ -14,7 +14,7 @@ namespace Business.Import
     public class ImportBusiness : IImportBusiness
     {
         private readonly ICustomerBusiness _customerBusiness;
-        private readonly IDashboardRepository _repository;
+        //  private readonly IDashboardRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<ImportBusiness> _logger;
 
@@ -22,14 +22,25 @@ namespace Business.Import
             IMapper mapper)
         {
             _customerBusiness = customerBusiness;
-            _repository = uow.Repository<IDashboardRepository>();
+            // _repository = uow.Repository<IDashboardRepository>();
             _logger = logger;
             _mapper = mapper;
         }
 
         public DataResponse<int> DoBasicImport(Dto.Transaction[] transactions, Guid userId)
         {
-            throw new NotImplementedException();
+            var resp = new DataResponse<int>();
+
+            var validateResp = ValidateBasic(transactions, userId);
+
+            if (validateResp.Type != ResponseType.Success)
+            {
+                resp.Type = validateResp.Type;
+                resp.ErrorCode = validateResp.ErrorCode;
+                return resp;
+            }
+
+            return resp;
         }
 
         public DataResponse<int> DoDetailedImport(Dto.Transaction[] transactions, Guid userId)

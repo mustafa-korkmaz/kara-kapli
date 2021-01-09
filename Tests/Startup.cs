@@ -8,17 +8,22 @@ using System.Reflection;
 using System.IO;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Business;
 using Business.Customer;
+using Business.Import;
 using Service.Caching;
 using Common;
 using Business.Transaction;
 using Business.Parameter;
+using Microsoft.EntityFrameworkCore.Storage;
 
 [assembly: TestFramework("Tests.Startup", "Tests")]
 namespace Tests
 {
     public class Startup : DependencyInjectionTestFramework
     {
+        public static readonly InMemoryDatabaseRoot InMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+
         public Startup(IMessageSink messageSink) : base(messageSink)
         {
         }
@@ -27,8 +32,11 @@ namespace Tests
         {
             var configuration = GetApplicationConfiguration();
 
-            services.AddDbContext<Dal.Db.BlackCoveredLedgerDbContext>(options =>
-           options.UseNpgsql(configuration.GetConnectionString("BlogContext")));
+            services.AddDbContext<Dal.Db.BlackCoveredLedgerDbContext>(
+                opt =>
+                    opt.UseInMemoryDatabase("UnitTestDb", InMemoryDatabaseRoot)
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
             services.AddTransient<Dal.IUnitOfWork, Dal.UnitOfWork>();
 
             // Add functionality to inject IOptions<T>
@@ -40,11 +48,11 @@ namespace Tests
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
             services.AddTransient<ITransactionBusiness, TransactionBusiness>();
             services.AddTransient<IParameterBusiness, ParameterBusiness>();
-            //services.AddTransient<ISecurity, JwtSecurity>();
+            services.AddTransient<IImportBusiness, ImportBusiness>();
 
             services.AddTransient<ICacheService, CacheService>();
 
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         private IConfiguration GetApplicationConfiguration()

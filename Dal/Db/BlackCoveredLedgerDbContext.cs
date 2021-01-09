@@ -182,7 +182,7 @@ namespace Dal.Db
                     "user", "7473ba90-3e20-491d-a4c2-ecbc7f22ec5f"),
                 CreateRole(Guid.Parse("8a158f67-b9aa-4dec-9e8f-53d29aeb1905"),
                     "demo_user", "8a51070d-4ad9-4b7a-84af-c7b4bfb7aa41"),
-                CreateRole(Guid.Parse("8a158f67-b9aa-4dec-9e8f-53d29aeb1905"),
+                CreateRole(Guid.Parse("de522b4b-4a2a-4992-a1b3-3b27b93a0d5a"),
                     "premium_user", "7c591b7b-0cfc-4de0-a216-a920779b7e7d")
             );
 

@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Common;
 using Common.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -7,17 +10,18 @@ using Dto;
 using Business.Parameter;
 using Api.ViewModels.Import.Request;
 using Api.ViewModels.Parameter.Request;
+using Business.Import;
 
 namespace Api.Controllers
 {
     [Route("imports"), ApiController, Authorize]
     public class ImportController : ApiControllerBase
     {
-        private readonly IParameterBusiness _parameterBusiness;
+        private readonly IImportBusiness _importBusiness;
 
-        public ImportController(IParameterBusiness parameterBusiness)
+        public ImportController(IImportBusiness importBusiness)
         {
-            _parameterBusiness = parameterBusiness;
+            _importBusiness = importBusiness;
         }
 
         [HttpPost("basic")]
@@ -29,16 +33,16 @@ namespace Api.Controllers
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            return Ok(12);
+            var customers = GetMappedCustomers(model);
 
-            //var resp = Create(model);
+            var resp = _importBusiness.DoBasicImport(customers.ToArray());
 
-            //if (resp.Type != ResponseType.Success)
-            //{
-            //    return BadRequest(resp);
-            //}
+            if (resp.Type != ResponseType.Success)
+            {
+                return BadRequest(resp);
+            }
 
-            //return Ok(resp);
+            return Ok(resp);
         }
 
         [HttpPost("detailed")]
@@ -50,93 +54,56 @@ namespace Api.Controllers
                 return BadRequest(GetModelStateErrorResponse(ModelState));
             }
 
-            var resp = Create(model);
-
-            if (resp.Type != ResponseType.Success)
-            {
-                return BadRequest(resp);
-            }
-
-            return Ok(resp);
+            return Ok();
         }
 
-        private ApiResponse Create(CreateParameterViewModel model)
+        private IEnumerable<Customer> GetMappedCustomers(BasicDataImportViewModel[] model)
         {
-            var apiResp = new ApiResponse
-            {
-                Type = ResponseType.Fail
-            };
-            var parameter = new Parameter
-            {
-                UserId = GetUserId().Value,
-                Name = model.Name,
-                Order = model.Order.Value,
-                ParameterTypeId = model.ParameterTypeId.Value
-            };
+            var list = new List<Customer>();
+            var now = DateTime.UtcNow;
+            var userId = GetUserId().Value;
 
-            _parameterBusiness.OwnerId = parameter.UserId;
-
-            var resp = _parameterBusiness.Add(parameter);
-
-            if (resp.Type != ResponseType.Success)
+            foreach (var item in model)
             {
-                apiResp.ErrorCode = resp.ErrorCode;
-                return apiResp;
+                var c = new Customer
+                {
+                    AuthorizedPersonName = item.Customer.AuthorizedPersonName,
+                    Title = item.Customer.Title,
+                    UserId = userId,
+                    ReceivableBalance = item.ReceivableBalance.Value,
+                    DebtBalance = item.DebtBalance.Value,
+                    CreatedAt = now,
+                    Transactions = new List<Transaction>()
+                };
+
+                if (item.DebtBalance.Value > 0)
+                {
+                    c.Transactions.Add(new Transaction
+                    {
+                        TypeId = DatabaseKeys.ParameterId.SystemDebt,
+                        Amount = item.DebtBalance.Value,
+                        IsDebt = true,
+                        CreatedAt = now,
+                        Date = now.Date
+                    });
+                }
+
+                if (item.ReceivableBalance.Value > 0)
+                {
+                    c.Transactions.Add(new Transaction
+                    {
+                        TypeId = DatabaseKeys.ParameterId.SystemReceivable,
+                        Amount = item.ReceivableBalance.Value,
+                        IsDebt = false,
+                        CreatedAt = now,
+                        Date = now.Date
+                    });
+                }
+
+                list.Add(c);
             }
 
-            apiResp.Type = ResponseType.Success;
-            return apiResp;
-        }
-
-        private ApiResponse Update(int id, UpdateParameterViewModel model)
-        {
-            var apiResp = new ApiResponse
-            {
-                Type = ResponseType.Fail
-            };
-
-            var parameter = new Parameter
-            {
-                Id = id,
-                UserId = GetUserId().Value,
-                Name = model.Name,
-                Order = model.Order.Value,
-                ParameterTypeId = model.ParameterTypeId.Value
-            };
-
-            _parameterBusiness.OwnerId = parameter.UserId;
-
-            var resp = _parameterBusiness.Edit(parameter);
-
-            if (resp.Type != ResponseType.Success)
-            {
-                apiResp.ErrorCode = resp.ErrorCode;
-                return apiResp;
-            }
-
-            apiResp.Type = ResponseType.Success;
-            return apiResp;
-        }
-
-        private ApiResponse Delete(int parameterId)
-        {
-            var apiResp = new ApiResponse
-            {
-                Type = ResponseType.Fail
-            };
-
-            _parameterBusiness.OwnerId = GetUserId().Value;
-
-            var resp = _parameterBusiness.SoftDelete(parameterId);
-
-            if (resp.Type != ResponseType.Success)
-            {
-                apiResp.ErrorCode = resp.ErrorCode;
-                return apiResp;
-            }
-
-            apiResp.Type = ResponseType.Success;
-            return apiResp;
+            return list;
         }
     }
 }

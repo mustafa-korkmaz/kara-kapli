@@ -14,7 +14,6 @@ namespace Business.Import
     public class ImportBusiness : IImportBusiness
     {
         private readonly ICustomerBusiness _customerBusiness;
-        //  private readonly IDashboardRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<ImportBusiness> _logger;
 
@@ -27,11 +26,13 @@ namespace Business.Import
             _mapper = mapper;
         }
 
-        public DataResponse<int> DoBasicImport(Dto.Transaction[] transactions, Guid userId)
+        public DataResponse<int> DoBasicImport(Dto.Customer[] customers)
         {
             var resp = new DataResponse<int>();
 
-            var validateResp = ValidateBasic(transactions, userId);
+            var userId = customers.First().UserId;
+
+            var validateResp = ValidateBasic(customers, userId);
 
             if (validateResp.Type != ResponseType.Success)
             {
@@ -43,19 +44,17 @@ namespace Business.Import
             return resp;
         }
 
-        public DataResponse<int> DoDetailedImport(Dto.Transaction[] transactions, Guid userId)
+        public DataResponse<int> DoDetailedImport(Dto.Customer[] customers)
         {
             throw new NotImplementedException();
         }
 
-        private Response ValidateBasic(IEnumerable<Dto.Transaction> transactions, Guid userId)
+        private Response ValidateBasic(Dto.Customer[] customers, Guid userId)
         {
             var resp = new Response
             {
                 Type = ResponseType.ValidationError
             };
-
-            var customers = transactions.Select(p => p.Customer).ToArray();
 
             if (!HasUniqueCustomers(customers))
             {
@@ -113,5 +112,6 @@ namespace Business.Import
 
             return result;
         }
+
     }
 }

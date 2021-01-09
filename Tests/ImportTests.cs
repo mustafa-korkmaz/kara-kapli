@@ -27,10 +27,11 @@ namespace Tests
         public void BasicImport_Should_GiveError_When_NotUniqueCustomerListIsGiven()
         {
             //arrange
-            var transactions = CreateBasicImportTransactionsWithDuplicatedTitles();
+            var userId = Guid.NewGuid();
+            var customers = CreateBasicImportCustomersWithDuplicatedTitles(userId);
 
             //act
-            var resp = _service.DoBasicImport(transactions.ToArray(), Guid.NewGuid());
+            var resp = _service.DoBasicImport(customers.ToArray());
 
             //assert
             Assert.True(resp.Type == ResponseType.ValidationError);
@@ -41,13 +42,13 @@ namespace Tests
         public void BasicImport_Should_GiveError_When_AnyCustomerExists()
         {
             //arrange
-            var transactions = CreateBasicImportTransactionsWithUniqueTitles();
             var userId = Guid.NewGuid();
+            var customers = CreateBasicImportCustomersWithUniqueTitles(userId);
 
             CreateDatabaseCustomers(userId);
 
             //act
-            var resp = _service.DoBasicImport(transactions.ToArray(), userId);
+            var resp = _service.DoBasicImport(customers.ToArray());
 
             //assert
             Assert.True(resp.Type == ResponseType.ValidationError);
@@ -58,21 +59,22 @@ namespace Tests
         public void BasicImport_Should_Work_When_ValidationsPass()
         {
             //arrange
-            var transactions = CreateBasicImportTransactionsWithRandomTitles();
             var userId = Guid.NewGuid();
+
+            var customers = CreateBasicImportCustomersWithRandomTitles(userId);
 
             CreateDatabaseCustomers(userId);
 
             //act
-            var resp = _service.DoBasicImport(transactions.ToArray(), userId);
+            var resp = _service.DoBasicImport(customers.ToArray());
 
             //assert
             Assert.True(resp.Type == ResponseType.Success);
         }
 
-        private IEnumerable<Transaction> CreateBasicImportTransactionsWithDuplicatedTitles()
+        private IEnumerable<Customer> CreateBasicImportCustomersWithDuplicatedTitles(Guid userId)
         {
-            var list = new List<Transaction>();
+            var list = new List<Customer>();
 
             var customers = new string[] { "Customer 1", "Customer 2", "Customer 3", "Customer 4", "Customer 5" };
 
@@ -83,27 +85,33 @@ namespace Tests
 
                 var amount = rand.NextDouble() + rand.Next(500, 10000);
 
-                list.Add(new Transaction
+                var c = new Customer
                 {
-                    Amount = Math.Round(amount, 2),
-                    CreatedAt = now,
-                    Date = DateTime.Today,
-                    IsDebt = false,
-                    ModifiedAt = now,
-                    Customer = new Customer
+                    UserId = userId,
+                    Title = customers[i % 5],
+                    AuthorizedPersonName = "Test" + i,
+                    Transactions = new List<Transaction>
                     {
-                        Title = customers[i % 5],
-                        AuthorizedPersonName = "Test" + i
+                        new Transaction
+                        {
+                            Amount = Math.Round(amount, 2),
+                            CreatedAt = now,
+                            Date = DateTime.Today,
+                            IsDebt = false,
+                            ModifiedAt = now,
+                        }
                     }
-                });
+                };
+
+                list.Add(c);
             }
 
             return list;
         }
 
-        private IEnumerable<Transaction> CreateBasicImportTransactionsWithUniqueTitles()
+        private IEnumerable<Customer> CreateBasicImportCustomersWithUniqueTitles(Guid userId)
         {
-            var list = new List<Transaction>();
+            var list = new List<Customer>();
 
             var customers = new string[100];
 
@@ -115,27 +123,33 @@ namespace Tests
 
                 var amount = rand.NextDouble() + rand.Next(500, 10000);
 
-                list.Add(new Transaction
+                var c = new Customer
                 {
-                    Amount = Math.Round(amount, 2),
-                    CreatedAt = now,
-                    Date = DateTime.Today,
-                    IsDebt = false,
-                    ModifiedAt = now,
-                    Customer = new Customer
+                    UserId = userId,
+                    Title = customers[i],
+                    AuthorizedPersonName = "Test" + i,
+                    Transactions = new List<Transaction>
                     {
-                        Title = customers[i],
-                        AuthorizedPersonName = "Test" + i
+                        new Transaction
+                        {
+                            Amount = Math.Round(amount, 2),
+                            CreatedAt = now,
+                            Date = DateTime.Today,
+                            IsDebt = false,
+                            ModifiedAt = now,
+                        }
                     }
-                });
+                };
+
+                list.Add(c);
             }
 
             return list;
         }
 
-        private IEnumerable<Transaction> CreateBasicImportTransactionsWithRandomTitles()
+        private IEnumerable<Customer> CreateBasicImportCustomersWithRandomTitles(Guid userId)
         {
-            var list = new List<Transaction>();
+            var list = new List<Customer>();
 
             var customers = new string[100];
 
@@ -147,19 +161,25 @@ namespace Tests
 
                 var amount = rand.NextDouble() + rand.Next(500, 10000);
 
-                list.Add(new Transaction
+                var c = new Customer
                 {
-                    Amount = Math.Round(amount, 2),
-                    CreatedAt = now,
-                    Date = DateTime.Today,
-                    IsDebt = false,
-                    ModifiedAt = now,
-                    Customer = new Customer
+                    UserId = userId,
+                    Title = customers[i],
+                    AuthorizedPersonName = "Test" + i,
+                    Transactions = new List<Transaction>
                     {
-                        Title = customers[i],
-                        AuthorizedPersonName = "Test" + i
+                        new Transaction
+                        {
+                            Amount = Math.Round(amount, 2),
+                            CreatedAt = now,
+                            Date = DateTime.Today,
+                            IsDebt = false,
+                            ModifiedAt = now,
+                        }
                     }
-                });
+                };
+
+                list.Add(c);
             }
 
             return list;

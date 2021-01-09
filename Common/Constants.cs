@@ -117,6 +117,19 @@ namespace Common
             /// </summary>
             public const int Debt = 2;
         }
+
+        public static class ParameterId
+        {
+            /// <summary>
+            /// ALACAK type accounting
+            /// </summary>
+            public const int SystemReceivable = 10;
+
+            /// <summary>
+            /// BORCLU type accounting
+            /// </summary>
+            public const int SystemDebt = 9;
+        }
     }
 
     #region cahce keys

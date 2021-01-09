@@ -1,13 +1,12 @@
 ﻿
-using System;
 using Common.Response;
 
 namespace Business.Import
 {
     public interface IImportBusiness
     {
-        DataResponse<int> DoBasicImport(Dto.Transaction[] transactions, Guid userId);
+        DataResponse<int> DoBasicImport(Dto.Customer[] customers);
 
-        DataResponse<int> DoDetailedImport(Dto.Transaction[] transactions, Guid userId);
+        DataResponse<int> DoDetailedImport(Dto.Customer[] customers);
     }
 }

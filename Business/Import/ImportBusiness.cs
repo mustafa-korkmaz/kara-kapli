@@ -16,12 +16,13 @@ namespace Business.Import
         private readonly ICustomerBusiness _customerBusiness;
         private readonly IMapper _mapper;
         private readonly ILogger<ImportBusiness> _logger;
+        private readonly IUnitOfWork _uow;
 
         public ImportBusiness(IUnitOfWork uow, ILogger<ImportBusiness> logger, ICustomerBusiness customerBusiness,
             IMapper mapper)
         {
             _customerBusiness = customerBusiness;
-            // _repository = uow.Repository<IDashboardRepository>();
+            _uow = uow;
             _logger = logger;
             _mapper = mapper;
         }
@@ -40,6 +41,20 @@ namespace Business.Import
                 resp.ErrorCode = validateResp.ErrorCode;
                 return resp;
             }
+
+            _logger.LogInformation($"Basic data import validation passed for user {userId}");
+
+            using (var tx = _uow.BeginTransaction())
+            {
+                //add customers including transactions
+                _customerBusiness.AddRange(customers);
+
+                tx.Commit();
+            }
+
+            _logger.LogInformation($"{customers.Length} customers are imported for user {userId}");
+
+            resp.Data = customers.Length;
 
             return resp;
         }

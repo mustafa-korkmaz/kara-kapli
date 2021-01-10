@@ -6,6 +6,7 @@ using Business;
 using Business.Customer;
 using Business.Dashboard;
 using Business.Feedback;
+using Business.Import;
 using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -90,6 +91,7 @@ namespace Api
             services.AddTransient<IParameterBusiness, ParameterBusiness>();
             services.AddTransient<IFeedbackBusiness, FeedbackBusiness>();
             services.AddTransient<IDashboardBusiness, DashboardBusiness>();
+            services.AddTransient<IImportBusiness, ImportBusiness>();
             services.AddTransient<ISecurity, JwtSecurity>();
 
             services.AddTransient<ICacheService, CacheService>();

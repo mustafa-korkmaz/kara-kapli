@@ -7,7 +7,6 @@ using Common.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Dto;
-using Business.Parameter;
 using Api.ViewModels.Import.Request;
 using Api.ViewModels.Parameter.Request;
 using Business.Import;
@@ -26,7 +25,7 @@ namespace Api.Controllers
 
         [HttpPost("basic")]
         [ProducesResponseType(typeof(ApiResponse<int>), (int)HttpStatusCode.OK)]
-        public IActionResult Basic([FromBody] BasicDataImportViewModel[] model)
+        public IActionResult Basic([FromBody] BasicDataImportViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,13 +56,13 @@ namespace Api.Controllers
             return Ok();
         }
 
-        private IEnumerable<Customer> GetMappedCustomers(BasicDataImportViewModel[] model)
+        private IEnumerable<Customer> GetMappedCustomers(BasicDataImportViewModel model)
         {
             var list = new List<Customer>();
             var now = DateTime.UtcNow;
             var userId = GetUserId().Value;
 
-            foreach (var item in model)
+            foreach (var item in model.Items)
             {
                 var c = new Customer
                 {
@@ -83,7 +82,9 @@ namespace Api.Controllers
                         TypeId = DatabaseKeys.ParameterId.SystemDebt,
                         Amount = item.DebtBalance.Value,
                         IsDebt = true,
+                        Description = GetTransactionDesc(model.Language),
                         CreatedAt = now,
+                        ModifiedAt = now,
                         Date = now.Date
                     });
                 }
@@ -95,7 +96,9 @@ namespace Api.Controllers
                         TypeId = DatabaseKeys.ParameterId.SystemReceivable,
                         Amount = item.ReceivableBalance.Value,
                         IsDebt = false,
+                        Description = GetTransactionDesc(model.Language),
                         CreatedAt = now,
+                        ModifiedAt = now,
                         Date = now.Date
                     });
                 }
@@ -104,6 +107,11 @@ namespace Api.Controllers
             }
 
             return list;
+        }
+
+        private string GetTransactionDesc(string lang)
+        {
+            return lang.ToLower() == Language.Turkish ? "Toplu veri aktarımı" : "Bulk data import";
         }
     }
 }

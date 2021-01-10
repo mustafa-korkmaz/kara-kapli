@@ -6,6 +6,15 @@ namespace Api.ViewModels.Import.Request
 {
     public class BasicDataImportViewModel
     {
+        [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
+        [Display(Name = "LANGUAGE")]
+        public string Language { get; set; }
+
+        public Data[] Items { get; set; }
+    }
+
+    public class Data
+    {
         public CreateCustomerViewModel Customer { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using AutoMapper;
 using Api.Configurations.Jwt;
 using Api.Middlewares;
@@ -27,6 +28,7 @@ using Dal.Repositories.File;
 using Google.Cloud.Diagnostics.AspNetCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Service.Email;
 using Service.File;
@@ -160,6 +162,16 @@ namespace Api
 
             app.UseRouting();
             app.UseCors("policy");
+
+            const string cacheMaxAge = "604800";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Append(
+                        "Cache-Control", $"public, max-age={cacheMaxAge}");
+                }
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

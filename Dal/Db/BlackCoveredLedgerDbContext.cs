@@ -199,10 +199,6 @@ namespace Dal.Db
 
             modelBuilder.Entity<ApplicationUser>().HasData(
 
-           CreateUser(Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
-           "Korkmaz Ltd.",
-           "Mustafa Korkmaz",
-           "mustafakorkmazdev@gmail.com"), 
            CreateUser(Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"),
                "System",
                "Mustafa Korkmaz",
@@ -230,7 +226,7 @@ namespace Dal.Db
 
             modelBuilder.Entity<Entities.Customer>().HasData(
                   CreateCustomer(1,
-                  Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"),
+                  Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"),
                     "Akcam Ltd. ",
                     "Esra Korkmaz"));
 
@@ -261,14 +257,6 @@ namespace Dal.Db
                 });
 
             modelBuilder.Entity<Entities.Parameter>().HasData(
-                CreateParameter(1, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 1, "Cariye Borç"),
-                CreateParameter(2, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 2, "Cariye Alacak"),
-                CreateParameter(3, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 3, "Tahsilat"),
-                CreateParameter(4, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 4, "Ödeme"),
-                CreateParameter(5, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 5, "Customer Debt"),
-                CreateParameter(6, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 6, "Customer Receivable"),
-                CreateParameter(7, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 1, 7, "Collection"),
-                CreateParameter(8, Guid.Parse("402e9a22-8b21-11ea-bc55-0242ac130003"), 2, 8, "Payment"),
                 CreateParameter(9, Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"), 2, 0, "-"), //TransactionType.Debt
                 CreateParameter(10, Guid.Parse("87622649-96c8-40b5-bcef-8351b0883b49"), 1, 1, "-") //TransactionType.Receivable
             );

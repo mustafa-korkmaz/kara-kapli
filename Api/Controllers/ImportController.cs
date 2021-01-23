@@ -69,6 +69,7 @@ namespace Api.Controllers
                     AuthorizedPersonName = item.Customer.AuthorizedPersonName,
                     Title = item.Customer.Title,
                     UserId = userId,
+                    PhoneNumber = item.Customer.PhoneNumber,
                     ReceivableBalance = item.ReceivableBalance.Value,
                     DebtBalance = item.DebtBalance.Value,
                     CreatedAt = now,

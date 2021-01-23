@@ -8,6 +8,7 @@ using Common.Request;
 using Common.Request.Criteria.Parameter;
 using Dal.Repositories.Parameter;
 using System;
+using System.Linq;
 using Service.Caching;
 using Common;
 
@@ -42,7 +43,24 @@ namespace Business.Parameter
         {
             var entities = Repository.GetUserParameters(userId);
 
-            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Parameter>, IEnumerable<Dto.Parameter>>(entities);
+            var parameters = Mapper.Map<IEnumerable<Dal.Entities.Parameter>, IEnumerable<Dto.Parameter>>(entities).ToList();
+
+            //add common parameters for all users
+            parameters.Add(new Dto.Parameter
+            {
+                Name = "-",
+                Order = 0,
+                Id = DatabaseKeys.ParameterId.SystemDebt,
+                ParameterTypeId = DatabaseKeys.ParameterTypeId.Debt
+            });
+          
+            parameters.Add(new Dto.Parameter
+            {
+                Name = "-",
+                Order = 1,
+                Id = DatabaseKeys.ParameterId.SystemReceivable,
+                ParameterTypeId = DatabaseKeys.ParameterTypeId.Receivable
+            });
 
             return parameters;
         }

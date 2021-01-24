@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Import\Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\Templates\basic-import-template.xlsx" />
     <None Include="wwwroot\Templates\detailed-import-template.xlsx" />
     <None Include="wwwroot\Templates\detayli-aktarim-sablonu.xlsx" />

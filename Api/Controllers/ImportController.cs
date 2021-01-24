@@ -36,11 +36,6 @@ namespace Api.Controllers
 
             var resp = _importBusiness.DoBasicImport(customers.ToArray());
 
-            if (resp.Type != ResponseType.Success)
-            {
-                return BadRequest(resp);
-            }
-
             return Ok(resp);
         }
 

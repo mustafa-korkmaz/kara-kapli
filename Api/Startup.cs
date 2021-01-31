@@ -137,7 +137,8 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            if (Configuration["Logging:UseGoogle"] != "false")
             {
                 loggerFactory.AddGoogle(app.ApplicationServices, "karakapli");
             }
